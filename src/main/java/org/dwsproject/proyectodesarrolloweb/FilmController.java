@@ -40,4 +40,10 @@ public class FilmController {
         model.addAttribute("films", films);
         return "PendingList";
     }
+    @GetMapping("/completed")
+    public String completed(Model model) {
+        model.addAttribute("films", films);
+        return "CompletedList";
+    }
+    
 }

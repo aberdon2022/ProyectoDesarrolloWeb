@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+1<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <link rel="stylesheet" href="completed.css">
+    <title>FilmList</title>
+</head>
+<body>
+    <h1>Completed List</h1>
+        <form id="filmForm" action="addpeli" method="post" enctype="multipart/form-data">
+            <label for="title">Title:</label>
+            <br>
+            <input type="text" id="title" name="title" required>
+            <br>
+            <label for="year">Year:</label>
+            <br>
+            <input type="number" id="year" name="year" required>
+            <br>
+            <label for="image">Image:</label>
+            <br>
+            <input type="file" id="image" name="image" required>
+            <br>
+            <input type="submit" value="Submit">
+        </form>
+        <div id="film-list">
+            {{#films}}
+            <div>
+                <h2>{{title}}</h2>
+                <p>{{year}}</p>
+                <img src="{{imagePath}}"
+            </div>
+            {{/films}}
+        </div>
+</body>
+</html>
