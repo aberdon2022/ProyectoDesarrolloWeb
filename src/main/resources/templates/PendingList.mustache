@@ -2,10 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <link rel="stylesheet" href="pending.css">
     <title>FilmList</title>
 </head>
 <body>
-    <h1>Add Film</h1>
+    <h1>Pending List</h1>
         <form id="filmForm" action="addpeli" method="post" enctype="multipart/form-data">
             <label for="title">Title:</label><br>
             <input type="text" id="title" name="title" required>
@@ -25,7 +29,7 @@
         <div>
             <h2>{{title}}</h2>
             <p>{{year}}</p>
-            <img src="{{imagePath}}" style="width: 100px; height: 100px;">
+            <img src="{{imagePath}}">
         </div>
         {{/films}}
     </div>
