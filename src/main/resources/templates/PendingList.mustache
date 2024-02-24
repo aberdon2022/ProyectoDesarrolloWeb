@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FilmList</title>
+</head>
+<body>
+    <h1>Add Film</h1>
+        <form id="filmForm" action="addpeli" method="post" enctype="multipart/form-data">
+            <label for="title">Title:</label><br>
+            <input type="text" id="title" name="title" required>
+            <br>
+            <label for="year">Year:</label>
+            <br>
+            <input type="number" id="year" name="year" required>
+            <br>
+            <label for="image">Image:</label>
+            <br>
+            <input type="file" id="image" name="image" required>
+            <br>
+            <input type="submit" value="Submit">
+        </form>
+    <div id="film-list">
+        {{#films}}
+        <div>
+            <h2>{{title}}</h2>
+            <p>{{year}}</p>
+            <img src="{{imagePath}}" style="width: 100px; height: 100px;">
+        </div>
+        {{/films}}
+    </div>
+</body>
+</html>
