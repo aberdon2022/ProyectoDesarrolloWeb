@@ -3,13 +3,15 @@ public class Pelicula {
     private String title;
     private int year;
     private String imagePath;
+    private int rating;
 
     public Pelicula() {
     }
-    public Pelicula(String title, int year, String imagePath) {
+    public Pelicula(String title, int year, String imagePath, int rating) {
         this.title = title;
         this.year = year;
         this.imagePath = imagePath;
+        this.rating = rating;
     }
 
     public String getTitle() {
@@ -34,5 +36,13 @@ public class Pelicula {
 
     public void setImagePath(String imagePath) {
         this.imagePath = "/images/" + imagePath;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 }

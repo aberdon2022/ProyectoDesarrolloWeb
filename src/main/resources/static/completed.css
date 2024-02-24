@@ -1,0 +1,152 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #222;
+    color: #ddd;
+  }
+  
+  h1 {
+    text-align: center;
+    padding: 1.5rem;
+    background-color: #4CAF50;
+    color: white;
+    margin: 0 0 2rem 0;
+    border-radius: 10px;
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  #filmForm {
+    width: 300px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  #filmForm label {
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+  }
+  
+  #filmForm input[type="text"],
+  #filmForm input[type="number"],
+  #filmForm input[type="file"] {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    background-color: #333;
+    color: #ddd;
+    border: none;
+  }
+@import url("//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css");
+
+.stars {
+  width: 270px;
+  display: inline-block;
+}
+
+input.star {
+  display: none;
+}
+
+label.star {
+  float: right;
+  padding: 10px;
+  font-size: 36px;
+  color: #444;
+  transition: all .2s;
+}
+
+input.star:checked ~ label.star:before {
+  content: '\f005';
+  color: #FD4;
+  transition: all .25s;
+}
+
+input.star-5:checked ~ label.star:before {
+  color: #FE7;
+  text-shadow: 0 0 20px #952;
+}
+
+input.star-1:checked ~ label.star:before {
+  color: #F62;
+}
+
+label.star:hover {
+  transform: rotate(-15deg) scale(1.3);
+}
+
+label.star:before {
+  content: '\f006';
+  font-family: FontAwesome;
+}
+  
+  #filmForm input[type="submit"] {
+    padding: 1rem;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+    font-family: 'Roboto', sans-serif;  
+  }
+  
+  #filmForm input[type="submit"]:hover {
+    background-color: lightpink;
+  }
+  
+  #film-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 2rem;
+  }
+  
+  #film-list .film-item {
+    background-color: #333;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    margin: 1rem 1rem 1rem 1rem;
+    text-align: center;
+    width: calc(33.333% - 2rem);
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+  
+  #film-list div img {
+    width: 200px; 
+    height: 300px;
+    object-fit: cover; 
+    border-radius: 15px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); 
+  }
+  
+  #film-list .film-item h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    display: inline-block;
+  }
+  
+  #film-list .film-item p {
+    text-align: center;
+    margin: 0;
+    font-size: 1rem;
+    color: #bbb;
+  }
+  
+  @media (max-width: 768px) {
+    #film-list div {
+        width: calc(50% - 2rem);
+    }
+  }
+  
+  @media (max-width: 200px) {
+    #film-list div {
+        width: 100%;
+    }
+  }
