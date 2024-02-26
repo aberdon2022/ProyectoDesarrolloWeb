@@ -94,6 +94,10 @@ label.star:before {
     background-color: lightpink;
   }
   
+  #film-list > div {
+    margin: 10px; /* Ajusta este valor a tu gusto */
+}
+
   #film-list {
     display: flex;
     flex-wrap: wrap;

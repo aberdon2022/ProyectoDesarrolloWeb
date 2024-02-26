@@ -15,44 +15,56 @@ import java.util.List;
 @Controller
 public class FilmController {
     // List of films
-    private ArrayList<Pelicula> films = new ArrayList<>();
+    private ArrayList<Pelicula> pendingFilms = new ArrayList<>();
+    private ArrayList<Pelicula> completedFilms = new ArrayList<>();
 
-    public ArrayList<Pelicula> getAllFilms() {
-        return films;
+     // Method to obtain pending films
+     public List<Pelicula> getPendingFilms() {
+        return pendingFilms;
     }
+
+    // Method yo obtain completed films
+    public List<Pelicula> getCompletedFilms() {
+        return completedFilms;
+    }
+    
     @PostMapping("/addpeli")
     public String createFilm(Pelicula film, @RequestParam("image")MultipartFile imageFile, @RequestParam("listType") String listType) {
         try {
             String folder = "src/main/resources/static/images/";
-            byte [] bytes = imageFile.getBytes();
+            byte[] bytes = imageFile.getBytes();
             Path path = Paths.get(folder + imageFile.getOriginalFilename());
             Files.write(path, bytes);
 
             film.setImagePath(imageFile.getOriginalFilename());
-            films.add(film);
+            if ("pending".equals(listType)) {
+                pendingFilms.add(film);
+            } else if ("completed".equals(listType)) {
+                completedFilms.add(film);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
         // Redirect to the corresponding list
-    if ("pending".equals(listType)) {
-        return "redirect:/pending";
-    } else if ("completed".equals(listType)) {
-        return "redirect:/completed";
-    } else {
-        // Si no se especifica el tipo de lista, redirigir a la página de inicio o a alguna otra página según sea necesario
-        return "redirect:/";
-    }
+        if ("pending".equals(listType)) {
+            return "redirect:/pending";
+        } else if ("completed".equals(listType)) {
+            return "redirect:/completed";
+        } else {
+            // If listType is not specified, redirect to home page or some other page as needed
+            return "redirect:/";
+        }
     }
 
     @GetMapping("/pending")
     public String pending(Model model) {
-        model.addAttribute("films", films);
+        model.addAttribute("films", pendingFilms);
         return "PendingList";
     }
     
     @GetMapping("/completed")
         public String completed(Model model) {
-            model.addAttribute("films", films);
+            model.addAttribute("films", completedFilms);
             return "completedList";
         }
 }
