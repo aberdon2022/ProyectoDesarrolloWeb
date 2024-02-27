@@ -65,6 +65,6 @@ public class FilmController {
     @GetMapping("/completed")
         public String completed(Model model) {
             model.addAttribute("films", completedFilms);
-            return "completedList";
+            return "CompletedList";
         }
 }
