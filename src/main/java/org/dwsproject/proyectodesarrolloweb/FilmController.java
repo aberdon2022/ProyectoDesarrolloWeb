@@ -56,6 +56,8 @@ public class FilmController {
         }
     }
 
+    
+
     @GetMapping("/pending")
     public String pending(Model model) {
         model.addAttribute("films", pendingFilms);
@@ -65,6 +67,6 @@ public class FilmController {
     @GetMapping("/completed")
         public String completed(Model model) {
             model.addAttribute("films", completedFilms);
-            return "completedList";
+            return "CompletedList";
         }
 }
