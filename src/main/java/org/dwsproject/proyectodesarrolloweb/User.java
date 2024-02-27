@@ -16,4 +16,7 @@ public class User {
         return username;
     }
 
+    protected String getPassword() {
+        return password;
+    }
 }
