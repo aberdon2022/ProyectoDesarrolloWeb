@@ -3,6 +3,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -68,5 +69,35 @@ public class FilmController {
         public String completed(Model model) {
             model.addAttribute("films", completedFilms);
             return "CompletedList";
+    
+    }
+    
+    @DeleteMapping("/delete")
+    public String deleteFilm(Pelicula film, @RequestParam("listType") String listType) {
+        try {
+            if ("pending".equals(listType)) {
+                pendingFilms.remove(film);
+                return "redirect:/pending";
+            } else if ("completed".equals(listType)) {
+                completedFilms.remove(film);
+                return "redirect:/completed";
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
         }
-}
+        if ("pending".equals(listType)) {
+            return "redirect:/pending";
+        } else if ("completed".equals(listType)) {
+            return "redirect:/completed";
+        } else {
+            return "redirect:/";
+        }
+    }
+
+}    
+    
+
+
+   
+
+
