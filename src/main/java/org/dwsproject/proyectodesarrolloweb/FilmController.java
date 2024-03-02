@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -48,7 +47,7 @@ public class FilmController {
         }
         // Redirect to the corresponding list
         if ("pending".equals(listType)) {
-            return "redirect:/pending";
+            return "redirect:/ConfirmPending";
         } else if ("completed".equals(listType)) {
             return "redirect:/completed";
         } else {
@@ -57,21 +56,29 @@ public class FilmController {
         }
     }
 
-    
-
-    @GetMapping("/pending")
+    @GetMapping("/AddPending")
     public String pending(Model model) {
         model.addAttribute("films", pendingFilms);
         return "PendingList";
     }
     
-    @GetMapping("/completed")
+    @GetMapping("/AddCompleted")
         public String completed(Model model) {
             model.addAttribute("films", completedFilms);
             return "CompletedList";
-    
     }
-    
+
+    @GetMapping("/ViewPending")
+    public String viewPending(Model model) {
+        model.addAttribute("films", pendingFilms);
+        return "ViewPendingList";
+    }
+
+    @GetMapping("/ConfirmPending")
+    public String confirmPending() {
+        return "MessageAfterAddPending";
+    }
+
     @DeleteMapping("/delete")
     public String deleteFilm(Pelicula film, @RequestParam("listType") String listType) {
         try {
