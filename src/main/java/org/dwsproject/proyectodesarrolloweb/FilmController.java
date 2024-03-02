@@ -49,7 +49,7 @@ public class FilmController {
         if ("pending".equals(listType)) {
             return "redirect:/ConfirmPending";
         } else if ("completed".equals(listType)) {
-            return "redirect:/completed";
+            return "redirect:/ConfirmCompleted";
         } else {
             // If listType is not specified, redirect to home page or some other page as needed
             return "redirect:/";
@@ -59,13 +59,13 @@ public class FilmController {
     @GetMapping("/AddPending")
     public String pending(Model model) {
         model.addAttribute("films", pendingFilms);
-        return "PendingList";
+        return "AddPendingList";
     }
     
     @GetMapping("/AddCompleted")
         public String completed(Model model) {
             model.addAttribute("films", completedFilms);
-            return "CompletedList";
+            return "AddCompletedList";
     }
 
     @GetMapping("/ViewPending")
@@ -77,6 +77,17 @@ public class FilmController {
     @GetMapping("/ConfirmPending")
     public String confirmPending() {
         return "MessageAfterAddPending";
+    }
+
+    @GetMapping("/ViewCompleted")
+    public String viewCompleted(Model model) {
+        model.addAttribute("films", completedFilms);
+        return "ViewCompletedList";
+    }
+
+    @GetMapping("/ConfirmCompleted")
+    public String confirmCompleted() {
+        return "MessageAfterAddCompleted";
     }
 
     @DeleteMapping("/delete")

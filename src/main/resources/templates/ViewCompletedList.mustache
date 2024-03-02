@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <link rel="stylesheet" href="ViewCompleted.css">
+    <title>Completed Films</title>
+</head>
+<body>
+<h1>Completed Films</h1>
+<a href="/profile" class="button">Return to Profile</a>
+<div id="film-list">
+    {{#films}}
+        <div>
+            <h2>{{title}}</h2>
+            <p>{{year}}</p>
+            <p>Rating: {{rating}}</p>
+            <img src="{{imagePath}}">
+        </div>
+    {{/films}}
+</div>
+</body>
+</html>

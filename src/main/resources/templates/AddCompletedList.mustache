@@ -10,8 +10,7 @@
     <title>FilmList</title>
 </head>
 <body>
-    <h1>Completed List</h1>
-    
+    <h1>Add film</h1>
         <form id="filmForm" action="addpeli" method="post" enctype="multipart/form-data">
             <label for="title">Title:</label>
             <br>
@@ -44,16 +43,6 @@
             <input type="hidden" name="listType" value="completed">
             <input type="submit" value="Submit">
         </form>
-        <div id="film-list">
-            {{#films}}
-            <div>
-                <h2>{{title}}</h2>
-                <p>{{year}}</p>
-                <p>Rating: {{rating}}</p>
-                <img src="{{imagePath}}">
-            </div>
-            {{/films}}
-        </div>
         <script>
         <!--Captures the value of the selected rating and assigns it to the hidden field before submitting the form -->
         document.getElementById('filmForm').addEventListener('submit', function(event) {
