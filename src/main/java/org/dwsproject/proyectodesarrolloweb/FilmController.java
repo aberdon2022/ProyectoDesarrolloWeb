@@ -23,7 +23,7 @@ public class FilmController {
         return pendingFilms;
     }
 
-    // Method yo obtain completed films
+    // Method to obtain completed films
     public List<Pelicula> getCompletedFilms() {
         return completedFilms;
     }
