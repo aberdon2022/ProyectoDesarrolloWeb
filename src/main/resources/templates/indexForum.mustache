@@ -1,4 +1,12 @@
 <html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <link rel="stylesheet" href="forum.css">
+    <title>Forum</title>
+</head>
 <body>
 
 	{{#welcome}}
@@ -6,15 +14,15 @@
 	{{/welcome}}
 
 	<h1>Posts</h1>
-	{{#posts}}
-	<a href="post/{{id}}">{{user}} {{title}}</a><br>
-	{{/posts}}
-	
-	{{^posts}}
-	<p>No posts yet.</p>
-	{{/posts}}
+    	{{#posts}}
+    	<a href="post/{{id}}" class="post-link">{{user}} - {{title}}</a><br>
+    	{{/posts}}
+
+    	{{^posts}}
+        <p>No posts yet.</p>
+        {{/posts}}
 
 	<br>
-	<a href="post/new">New Post</a>
+	<a href="postnew" class="new_post">New Post</a>
 </body>
 </html>

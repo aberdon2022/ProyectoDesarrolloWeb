@@ -1,0 +1,58 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 15px;
+    padding: 0;
+    background-color: #222;
+    color: #ddd;
+}
+
+h1 {
+    text-align: center;
+    padding: 1.5rem;
+    background-color: #4CAF50;
+    color: white;
+    margin: 0 0 2rem 0;
+    border-radius: 10px;
+    font-family: 'Roboto', sans-serif;
+}
+
+#newPostForm {
+    width: 300px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+#newPostForm label {
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+#newPostForm input[type="text"],
+#newPostForm input[type="file"] {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    background-color: #333;
+    color: #ddd;
+    border: none;
+}
+#newPostForm textarea {
+    width: 100%; /* Ancho completo */
+    padding: 10px; /* Espaciado interno */
+    margin-bottom: 10px; /* Margen inferior */
+    border-radius: 5px; /* Borde redondeado */
+    background-color: #333;
+    color: #ddd;
+    border: none;
+    resize: none;
+}
+
+#newPostForm input[type="submit"] {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #4CAF50;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}

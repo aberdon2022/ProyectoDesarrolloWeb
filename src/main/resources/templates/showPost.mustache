@@ -1,15 +1,23 @@
 <html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <link rel="stylesheet" href="Posts.css">
+    <title>Post</title>
+</head>
 <body>
 	<p>User: {{post.user}}</p>
 	<p>Title: {{post.title}}</p>
 	<p>Text: {{post.text}}</p>
-	
+
 	<img src="/post/{{post.id}}/image"></img>
-	
-	<a href="/post/{{post.id}}/delete">Delete post</a>
-	
+
+	<a href="/post/{{post.id}}/delete" class="delete">Delete post</a>
+
 	<br>
-	
-	<a href="/">Back</a>
+
+	<a href="/forum" class= "return">Back</a>
 </body>
 </html>

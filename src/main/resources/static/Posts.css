@@ -1,0 +1,29 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 15px;
+    padding: 0;
+    background-color: #222;
+    color: #ddd;
+}
+p {
+    color: white;
+    font-family: 'Roboto', sans-serif;
+}
+a.delete {
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #ED361D;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+a.return {
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #4CAF50;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 15px;
+}

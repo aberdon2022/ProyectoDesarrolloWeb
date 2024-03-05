@@ -1,0 +1,35 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 15px;
+    padding: 0;
+    background-color: #222;
+    color: #ddd;
+}
+a.post-link {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #4CAF50;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+a.new_post {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #2DA6F5;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+h1 {
+    text-align: center;
+    padding: 1.5rem;
+    background-color: #4CAF50;
+    color: white;
+    margin: 0 0 2rem 0;
+    border-radius: 10px;
+    font-family: 'Roboto', sans-serif;
+}
