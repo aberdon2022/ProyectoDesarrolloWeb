@@ -8,11 +8,15 @@
     <title>Post</title>
 </head>
 <body>
-	<p>User: {{post.user}}</p>
-	<p>Title: {{post.title}}</p>
-	<p>Text: {{post.text}}</p>
+    <h1>{{post.user}} - {{post.title}}</h1>
+    <div class="post-container">
+	    <p>User: {{post.user}}</p>
+	    <p>Title: {{post.title}}</p>
+	    <p>Text: {{post.text}}</p>
 
-	<img src="/post/{{post.id}}/image"></img>
+	    <img src="/post/{{post.id}}/image" class="img"></img>
+    </div>
+	<br>
 
 	<a href="/post/{{post.id}}/delete" class="delete">Delete post</a>
 

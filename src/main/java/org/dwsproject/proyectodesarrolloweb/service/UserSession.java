@@ -7,7 +7,7 @@ import org.springframework.web.context.annotation.SessionScope;
 @SessionScope
 public class UserSession {
 
-    private String user;
+    private String user = "user1";
     private int numPosts;
 
     public void setUser(String user) {

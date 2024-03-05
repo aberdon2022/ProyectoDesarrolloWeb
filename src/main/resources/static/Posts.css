@@ -5,9 +5,21 @@ body {
     background-color: #222;
     color: #ddd;
 }
+h1 {
+    text-align: center;
+    padding: 1.5rem;
+    background-color: #4CAF50;
+    color: white;
+    margin: 0 0 2rem 0;
+    border-radius: 10px;
+    font-family: 'Roboto', sans-serif;
+}
 p {
     color: white;
     font-family: 'Roboto', sans-serif;
+    font-size: 20px;
+    margin-left: 20px;
+    margin-top: 20px;
 }
 a.delete {
     display: inline-block;
@@ -17,6 +29,7 @@ a.delete {
     text-decoration: none;
     border-radius: 5px;
     margin-bottom: 15px;
+    margin-top: 40px;
 }
 a.return {
     display: inline-block;
@@ -26,4 +39,17 @@ a.return {
     text-decoration: none;
     border-radius: 5px;
     margin-top: 15px;
+}
+.img {
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+.post-container {
+    border: 2px solid #ccc;
+    padding: 15px;
+    width: 80%;
+    word-wrap: break-word;
+}
+.post-container img{
+    max-width: 100%;
 }

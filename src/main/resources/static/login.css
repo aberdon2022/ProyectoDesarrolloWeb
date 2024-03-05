@@ -5,24 +5,6 @@ body {
     background-color: #222;
     color: #ddd;
 }
-a.post-link {
-    display: inline-block;
-    padding: 10px 15px;
-    background-color: #4CAF50;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-    margin-bottom: 15px;
-}
-a.new_post {
-    display: inline-block;
-    padding: 10px 15px;
-    background-color: #2DA6F5;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-    margin-bottom: 15px;
-}
 
 h1 {
     text-align: center;
@@ -33,12 +15,34 @@ h1 {
     border-radius: 10px;
     font-family: 'Roboto', sans-serif;
 }
-a.return {
+
+#loginForm {
+    width: 300px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+#loginForm label {
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+#loginForm input[type="text"],
+#loginForm input[type="password"] {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    background-color: #333;
+    color: #ddd;
+    border: none;
+}
+
+#loginForm input[type="submit"] {
     display: inline-block;
-    padding: 5px 10px;
+    padding: 10px 15px;
     background-color: #4CAF50;
     color: #fff;
     text-decoration: none;
     border-radius: 5px;
-    margin-top: 15px;
+    margin-bottom: 15px;
 }
