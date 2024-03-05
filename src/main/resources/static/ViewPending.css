@@ -57,9 +57,9 @@ h1 {
 #film-list div img {
     width: 200px;
     height: 300px;
-    object-fit: cover;
     border-radius: 15px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    max-width: 100%;
 }
 
 #film-list .film-item h2 {
