@@ -67,7 +67,6 @@ public class PostController {
     public String showPost(Model model, @PathVariable long id) {
 
         Post post = postService.findById(id);
-
         model.addAttribute("post", post);
 
         return "showPost";

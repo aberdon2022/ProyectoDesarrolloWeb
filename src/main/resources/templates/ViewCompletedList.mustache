@@ -17,7 +17,13 @@
             <h2>{{title}}</h2>
             <p>{{year}}</p>
             <p>Rating: {{rating}}</p>
-            <img src="{{imagePath}}">
+            <img src="{{imagePath}}" class= "imagen">
+            <br>
+            <div>
+                <a href="/ViewCompleted/{{title}}/delete" class="delete">
+                    <img src="/images/3221803.png" alt="Delete">
+                </a>
+            </div>
         </div>
     {{/films}}
 </div>

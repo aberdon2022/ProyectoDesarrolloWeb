@@ -27,6 +27,20 @@ body {
     transition: background-color 0.3s ease;
 }
 
+#film-list div div img{
+  position: relative;
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  bottom: 30px;
+  left: 10px;
+  margin-top: 40px;
+  max-width: 100%;
+  border-radius: 0;
+  box-shadow:0 0;
+}
+
+
   #filmForm {
     width: 300px;
     margin: 0 auto;
@@ -135,9 +149,9 @@ label.star:before {
   #film-list div img {
     width: 200px; 
     height: 300px;
-    object-fit: cover; 
     border-radius: 15px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); 
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    max-width: 100%;
   }
   
   #film-list .film-item h2 {
