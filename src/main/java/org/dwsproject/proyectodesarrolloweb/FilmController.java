@@ -35,7 +35,7 @@ public class FilmController {
             Path path = Paths.get(folder + imageFile.getOriginalFilename());
             Files.write(path, bytes);
 
-            film.setImagePath(imageFile.getOriginalFilename());
+            film.setImagePath(imageFile.getOriginalFilename());//Save the image path
             if ("pending".equals(listType)) {
                 pendingFilms.add(film);
             } else if ("completed".equals(listType)) {
@@ -89,12 +89,12 @@ public class FilmController {
         return "MessageAfterAddCompleted";
     }
 
-    @GetMapping("/ViewCompleted/{title}/delete")
+    @GetMapping("/ViewCompleted/{title}/delete")//Delete a film from the completed list
     public String deleteFilmC(Model model, @PathVariable String title) {
         completedFilms.removeIf(p -> p.getTitle().equals(title));
         return "deletedCompletedFilm";
     }
-    @GetMapping("/ViewPending/{title}/delete")
+    @GetMapping("/ViewPending/{title}/delete")//Delete a film from the pending list
     public String deleteFilmP(Model model, @PathVariable String title) {
         pendingFilms.removeIf(p -> p.getTitle().equals(title));
         return "deletedPendingFilm";

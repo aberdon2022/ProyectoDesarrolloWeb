@@ -1,0 +1,55 @@
+body {
+     background: url('images/backgroundHome.jpg');
+    background-size: cover; /* Ajusta el tamaño de la imagen de fondo */
+    background-position: center; /* Ajusta la posición de la imagen de fondo */
+    font-family: 'Roboto', sans-serif;
+    font-family: Arial, sans-serif;
+    background-color: #f8f8f8;
+    margin: 0;
+    padding: 0;
+}
+
+h2 {
+    text-align: center;
+    color: #fff9f9;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+li {
+    background-color: #fff;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+a.button {
+    display: block;
+    width: 150px;
+    margin: 0 auto 20px;
+    text-align: center;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+a.button:hover {
+    background-color: #0056b3;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+

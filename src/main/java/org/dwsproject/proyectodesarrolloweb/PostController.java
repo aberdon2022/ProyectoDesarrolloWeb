@@ -20,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 public class PostController {
 
-    private static final String POSTS_FOLDER = "posts";
+    private static final String POSTS_FOLDER = "posts";//Create a folder for the posts
 
     @Autowired
     private PostService postService;
@@ -65,7 +65,7 @@ public class PostController {
 
     @GetMapping("/post/{id}")
     public String showPost(Model model, @PathVariable long id) {
-
+        //Obtain the post by its id
         Post post = postService.findById(id);
         model.addAttribute("post", post);
 

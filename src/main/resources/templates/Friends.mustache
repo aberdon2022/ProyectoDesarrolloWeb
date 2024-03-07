@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Friends</title>
+    <link rel="stylesheet" href="friends.css">
+</head>
+<body>
+   <h2>My Friends</h2>
+   <a href="/profile" class="button">Return to Profile</a>
+   <ul>
+       {{#friends}}
+           <li>Friend: {{username}}</li>
+       {{/friends}}
+   </ul>
+</body>
+</html>
