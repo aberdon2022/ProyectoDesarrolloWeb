@@ -15,8 +15,8 @@ public class PostService {
     private AtomicLong nextId = new AtomicLong();
 
     public PostService() {
-        save(new Post("Taylor", "Opinión Clueless", "Perfecta"));
-        save(new Post("Swift", "Opinión El padrino", "Horrible"));
+        save(new Post("Taylor", "Opinion Clueless", "Perfecta"));
+        save(new Post("Swift", "Opinion El padrino", "Horrible"));
     }
 
     public Collection<Post> findAll() {
@@ -38,6 +38,14 @@ public class PostService {
 
     public void deleteById(long id) {
         this.posts.remove(id);
+    }
+    public void editById(Post post, long id){
+        if (posts.containsKey(id)) {
+            posts.replace(id, post);
+        } else {
+            throw new IllegalArgumentException("No hay ningún post con el ID proporcionado: " + id);
+        }
+
     }
 
 }

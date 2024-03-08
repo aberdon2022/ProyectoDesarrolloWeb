@@ -1,0 +1,35 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+    <link rel="stylesheet" href="/editPost.css">
+    <title>Post</title>
+</head>
+<body>
+    <h1>{{post.user}} - {{post.title}}</h1>
+    	    <form id="newPostForm" action="/post/{{post.id}}/edit" method="post" enctype="multipart/form-data">
+    		    <label for="user">User:</label>
+    		    <br>
+                <input type="text" id="user" name="user" value='{{post.user}}' required readonly>
+                <br>
+                <label for="title">Title:</label>
+                <br>
+                <input type="text" id="title" name="title" value='{{post.title}}' required>
+                <br>
+                <label for="text">Text:</label>
+                <br>
+                <textarea name='text' rows=5 cols=40>{{post.text}}</textarea>
+                <br>
+                <label for="image">Image:</label>
+                <br>
+                <input type="file" id="image" name="image">
+                <br>
+
+    		    <input type='submit' value='Save'/>
+    	</form>
+
+	<a href="/forum" class= "return">Back</a>
+</body>
+</html>

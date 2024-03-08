@@ -54,12 +54,8 @@ public class UserController {
         User user = userService.findUserByUsername("user1"); // Obtener el usuario user1
         if (user != null) {
             // Create a list of fake friends
-            ArrayList<User> friends = new ArrayList<>();
-            friends.add(new User("user2", "password"));
-            friends.add(new User("user3", "password"));
-            friends.add(new User("user4", "password"));
-            
-            model.addAttribute("friends", friends);
+            userService.createFakeFriends();
+            model.addAttribute("friends", userService.getFriends());
             return "Friends";
         } else {
             return "redirect:/login"; // redirect if not user1

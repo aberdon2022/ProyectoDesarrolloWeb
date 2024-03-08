@@ -31,6 +31,16 @@ a.delete {
     margin-bottom: 15px;
     margin-top: 40px;
 }
+a.edit {
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #26689e;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    margin-top: 40px;
+}
 a.return {
     display: inline-block;
     padding: 5px 10px;

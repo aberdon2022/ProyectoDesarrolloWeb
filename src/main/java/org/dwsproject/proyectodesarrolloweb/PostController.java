@@ -87,4 +87,22 @@ public class PostController {
 
         return "deletedPost";
     }
+    @GetMapping("/post/{id}/edit")
+    public String editPost(Model model, @PathVariable long id) throws IOException {
+
+        Post post = postService.findById(id);
+        model.addAttribute("post", post);
+
+        return "editPost";
+    }
+    @PostMapping("/post/{id}/edit")
+    public String editPost(Model model, Post post, MultipartFile image) throws IOException {
+
+        postService.editById(post, post.getId());
+
+        imageService.saveImage(POSTS_FOLDER, post.getId(), image);
+        model.addAttribute("post", post);
+
+        return "redirect:/forum";
+    }
 }

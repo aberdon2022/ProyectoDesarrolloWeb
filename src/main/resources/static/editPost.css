@@ -1,0 +1,75 @@
+body {
+    background: url('images/backgroundHome.jpg');
+    background-size: cover; /* Ajusta el tamaño de la imagen de fondo */
+    background-position: center; /* Ajusta la posición de la imagen de fondo */
+    font-family: 'Roboto', sans-serif;
+    font-family: 'Roboto', sans-serif;
+    margin: 15px;
+    padding: 0;
+    background-color: #222;
+    color: #ddd;
+}
+
+h1 {
+    text-align: center;
+    padding: 1.5rem;
+    background-color: #26689e;
+    color: white;
+    margin: 0 0 2rem 0;
+    border-radius: 10px;
+    font-family: 'Roboto', sans-serif;
+}
+
+#newPostForm {
+    width: 300px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    background-color: #26689e; /* Fondo blanco */
+    border-radius: 10px; /* Borde redondeado */
+    padding: 20px; /* Espacio interno */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Sombra */
+}
+
+#newPostForm label {
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+#newPostForm input[type="text"],
+#newPostForm input[type="file"] {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    background-color: #b3bebe;
+    color: #000000;
+    border: none;
+}
+#newPostForm textarea {
+    width: 100%; /* Ancho completo */
+    padding: 10px; /* Espaciado interno */
+    margin-bottom: 10px; /* Margen inferior */
+    border-radius: 5px; /* Borde redondeado */
+    background-color: #b3bebe;
+    color: #000000;
+    border: none;
+    resize: none;
+}
+
+#newPostForm input[type="submit"] {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #26689e;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+a.return{
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #333;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
