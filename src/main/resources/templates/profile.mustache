@@ -1,7 +1,6 @@
 <html>
-
 <head>
-    <link rel="stylesheet" href="profile.css">
+    <link rel="stylesheet" href="/profile.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Profile</title>
 </head>
@@ -10,24 +9,25 @@
 <h1>Welcome, User!</h1>
 <a href="/logout" class= "logout">Logout</a>
 <h2>Profile</h2>
-<a href="/AddPending" class="pending">
-   <img src="/images/3221803.png" alt="Delete">
-</a>
-<br>
-   <h3 class="adpen">Add to Pending List</h3>
-   </br>
-   <br>
-    </br>
-   <br>
-    </br>
-   <br>
-    </br>
-   <br>
-    </br>
 
-<button onclick="location.href='/AddCompleted'">Add Film To Completed List</button>
-<button onclick="location.href='/ViewPending'">Pending Films</button>
-<button onclick="location.href='/ViewCompleted'">Completed Films</button>
+<div class="film-container">
+    <a href="/pending" class="pending">
+        <img src="/images/3221803.png" alt="Delete">
+        <h3 class="film-titlePend">Pending List</h3>
+    </a>
+    <a href="/completed" class="completed">
+        <img src="/images/3221803.png" alt="Delete">
+        <h3 class="film-titleComp">Completed List</h3>
+    </a>
+</div>
+   <br>
+   <br>
+    <br>
+   <br>
+   <br>
+   <br>
+<button onclick="location.href='/pending'">Pending Films</button>
+<button onclick="location.href='/completed'">Completed Films</button>
 <button onclick="location.href='/forum'">Forum</button>
 <button onclick="location.href='/Friends'">Friends</button>
 

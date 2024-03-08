@@ -18,7 +18,7 @@
             <p>{{year}}</p>
             <img src="{{imagePath}}">
             <div>
-                <a href="/ViewPending/{{title}}/delete" class="delete">
+                <a href="/pending/{{title}}/delete" class="delete">
                 <img src="/images/3221803.png" alt="Delete">
                 </a>
                 </div>
@@ -26,4 +26,5 @@
     {{/films}}
 </div>
 </body>
+<button onclick="location.href='/pending/add'" class="button">Add Film</button>
 </html>

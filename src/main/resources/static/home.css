@@ -45,7 +45,7 @@
   }
 .button {
   --color: #26689e;
-  margin: center; /* Cambia esta línea */
+  margin: 30px; /* Cambia esta línea */
   padding: 0.8em 1.7em;
   background-color: rgb(208, 218, 212);
   border-radius: .3em;

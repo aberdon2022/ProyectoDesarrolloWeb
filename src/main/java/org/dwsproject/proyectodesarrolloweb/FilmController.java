@@ -1,110 +1,80 @@
 package org.dwsproject.proyectodesarrolloweb;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
+import org.dwsproject.proyectodesarrolloweb.service.FilmService;
 
 @Controller
 public class FilmController {
-    // List of films
-    private ArrayList<Pelicula> pendingFilms = new ArrayList<>();
-    private ArrayList<Pelicula> completedFilms = new ArrayList<>();
+    @Autowired
+    private FilmService filmService;
 
-     // Method to obtain pending films
-     public List<Pelicula> getPendingFilms() {
-        return pendingFilms;
-    }
-
-    // Method to obtain completed films
-    public List<Pelicula> getCompletedFilms() {
-        return completedFilms;
-    }
-    
     @PostMapping("/addpeli")
     public String createFilm(Pelicula film, @RequestParam("image")MultipartFile imageFile, @RequestParam("listType") String listType) {
         try {
-            String folder = "src/main/resources/static/images/";
-            byte[] bytes = imageFile.getBytes();
-            Path path = Paths.get(folder + imageFile.getOriginalFilename());
-            Files.write(path, bytes);
-
-            film.setImagePath(imageFile.getOriginalFilename());//Save the image path
-            if ("pending".equals(listType)) {
-                pendingFilms.add(film);
-            } else if ("completed".equals(listType)) {
-                completedFilms.add(film);
-            }
+            filmService.addFilm(film, imageFile, listType);
         } catch (Exception e) {
             e.printStackTrace();
         }
         // Redirect to the corresponding list
         if ("pending".equals(listType)) {
-            return "redirect:/ConfirmPending";
+            return "redirect:/pending/confirmed";
         } else if ("completed".equals(listType)) {
-            return "redirect:/ConfirmCompleted";
+            return "redirect:/completed/confirmed";
         } else {
             // If listType is not specified, redirect to home page or some other page as needed
             return "redirect:/";
         }
     }
 
-    @GetMapping("/AddPending")
+    @GetMapping("/pending/add")
     public String pending(Model model) {
-        model.addAttribute("films", pendingFilms);
+        model.addAttribute("films", filmService.getPendingFilms());
         return "AddPendingList";
     }
-    
-    @GetMapping("/AddCompleted")
-        public String completed(Model model) {
-            model.addAttribute("films", completedFilms);
-            return "AddCompletedList";
+
+    @GetMapping("/completed/add")
+    public String completed(Model model) {
+        model.addAttribute("films", filmService.getCompletedFilms());
+        return "AddCompletedList";
     }
 
-    @GetMapping("/ViewPending")
+    @GetMapping("/pending")
     public String viewPending(Model model) {
-        model.addAttribute("films", pendingFilms);
+        model.addAttribute("films", filmService.getPendingFilms());
         return "ViewPendingList";
     }
 
-    @GetMapping("/ConfirmPending")
+    @GetMapping("/completed")
+    public String viewCompleted(Model model) {
+        model.addAttribute("films", filmService.getCompletedFilms());
+        return "ViewCompletedList";
+    }
+
+    @GetMapping("/pending/confirmed")
     public String confirmPending() {
         return "MessageAfterAddPending";
     }
 
-    @GetMapping("/ViewCompleted")
-    public String viewCompleted(Model model) {
-        model.addAttribute("films", completedFilms);
-        return "ViewCompletedList";
-    }
-
-    @GetMapping("/ConfirmCompleted")
+    @GetMapping("/completed/confirmed")
     public String confirmCompleted() {
         return "MessageAfterAddCompleted";
     }
 
-    @DeleteMapping ("/ViewCompleted/{title}/delete")//Delete a film from the completed list
+    @GetMapping ("/completed/{title}/delete")//Delete a film from the completed list
     public String deleteFilmC(Model model, @PathVariable String title) {
-        completedFilms.removeIf(p -> p.getTitle().equals(title));
+        filmService.deleteFilm(title, "completed");
         return "deletedCompletedFilm";
     }
-    @GetMapping("/ViewPending/{title}/delete")//Delete a film from the pending list
+    @GetMapping("/pending/{title}/delete")//Delete a film from the pending list
     public String deleteFilmP(Model model, @PathVariable String title) {
-        pendingFilms.removeIf(p -> p.getTitle().equals(title));
+        filmService.deleteFilm(title, "pending");
         return "deletedPendingFilm";
     }
-
-
-
-}    
-    
-
+}
 
    
 
