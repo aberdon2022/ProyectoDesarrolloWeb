@@ -89,7 +89,7 @@ public class FilmController {
         return "MessageAfterAddCompleted";
     }
 
-    @GetMapping("/ViewCompleted/{title}/delete")//Delete a film from the completed list
+    @DeleteMapping ("/ViewCompleted/{title}/delete")//Delete a film from the completed list
     public String deleteFilmC(Model model, @PathVariable String title) {
         completedFilms.removeIf(p -> p.getTitle().equals(title));
         return "deletedCompletedFilm";

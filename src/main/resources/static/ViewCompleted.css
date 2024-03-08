@@ -3,7 +3,6 @@ body {
   background-size: cover; /* Ajusta el tamaño de la imagen de fondo */
   background-position: center; /* Ajusta la posición de la imagen de fondo */
   font-family: 'Roboto', sans-serif;
-    font-family: 'Roboto', sans-serif;
     margin: 15px;
     padding: 0;
     background-color: #222;
@@ -156,6 +155,8 @@ label.star:before {
     border-radius: 15px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     max-width: 100%;
+    max-height: 100%
+
   }
   
   #film-list .film-item h2 {
