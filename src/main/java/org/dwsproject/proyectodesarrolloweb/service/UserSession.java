@@ -5,7 +5,7 @@ import org.springframework.web.context.annotation.SessionScope;
 
 @Component
 @SessionScope
-public class UserSession {
+public class UserSession {//information about the actual user
 
     private String user = "user1";
     private int numPosts;
@@ -18,11 +18,11 @@ public class UserSession {
         return user;
     }
 
-    public int getNumPosts() {
+    public int getNumPosts() {//number of posts that the user has made
         return this.numPosts;
     }
 
-    public void incNumPosts() {
+    public void incNumPosts() {//when the user makes a post, the number of posts is increased
         this.numPosts++;
     }
 
