@@ -25,12 +25,16 @@ p{
 a.button {
     display: inline-block;
     color: #fff;
-    background-color: #5775AD;
+    background-color: #678ACC;
     padding: 10px 20px;
     text-decoration: none;
     border-radius: 5px;
-    transition: background-color 0.3s ease;
     margin: 0 0 20px;
+    transition: background-color 0.3s; /* Agrega una transición suave */
+}
+
+a.button:hover {
+    background-color: #26689e; /* Cambia el color de fondo al pasar el ratón */
 }
 a.add {
     display: inline-block;
@@ -51,8 +55,15 @@ a.add {
     left: 10px;
     margin-top: 40px;
     max-width: 100%;
-    border-radius: 0;
+    border-radius: 5px;
+    padding-bottom: 3px;
+    padding-top: 2px;
     box-shadow:0 0;
+    transition: background-color 0.3s; /* Agrega una transición suave */
+}
+
+#film-list div div img:hover {
+    background-color: red; /* Cambia el color de fondo al pasar el ratón */
 }
 
 #film-list > div {

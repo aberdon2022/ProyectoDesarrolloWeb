@@ -2,16 +2,35 @@ body {
     font-family: 'Roboto', sans-serif;
     margin: 15px;
     padding: 0;
-    background-color: #ddd;
+    background-color: black;
     color: #ddd;
 }
-h1 {
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('images/series-netflix.webp') center/cover;
+    opacity: 0.4; /* Cambia la opacidad de la imagen de fondo */
+    z-index: -1; /* Coloca el pseudo-elemento detrás del contenido */
+}
+h1 { /*ns como ajustar la imagen*/
     text-align: center;
     padding: 1.5rem;
-    background-color: #678ACC;
-    color: white;
+    background-image: url('images/cinta.webp');
+    width: 100%;
+    height: 30px;
+    color: #ddd;
     margin: 0 0 2rem 0;
     border-radius: 10px;
+    font-family: 'Roboto', sans-serif;
+    max-width: 100%;
+}
+h2{
+    color: #26689e;
     font-family: 'Roboto', sans-serif;
 }
 button {
@@ -54,6 +73,11 @@ a.pending img{
     margin: 20px 50px 30px 300px;
     max-width: 100%;
     max-height: 100%;
+    transition: transform 0.3s; /* Agrega una transición suave */
+}
+
+a.pending img:hover {
+    transform: scale(1.1); /* Aumenta el tamaño al 110% cuando pasa el cursor por encima */
 }
 
 a.completed img{
@@ -65,7 +89,12 @@ a.completed img{
     left: 0px;
     margin: 20px 0px 30px 320px;
     max-width: 100%;
-    max-height: 100%
+    max-height: 100%;
+    transition: transform 0.3s; /* Agrega una transición suave */
+}
+
+a.completed img:hover {
+    transform: scale(1.1); /* Aumenta el tamaño al 110% cuando pasa el cursor por encima */
 }
 a.forum img{
     position: relative;
@@ -76,7 +105,12 @@ a.forum img{
     left: 0px;
     margin: 90px 0px 30px 540px;
     max-width: 100%;
-    max-height: 100%
+    max-height: 100%;
+    transition: transform 0.3s; /* Agrega una transición suave */
+}
+
+a.forum img:hover {
+    transform: scale(1.1); /* Aumenta el tamaño al 110% cuando pasa el cursor por encima */
 }
 a.titleFor{
     position: relative;
@@ -96,19 +130,24 @@ a.logout{
     text-decoration: none;
     border-radius: 5px;
     margin-bottom: 15px;
+    transition: background-color 0.3s; /* Agrega una transición suave */
+}
+
+a.logout:hover {
+    background-color: #BD300D; /* Cambia el color de fondo al pasar el ratón */
 }
 a.friends {
     font-weight: bold;
     display: inline-block;
     padding: 10px 10px;
-    background-color: #4FCB7C ;
+    background-color: #4FCB7C;
     color: #fff;
     text-decoration: none;
     border-bottom-left-radius: 5px;
     margin-bottom: 15px;
     float: right;
 }
-a.friendsimg img{
+a.friendsimg img {
     float: right;
     position: relative;
     display: inline-block;
@@ -118,6 +157,6 @@ a.friendsimg img{
     max-height: 100%;
     margin-top: 0px;
     padding: 9px 5px;
-    background-color: #4FCB7C ;
+    background-color: #4FCB7C;
     border-bottom-right-radius: 5px;
 }
