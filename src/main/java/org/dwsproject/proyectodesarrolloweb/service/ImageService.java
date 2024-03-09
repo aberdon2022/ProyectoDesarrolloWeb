@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -15,6 +16,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class ImageService {
+
+    @Autowired
+    private FilmService filmService;
 
     private static final Path FILES_FOLDER = Paths.get(System.getProperty("user.dir"), "images");
 
@@ -42,7 +46,13 @@ public class ImageService {
         Resource file = new UrlResource(imagePath.toUri());
 
         if(!Files.exists(imagePath)) {
-            return ResponseEntity.notFound().build();
+            // If the image is not found on the disk, try to get it from memory
+            byte[] image = filmService.getImage(folderName + "/" + imageId + ".jpg");
+            if (image != null) {
+                return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "image/jpeg").body(image);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
         } else {
             return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "image/jpeg").body(file);
         }
