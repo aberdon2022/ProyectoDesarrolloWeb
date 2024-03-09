@@ -5,12 +5,16 @@
     <link rel="stylesheet" href="/friends.css">
 </head>
 <body>
-   <h2>My Friends</h2>
-   <a href="/profile" class="button">Return to Profile</a>
-   <ul>
+   <h1>My Friends</h1>
+<div id="friend-list">
        {{#friends}}
-           <li>Friend: {{username}}</li>
+       <div>
+           <p>Friend: {{username}}</p>
+           <a href="/friends/{{username}}/delete" class="delete">Delete friend</a>
+           </div>
+       </div>
        {{/friends}}
-   </ul>
+   </div>
+   <a href="/profile" class="button">Return to Profile</a>
 </body>
 </html>

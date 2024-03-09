@@ -40,7 +40,7 @@ public class PostController {
         return "indexForum";
     }
 
-    @GetMapping("/postnew")
+    @GetMapping("/forum/new")
     public String newPostForm(Model model) {
 
         model.addAttribute("user", userSession.getUser());
@@ -48,7 +48,7 @@ public class PostController {
         return "newPost";
     }
 
-    @PostMapping("/postnew")
+    @PostMapping("/forum/new")
     public String newPost(Model model, Post post, MultipartFile image) throws IOException {
 
         postService.save(post);

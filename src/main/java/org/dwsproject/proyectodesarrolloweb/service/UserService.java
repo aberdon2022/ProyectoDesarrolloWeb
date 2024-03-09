@@ -17,11 +17,6 @@ public class UserService {
 
     public void createFakeUsers() {//Create fake users
         usersdb.add(new User("user1", "1"));
-        usersdb.add(new User("user2", "2"));
-        usersdb.add(new User("user3", "3"));
-        usersdb.add(new User("user4", "4"));
-    }
-    public void createFakeFriends() {//Create fake users
         friendsdb.add(new User("user2", "2"));
         friendsdb.add(new User("user3", "3"));
         friendsdb.add(new User("user4", "4"));
@@ -39,4 +34,8 @@ public class UserService {
         }
         return null;
     }
+    public void deleteFriends(String username){
+        friendsdb.removeIf(p -> p.getUsername().equals(username));
+    }
 }
+

@@ -18,7 +18,6 @@
             <p>Year: {{year}}</p>
             <p>Rating: {{rating}}</p>
             <img src="{{imagePath}}" class= "imagen">
-            <br>
             <div>
                 <a href="/completed/{{title}}/delete" class="delete">
                     <img src="/images/3221803.png" alt="Delete">
@@ -27,6 +26,6 @@
         </div>
     {{/films}}
 </div>
-<button onclick="location.href='/completed/add'" class="button">Add Film</button>
+<a href="/completed/add" class="add">Add Film</a>
 </body>
 </html>

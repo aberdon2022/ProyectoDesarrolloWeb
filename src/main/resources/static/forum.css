@@ -1,20 +1,25 @@
 body {
-    background: url('images/backgroundHome.jpg');
-    background-size: cover; /* Ajusta el tamaño de la imagen de fondo */
-    background-position: center; /* Ajusta la posición de la imagen de fondo */
-    font-family: 'Roboto', sans-serif;
     font-family: 'Roboto', sans-serif;
     margin: 15px;
     padding: 0;
-    background-color: #222;
+    background-color: #ddd;
     color: #ddd;
+}
+h1 {
+    text-align: center;
+    padding: 1.5rem;
+    background-color: #678ACC;
+    color: white;
+    margin: 0 0 2rem 0;
+    border-radius: 10px;
+    font-family: 'Roboto', sans-serif;
 }
 a.post-link {
     font-weight: bold;
     display: inline-block;
     padding: 10px 15px;
-    background-color: #544669;
-    color: #fff9f9;
+    background-color: #fff;
+    color: #678ACC;
     text-decoration: none;
     border-radius: 5px;
     margin-bottom: 15px;
@@ -22,26 +27,17 @@ a.post-link {
 a.new_post {
     display: inline-block;
     padding: 10px 15px;
-    background-color: #2DA6F5;
+    background-color: #628EE2;
     color: #fff;
     text-decoration: none;
     border-radius: 5px;
     margin-bottom: 15px;
 }
 
-h1 {
-    text-align: center;
-    padding: 1.5rem;
-    background-color: #26689e;
-    color: white;
-    margin: 0 0 2rem 0;
-    border-radius: 10px;
-    font-family: 'Roboto', sans-serif;
-}
 a.return {
     display: inline-block;
     padding: 5px 10px;
-    background-color: #333;
+    background-color: #26689e;
     color: #fff;
     text-decoration: none;
     border-radius: 5px;

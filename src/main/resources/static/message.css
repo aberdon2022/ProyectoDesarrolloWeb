@@ -1,19 +1,14 @@
 body {
-    background: url('images/backgroundHome.jpg');
-    background-size: cover; /* Ajusta el tamaño de la imagen de fondo */
-    background-position: center; /* Ajusta la posición de la imagen de fondo */
     font-family: 'Roboto', sans-serif;
-    font-family: 'Roboto', sans-serif;
-    margin: 0;
+    margin: 15px;
     padding: 0;
-    background-color: #222;
+    background-color: #ddd;
     color: #ddd;
 }
-
 h1 {
     text-align: center;
     padding: 1.5rem;
-    background-color: #26689e;
+    background-color: #678ACC;
     color: white;
     margin: 0 0 2rem 0;
     border-radius: 10px;
@@ -34,7 +29,7 @@ h1 {
 .button {
     display: inline-block;
     color: #fff;
-    background-color: #333;
+    background-color: #5775AD;
     padding: 10px 20px;
     text-decoration: none;
     margin: 20px;
@@ -43,7 +38,7 @@ h1 {
 }
 
 .button:hover {
-    background-color: #444;
+    background-color: #5775AD;
 }
 
 .toast {
@@ -59,7 +54,7 @@ h1 {
     top: 50%;
     transform: translate(-50%, -50%);
     font-size: 17px;
-    background-color: #333;
+    background-color: #5775AD;
 }
 
 .toast.show {

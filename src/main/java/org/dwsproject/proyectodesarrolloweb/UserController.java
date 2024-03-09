@@ -49,16 +49,19 @@ public class UserController {
         }
     }
 
-    @GetMapping("/Friends")
+    @GetMapping("/friends")
     public String friends(Model model) {
         User user = userService.findUserByUsername("user1"); // Obtener el usuario user1
         if (user != null) {
-            // Create a list of fake friends
-            userService.createFakeFriends();
             model.addAttribute("friends", userService.getFriends());
             return "Friends";
         } else {
             return "redirect:/login"; // redirect if not user1
         }
+    }
+    @GetMapping("/friends/{username}/delete")//Delete a user from the friend list
+    public String deleteFriend(Model model, @PathVariable String username) {
+        userService.deleteFriends(username);
+        return "deletedFriend";
     }
 }

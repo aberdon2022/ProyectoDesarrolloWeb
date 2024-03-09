@@ -1,18 +1,14 @@
 body {
-    background: url('images/backgroundHome.jpg');
-    background-size: cover; /* Ajusta el tamaño de la imagen de fondo */
-    background-position: center; /* Ajusta la posición de la imagen de fondo */
-    font-family: 'Roboto', sans-serif;
     font-family: 'Roboto', sans-serif;
     margin: 15px;
     padding: 0;
-    background-color: #222;
+    background-color: #ddd;
     color: #ddd;
 }
 h1 {
     text-align: center;
     padding: 1.5rem;
-    background-color: #26689e;
+    background-color: #678ACC;
     color: white;
     margin: 0 0 2rem 0;
     border-radius: 10px;
@@ -22,9 +18,15 @@ h1 {
 a.return{
     display: inline-block;
     padding: 5px 10px;
-    background-color: #333;
+    background-color: #26689e;
     color: #fff;
     text-decoration: none;
     border-radius: 5px;
     margin-bottom: 15px;
+    margin-top: 20px;
+}
+p{
+    font-family: 'Roboto', sans-serif;
+    color: #26689e;
+    font-size: 20px;
 }

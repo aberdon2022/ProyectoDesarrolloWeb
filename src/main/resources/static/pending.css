@@ -1,12 +1,18 @@
 body {
-  background: url('images/backgroundHome.jpg');
-  background-size: cover; /* Ajusta el tamaño de la imagen de fondo */
-  background-position: center; /* Ajusta la posición de la imagen de fondo */
   font-family: 'Roboto', sans-serif;
   margin: 15px;
   padding: 0;
-  background-color: #222;
+  background-color: #ddd;
   color: #ddd;
+}
+h1 {
+  text-align: center;
+  padding: 1.5rem;
+  background-color: #678ACC;
+  color: white;
+  margin: 0 0 2rem 0;
+  border-radius: 10px;
+  font-family: 'Roboto', sans-serif;
 }
 
 .button {
@@ -20,16 +26,6 @@ body {
   transition: background-color 0.3s ease;
 }
 
-h1 {
-  text-align: center;
-  padding: 1.5rem;
-  background-color: #26689e;
-  color: white;
-  margin: 0 0 2rem 0;
-  border-radius: 10px;
-  font-family: 'Roboto', sans-serif;
-}
-
 #filmForm {
   width: 300px;
   margin: 0 auto;
@@ -40,6 +36,7 @@ h1 {
 #filmForm label {
   margin-bottom: 0.5rem;
   font-weight: bold;
+  color: #678ACC;
 }
 
 #filmForm input[type="text"],
@@ -47,8 +44,8 @@ h1 {
 #filmForm input[type="file"] {
   margin-bottom: 1rem;
   padding: 0.5rem;
-  background-color: #fff4f4;
-  color: #000000;
+  background-color: #95B4EF;
+  color: white;
   border: none;
 }
 
@@ -63,7 +60,7 @@ h1 {
 }
 
 #filmForm input[type="submit"]:hover {
-  background-color: lightpink;
+  background-color: #1E527C;
 }
 
 #film-list > div {

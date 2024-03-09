@@ -1,22 +1,18 @@
 body {
-    background: url('images/backgroundHome.jpg');
-    background-size: cover; /* Ajusta el tamaño de la imagen de fondo */
-    background-position: center; /* Ajusta la posición de la imagen de fondo */
-    font-family: 'Roboto', sans-serif;
     font-family: 'Roboto', sans-serif;
     margin: 15px;
     padding: 0;
-    background-color: #222;
+    background-color: #ddd;
     color: #ddd;
 }
 p {
-    color: white;
+    color: #26689e;
     font-family: 'Roboto', sans-serif;
 }
 a.return {
     display: inline-block;
     padding: 5px 10px;
-    background-color: #333;
+    background-color: #26689e;
     color: #fff;
     text-decoration: none;
     border-radius: 5px;

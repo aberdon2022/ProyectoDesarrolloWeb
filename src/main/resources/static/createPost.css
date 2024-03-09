@@ -1,19 +1,15 @@
 body {
-    background: url('images/backgroundHome.jpg');
-    background-size: cover; /* Ajusta el tamaño de la imagen de fondo */
-    background-position: center; /* Ajusta la posición de la imagen de fondo */
-    font-family: 'Roboto', sans-serif;
     font-family: 'Roboto', sans-serif;
     margin: 15px;
     padding: 0;
-    background-color: #222;
+    background-color: #ddd;
     color: #ddd;
 }
 
 h1 {
     text-align: center;
     padding: 1.5rem;
-    background-color: #26689e;
+    background-color: #678ACC;
     color: white;
     margin: 0 0 2rem 0;
     border-radius: 10px;
@@ -30,14 +26,15 @@ h1 {
 #newPostForm label {
     margin-bottom: 0.5rem;
     font-weight: bold;
+    color: #678ACC;
 }
 
 #newPostForm input[type="text"],
 #newPostForm input[type="file"] {
     margin-bottom: 1rem;
     padding: 0.5rem;
-    background-color: #333;
-    color: #ddd;
+    background-color: #95B4EF;
+    color: white;
     border: none;
 }
 #newPostForm textarea {
@@ -45,8 +42,8 @@ h1 {
     padding: 10px; /* Espaciado interno */
     margin-bottom: 10px; /* Margen inferior */
     border-radius: 5px; /* Borde redondeado */
-    background-color: #333;
-    color: #ddd;
+    background-color: #95B4EF;
+    color: #fff;
     border: none;
     resize: none;
 }

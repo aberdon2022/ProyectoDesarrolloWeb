@@ -13,7 +13,7 @@
 <div id="film-list">
     {{#films}}
         <div>
-            <h2>{{title}}</h2>
+            <h2>Title: {{title}}</h2>
             <p>Year: {{year}}</p>
             <img src="{{imagePath}}">
             <div>
@@ -25,5 +25,5 @@
     {{/films}}
 </div>
 </body>
-<button onclick="location.href='/pending/add'" class="button">Add Film</button>
+<a href="/pending/add" class="add">Add Film</a>
 </html>
