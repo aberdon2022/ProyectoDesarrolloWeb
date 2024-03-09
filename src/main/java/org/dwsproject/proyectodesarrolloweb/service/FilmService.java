@@ -27,7 +27,6 @@ public class FilmService {
         return completedFilms;
     }
 
-    @Async
     public void addFilm(Pelicula film, MultipartFile imageFile, String listType) throws IOException {
         String folder = "src/main/resources/static/images/";
         byte[] bytes = imageFile.getBytes();
