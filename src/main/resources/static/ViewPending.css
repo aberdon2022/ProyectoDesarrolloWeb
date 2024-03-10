@@ -2,49 +2,71 @@ body {
     font-family: 'Roboto', sans-serif;
     margin: 15px;
     padding: 0;
-    background-color: #ddd;
+    background-color: black;
     color: #ddd;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('images/series-netflix.webp') center/cover;
+    opacity: 0.4; /* Cambia la opacidad de la imagen de fondo */
+    z-index: -1; /* Coloca el pseudo-elemento detrás del contenido */
 }
 h1 {
     text-align: center;
-    padding: 1.5rem;
-    background-color: #678ACC;
-    color: white;
+    padding: 1.7rem;
+    background-image: url('images/cinta2.jpg');
+    background-size: contain;
+    width: 100%;
+    height: 30px;
+    color: black;
     margin: 0 0 2rem 0;
     border-radius: 10px;
     font-family: 'Roboto', sans-serif;
+    opacity: 0.6;
+    margin-left: -15px;
 }
 h2{
-    color: #26689e;
+    color: #ddd;
 }
 
 p{
-    color: #26689e;
+    color: #ddd;
 }
 
 a.button {
     display: inline-block;
     color: #fff;
-    background-color: #678ACC;
+    background-color: #26689e;
     padding: 10px 20px;
     text-decoration: none;
     border-radius: 5px;
     margin: 0 0 20px;
-    transition: background-color 0.3s; /* Agrega una transición suave */
+    transition: background-color 0.1s;
 }
 
 a.button:hover {
-    background-color: #26689e; /* Cambia el color de fondo al pasar el ratón */
+    background-color: #2E4F9B;
 }
 a.add {
     display: inline-block;
     color: #fff;
-    background-color: #628EE2;
+    background-color: #26689e;
     padding: 10px 20px;
     text-decoration: none;
     margin: 0 0 2rem 0;
     border-radius: 5px;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.1s;
+}
+
+a.add:hover {
+    background-color: #2E4F9B;
 }
 #film-list div div img{
     position: relative;
@@ -57,31 +79,32 @@ a.add {
     max-width: 100%;
     border-radius: 5px;
     padding-bottom: 3px;
+    padding-left: 0px;
     padding-top: 2px;
     box-shadow:0 0;
     transition: background-color 0.3s; /* Agrega una transición suave */
+    background-color: #F34F1B;
 }
 
 #film-list div div img:hover {
-    background-color: red; /* Cambia el color de fondo al pasar el ratón */
+    background-color: #B42901;
 }
 
 #film-list > div {
-    margin: 10px; /* Ajusta este valor a tu gusto */
+    margin: 10px;
 }
 
 #film-list {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    margin: 2rem;
+    margin: 0px 2rem 2rem;
 }
 
 #film-list .film-item {
     background-color: #333;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 1rem;
-    margin: 1rem 1rem 1rem 1rem;
     text-align: center;
     width: calc(33.333% - 2rem);
     border-radius: 4px;
@@ -91,6 +114,7 @@ a.add {
     justify-content: center;
     align-items: center;
     height: 100%;
+    margin: 0px 1rem 1rem;
 }
 
 #film-list div img {
@@ -99,6 +123,7 @@ a.add {
     border-radius: 15px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     max-width: 100%;
+    max-height: 100%
 }
 
 #film-list .film-item h2 {
@@ -106,14 +131,14 @@ a.add {
     font-size: 1.2rem;
     margin-bottom: 0.5rem;
     display: inline-block;
-    color: #26689e;
+    color: #ddd;
 }
 
 #film-list .film-item p {
     text-align: center;
     margin: 0;
     font-size: 1rem;
-    color: #26689e;
+    color: #ddd;
 }
 
 @media (max-width: 768px) {

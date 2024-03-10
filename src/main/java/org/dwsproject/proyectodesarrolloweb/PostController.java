@@ -21,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class PostController {
 
     private static final String POSTS_FOLDER = "posts";//Create a folder for the posts
-
+//Use the methods of the service PostService, UserSession and ImageService
     @Autowired
     private PostService postService;
 
@@ -31,7 +31,7 @@ public class PostController {
     @Autowired
     private ImageService imageService;
 
-    @GetMapping("/forum")
+    @GetMapping("/forum")//Show the actual posts
     public String showPosts(Model model, HttpSession session) {
 
         model.addAttribute("posts", postService.findAll());
@@ -40,7 +40,7 @@ public class PostController {
         return "indexForum";
     }
 
-    @GetMapping("/forum/new")
+    @GetMapping("/forum/new")//Show the form to add a new post
     public String newPostForm(Model model) {
 
         model.addAttribute("user", userSession.getUser());
@@ -48,7 +48,7 @@ public class PostController {
         return "newPost";
     }
 
-    @PostMapping("/forum/new")
+    @PostMapping("/forum/new")//Add a new post
     public String newPost(Model model, Post post, MultipartFile image) throws IOException {
 
         postService.save(post);
@@ -63,7 +63,7 @@ public class PostController {
         return "savedPost";
     }
 
-    @GetMapping("/post/{id}")
+    @GetMapping("/post/{id}")//Show a post by its id
     public String showPost(Model model, @PathVariable long id) {
         //Obtain the post by its id
         Post post = postService.findById(id);
@@ -72,13 +72,13 @@ public class PostController {
         return "showPost";
     }
 
-    @GetMapping("/post/{id}/image")
+    @GetMapping("/post/{id}/image")//Download the image of a post by its id
     public ResponseEntity<Object> downloadImage(@PathVariable int id) throws MalformedURLException {
 
         return imageService.createResponseFromImage(POSTS_FOLDER, id);
     }
 
-    @GetMapping("/post/{id}/delete")
+    @GetMapping("/post/{id}/delete")//Delete a post by its id
     public String deletePost(Model model, @PathVariable long id) throws IOException {
 
         postService.deleteById(id);
@@ -87,7 +87,7 @@ public class PostController {
 
         return "deletedPost";
     }
-    @GetMapping("/post/{id}/edit")
+    @GetMapping("/post/{id}/edit")//Show the form to edit a post by its id
     public String editPost(Model model, @PathVariable long id) throws IOException {
 
         Post post = postService.findById(id);
@@ -95,7 +95,7 @@ public class PostController {
 
         return "editPost";
     }
-    @PostMapping("/post/{id}/edit")
+    @PostMapping("/post/{id}/edit")//Edit a post by its id
     public String editPost(Model model, Post post, MultipartFile image) throws IOException {
 
         postService.editById(post, post.getId());

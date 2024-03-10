@@ -4,6 +4,7 @@ body {
     padding: 0;
     background-color: black;
     color: #ddd;
+    overflow-x: hidden;
 }
 
 body::before {
@@ -17,110 +18,51 @@ body::before {
     opacity: 0.4; /* Cambia la opacidad de la imagen de fondo */
     z-index: -1; /* Coloca el pseudo-elemento detrás del contenido */
 }
-h1 { /*ns como ajustar la imagen*/
+h1 {
     text-align: center;
-    padding: 1.5rem;
-    background-image: url('images/cinta.webp');
+    padding: 1.7rem;
+    background-image: url('images/cinta2.jpg');
+    background-size: contain;
     width: 100%;
     height: 30px;
-    color: #ddd;
+    color: black;
     margin: 0 0 2rem 0;
     border-radius: 10px;
     font-family: 'Roboto', sans-serif;
-    max-width: 100%;
+    opacity: 0.6;
+    margin-left: -15px;
 }
 h2{
-    color: #26689e;
+    color: #ddd;
     font-family: 'Roboto', sans-serif;
-}
-button {
-    font-size: 15px;
-    font-weight: bold;
-    display: inline-block;
-    padding: 20px 35px;
-    background-color: #434947;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 30px;
-    margin-bottom: 15px;
-    margin: 20px;
 }
 
-a.film-titlePend {
-    text-align: center;
-    font-size: 20px;
-    color: #26689e;
-    margin-top: 220px;
-    margin-left: -180px;
-    text-decoration: none !important;
-    font-family: 'Roboto', sans-serif;
-}
-a.film-titleComp {
-    font-size: 20px;
-    color: #26689e;
-    margin-top: 220px;
-    margin-left: -140px;
-    text-decoration: none !important;
-    font-family: 'Roboto', sans-serif;
-}
-a.pending img{
-    position: relative;
-    display: inline-block;
-    width: 150px;
-    height: 150px;
-    bottom: 20px;
-    left: 0px;
-    margin: 20px 50px 30px 300px;
-    max-width: 100%;
-    max-height: 100%;
-    transition: transform 0.3s; /* Agrega una transición suave */
+.item {
+    text-align: center; /* Centrar el contenido dentro del div */
+    display: inline-block; /* Hacer que los elementos div se muestren en línea */
+    margin: 0 10px; /* Espacio entre cada elemento */
 }
 
-a.pending img:hover {
+.item img {
+    width: 150px; /* Ajustar el ancho de las imágenes */
+    display: block; /* Eliminar el espacio adicional debajo de las imágenes */
+    /* Espacio entre la imagen y el título */
+    margin: 70px 110px 20px;
+    transition: transform 0.3s;
+}
+.item img:hover {
     transform: scale(1.1); /* Aumenta el tamaño al 110% cuando pasa el cursor por encima */
 }
 
-a.completed img{
-    position: relative;
-    display: inline-block;
-    width: 150px;
-    height: 150px;
-    bottom: 20px;
-    left: 0px;
-    margin: 20px 0px 30px 320px;
-    max-width: 100%;
-    max-height: 100%;
-    transition: transform 0.3s; /* Agrega una transición suave */
-}
 
-a.completed img:hover {
-    transform: scale(1.1); /* Aumenta el tamaño al 110% cuando pasa el cursor por encima */
-}
-a.forum img{
-    position: relative;
-    display: inline-block;
-    width: 150px;
-    height: 150px;
-    bottom: 20px;
-    left: 0px;
-    margin: 90px 0px 30px 540px;
-    max-width: 100%;
-    max-height: 100%;
-    transition: transform 0.3s; /* Agrega una transición suave */
-}
-
-a.forum img:hover {
-    transform: scale(1.1); /* Aumenta el tamaño al 110% cuando pasa el cursor por encima */
-}
-a.titleFor{
-    position: relative;
+.item a {
+    display: block; /* Para que los elementos ocupen toda la anchura disponible */
     font-size: 20px;
-    color: #26689e;
-    margin-top: 150px;
-    margin-left: -95px;
+    color: #ddd;
     text-decoration: none !important;
     font-family: 'Roboto', sans-serif;
 }
+
 a.logout{
     font-weight: bold;
     display: inline-block;
@@ -130,6 +72,7 @@ a.logout{
     text-decoration: none;
     border-radius: 5px;
     margin-bottom: 15px;
+    float: right;
     transition: background-color 0.3s; /* Agrega una transición suave */
 }
 
@@ -144,11 +87,11 @@ a.friends {
     color: #fff;
     text-decoration: none;
     border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
     margin-bottom: 15px;
-    float: right;
+    float: left;
 }
-a.friendsimg img {
-    float: right;
+.friendsImg img {
     position: relative;
     display: inline-block;
     width: 20px;
@@ -159,4 +102,5 @@ a.friendsimg img {
     padding: 9px 5px;
     background-color: #4FCB7C;
     border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
 }

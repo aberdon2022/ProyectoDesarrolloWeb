@@ -10,9 +10,9 @@ import org.dwsproject.proyectodesarrolloweb.service.FilmService;
 @Controller
 public class FilmController {
     @Autowired
-    private FilmService filmService;
+    private FilmService filmService;//use methods of the service FilmService
 
-    @PostMapping("/addpeli")
+    @PostMapping("/addpeli")//Add a film to the list
     public String createFilm(Pelicula film, @RequestParam("image")MultipartFile imageFile, @RequestParam("listType") String listType) {
         try {
             filmService.addFilm(film, imageFile, listType);
@@ -30,36 +30,36 @@ public class FilmController {
         }
     }
 
-    @GetMapping("/pending/add")
+    @GetMapping("/pending/add")//Show the form to add a film to the pending list
     public String pending(Model model) {
         model.addAttribute("films", filmService.getPendingFilms());
         return "AddPendingList";
     }
 
-    @GetMapping("/completed/add")
+    @GetMapping("/completed/add")//Show the form to add a film to the completed list
     public String completed(Model model) {
         model.addAttribute("films", filmService.getCompletedFilms());
         return "AddCompletedList";
     }
 
-    @GetMapping("/pending")
+    @GetMapping("/pending")//Show the pending list
     public String viewPending(Model model) {
         model.addAttribute("films", filmService.getPendingFilms());
         return "ViewPendingList";
     }
 
-    @GetMapping("/completed")
+    @GetMapping("/completed")//show the completed list
     public String viewCompleted(Model model) {
         model.addAttribute("films", filmService.getCompletedFilms());
         return "ViewCompletedList";
     }
 
-    @GetMapping("/pending/confirmed")
+    @GetMapping("/pending/confirmed")//Show a message after adding a film to the pending list
     public String confirmPending() {
         return "MessageAfterAddPending";
     }
 
-    @GetMapping("/completed/confirmed")
+    @GetMapping("/completed/confirmed")//Show a message after adding a film to the completed list
     public String confirmCompleted() {
         return "MessageAfterAddCompleted";
     }
