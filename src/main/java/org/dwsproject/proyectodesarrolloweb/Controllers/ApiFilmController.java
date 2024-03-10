@@ -1,7 +1,10 @@
 package org.dwsproject.proyectodesarrolloweb.Controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.dwsproject.proyectodesarrolloweb.Classes.Pelicula;
+import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.dwsproject.proyectodesarrolloweb.service.FilmService;
+import org.dwsproject.proyectodesarrolloweb.service.UserService;
+import org.dwsproject.proyectodesarrolloweb.service.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,57 +21,90 @@ public class ApiFilmController {
     @Autowired//uses the methods of the service FilmService
     private FilmService filmService;
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping("/films")//Get all the films
-    public ResponseEntity<List<Pelicula>> getAllFilms() {
+    public ResponseEntity<List<Pelicula>> getAllFilms(@RequestParam String username) {
+        User user = userService.findUserByUsername(username);
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         List<Pelicula> films = new ArrayList<>();
-        films.addAll(filmService.getPendingFilms());
-        films.addAll(filmService.getCompletedFilms());
+        films.addAll(user.getPendingFilms());
+        films.addAll(user.getCompletedFilms());
         return ResponseEntity.ok(films);
     }
 
     @GetMapping("/films/pending")//Get the pending films
-    public ResponseEntity<List<Pelicula>> getPendingFilms() {
-        List<Pelicula> films = filmService.getPendingFilms();
+    public ResponseEntity<List<Pelicula>> getPendingFilms(@RequestParam String username) {
+        User user = userService.findUserByUsername(username);
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        List<Pelicula> films = user.getPendingFilms();
         return ResponseEntity.ok(films);
     }
 
     @GetMapping("/films/completed")//Get the completed films
-    public ResponseEntity<List<Pelicula>> getCompletedFilms() {
-        List<Pelicula> films = filmService.getCompletedFilms();
+    public ResponseEntity<List<Pelicula>> getCompletedFilms(@RequestParam String username) {
+        User user = userService.findUserByUsername(username);
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        List<Pelicula> films = user.getCompletedFilms();
         return ResponseEntity.ok(films);
     }
 
-    @DeleteMapping("/films/completed/{title}/")//Delete a film from the completed list by title
-    public ResponseEntity<String> deleteFilmC (@PathVariable String title) {
+    @PostMapping("/addpeli")
+    public ResponseEntity<Pelicula> createFilm(@RequestPart("film") String filmJson, @RequestParam("image") MultipartFile imageFile, @RequestParam("listType") String listType, @RequestParam("username") String username) {
+        User user = userService.findUserByUsername(username);
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
         try {
-            filmService.deleteFilm(title, "completed");
+            ObjectMapper objectMapper = new ObjectMapper();
+            Pelicula film = objectMapper.readValue(filmJson, Pelicula.class);
+            filmService.addFilm(user, film, imageFile, listType);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        if ("pending".equals(listType) || "completed".equals(listType)) {
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/films/completed")
+    public ResponseEntity<String> deleteFilmC (@RequestParam String title, @RequestParam String username) {
+        User user = userService.findUserByUsername(username);
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            filmService.deleteFilm(user, title, "completed");
             return new ResponseEntity<>("Film deleted", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @DeleteMapping("/films/pending/{title}/")//Delete a film from the pending list by title
-    public ResponseEntity<String> deleteFilmP (@PathVariable String title) {
+
+    @DeleteMapping("/films/pending")
+    public ResponseEntity<String> deleteFilmP (@RequestParam String title, @RequestParam String username) {
+        User user = userService.findUserByUsername(username);
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
         try {
-            filmService.deleteFilm(title, "pending");
+            filmService.deleteFilm(user, title, "pending");
             return new ResponseEntity<>("Film deleted", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-    @PostMapping("/addpeli")//Add a film to the list with a JSON and an image
-        public ResponseEntity<Pelicula> createFilm(@RequestPart("film") String filmJson, @RequestParam("image") MultipartFile imageFile, @RequestParam("listType") String listType) {
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();//Create an object mapper to convert the JSON to a Pelicula object
-            Pelicula film = objectMapper.readValue(filmJson, Pelicula.class);
-            filmService.addFilm(film, imageFile, listType);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);//If there is an error, return an internal server error
-        }
-        if ("pending".equals(listType) || "completed".equals(listType)) {//If the listType is not valid, return a bad request
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 }

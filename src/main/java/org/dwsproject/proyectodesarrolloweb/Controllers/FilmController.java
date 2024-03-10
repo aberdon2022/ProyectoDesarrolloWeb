@@ -18,8 +18,9 @@ public class FilmController {
     private UserService UserService;//use methods of the service UserService
     @PostMapping("/addpeli")//Add a film to the list
     public String createFilm(Pelicula film, @RequestParam("image")MultipartFile imageFile, @RequestParam("listType") String listType, @RequestParam String username) {
+        User user = UserService.findUserByUsername(username);
         try {
-            filmService.addFilm(film, imageFile, listType);
+            filmService.addFilm(user, film, imageFile, listType);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -38,7 +39,7 @@ public class FilmController {
     public String pending(Model model, @RequestParam String username) {
         User user = UserService.findUserByUsername(username);
         model.addAttribute("user", user);
-        model.addAttribute("films", filmService.getPendingFilms());
+        model.addAttribute("films", user.getPendingFilms());
         return "AddPendingList";
     }
 
@@ -46,7 +47,7 @@ public class FilmController {
     public String completed(Model model, @RequestParam String username) {
         User user = UserService.findUserByUsername(username);
         model.addAttribute("user", user);
-        model.addAttribute("films", filmService.getCompletedFilms());
+        model.addAttribute("films", user.getCompletedFilms());
         return "AddCompletedList";
     }
 
@@ -54,7 +55,7 @@ public class FilmController {
     public String viewPending(Model model, @RequestParam String username) {
         User user = UserService.findUserByUsername(username);
         model.addAttribute("user", user);
-        model.addAttribute("films", filmService.getPendingFilms());
+        model.addAttribute("films", user.getPendingFilms());
         return "ViewPendingList";
     }
 
@@ -62,7 +63,7 @@ public class FilmController {
     public String viewCompleted(Model model, @RequestParam String username) {
         User user = UserService.findUserByUsername(username);
         model.addAttribute("user", user);
-        model.addAttribute("films", filmService.getCompletedFilms());
+        model.addAttribute("films", user.getCompletedFilms());
         return "ViewCompletedList";
     }
 
@@ -82,15 +83,18 @@ public class FilmController {
 
     @GetMapping ("/completed/{title}/delete")//Delete a film from the completed list
     public String deleteFilmC(Model model, @PathVariable String title, @RequestParam String username) {
-        filmService.deleteFilm(title, "completed");
         User user = UserService.findUserByUsername(username);
+        filmService.deleteFilm(user, title, "completed");
         model.addAttribute("user", user);
         return "deletedCompletedFilm";
     }
     @GetMapping("/pending/{title}/delete")//Delete a film from the pending list
     public String deleteFilmP(Model model, @PathVariable String title, @RequestParam String username) {
-        filmService.deleteFilm(title, "pending");
         User user = UserService.findUserByUsername(username);
+        if (user == null) {
+            return "redirect:/";
+        }
+        filmService.deleteFilm(user, title, "pending");
         model.addAttribute("user", user);
         return "deletedPendingFilm";
     }

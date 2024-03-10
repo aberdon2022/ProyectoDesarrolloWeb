@@ -1,21 +1,37 @@
 package org.dwsproject.proyectodesarrolloweb.Classes;
 import java.util.ArrayList;
+import java.util.List;
 
 public class User {
     private long id;
     private String username;
     private String password;
     private ArrayList<User> friends;
+    private List<Pelicula> pendingFilms;
+    private List<Pelicula> completedFilms;
 
     public User() {
         this.friends = new ArrayList<>();
+        this.pendingFilms = new ArrayList<>();
+        this.completedFilms = new ArrayList<>();
     }
 
     public User(String username, String password) {
         this.username = username;
         this.password = password;
         this.friends = new ArrayList<>();
+        this.pendingFilms = new ArrayList<>();
+        this.completedFilms = new ArrayList<>();
     }
+
+    public List<Pelicula> getPendingFilms() {
+        return pendingFilms;
+    }
+
+    public List<Pelicula> getCompletedFilms() {
+        return completedFilms;
+    }
+
 
     public long getId() {
         return id;
