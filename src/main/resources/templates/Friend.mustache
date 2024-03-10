@@ -16,7 +16,7 @@
 {{/friends}}
 </div>
 {{#isOwner}}
-<form action="/friends/{{friend.username}}/add" method="post">
+<form action="/friends/{{friend.username}}/add?loggedInUser={{username}}" method="post">
     <input type="text" name="friendUsername" placeholder="Enter username">
     <button type="submit">Add friend</button>
 </form>

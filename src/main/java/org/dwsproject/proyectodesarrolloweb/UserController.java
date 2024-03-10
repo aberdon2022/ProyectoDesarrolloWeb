@@ -61,20 +61,12 @@ public class UserController {
     }
 
     @PostMapping("/friends/{username}/add")
-    public String addFriend(Model model, @PathVariable String username, @RequestParam String friendUsername) {
+    public String addFriend(Model model, @PathVariable String username, @RequestParam String friendUsername, @RequestParam String loggedInUser) {
         // Retrieve the user's data
         User user = userService.findUserByUsername(username);
 
         // Retrieve the friend's data
         User newFriend = userService.findUserByUsername(friendUsername);
-
-        // Debugging code
-        if (user == null) {
-            System.out.println("User is null. No user found with username: " + username);
-        }
-        if (newFriend == null) {
-            System.out.println("NewFriend is null. No friend found with username: " + friendUsername);
-        }
 
         if (user == null || newFriend == null) {
             // Redirect to an error page or another appropriate page
@@ -92,7 +84,7 @@ public class UserController {
         model.addAttribute("friends", user.getFriends());
 
         // Redirect to the user's friend list
-        return "Friend";
+        return "redirect:/friends/" + loggedInUser  + "?loggedInUser=" + loggedInUser;
     }
  /*   @GetMapping("/friends/{username}/show")
     public String showFriend(Model model, @PathVariable String username) {
