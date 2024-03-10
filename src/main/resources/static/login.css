@@ -43,8 +43,9 @@ h1 {
     margin-bottom: 1rem;
     padding: 0.5rem;
     background-color: #95B4EF;
-    color: white;
+    color: #11234C;
     border: none;
+    font-family: 'Roboto', sans-serif;
 }
 
 #loginForm input[type="submit"] {

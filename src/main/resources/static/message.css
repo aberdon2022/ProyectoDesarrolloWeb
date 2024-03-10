@@ -2,17 +2,35 @@ body {
     font-family: 'Roboto', sans-serif;
     margin: 15px;
     padding: 0;
-    background-color: #ddd;
+    background-color: black;
     color: #ddd;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('images/series-netflix.webp') center/cover;
+    opacity: 0.4; /* Cambia la opacidad de la imagen de fondo */
+    z-index: -1; /* Coloca el pseudo-elemento detrás del contenido */
 }
 h1 {
     text-align: center;
-    padding: 1.5rem;
-    background-color: #678ACC;
-    color: white;
+    padding: 1.7rem;
+    background-image: url('images/cinta2.jpg');
+    background-size: contain;
+    width: 100%;
+    height: 30px;
+    color: black;
     margin: 0 0 2rem 0;
     border-radius: 10px;
     font-family: 'Roboto', sans-serif;
+    opacity: 0.6;
+    margin-left: -15px;
 }
 
 .container {
@@ -29,7 +47,7 @@ h1 {
 .button {
     display: inline-block;
     color: #fff;
-    background-color: #5775AD;
+    background-color: #26689e;
     padding: 10px 20px;
     text-decoration: none;
     margin: 20px;
@@ -38,13 +56,13 @@ h1 {
 }
 
 .button:hover {
-    background-color: #5775AD;
+    background-color: #2E4F9B;
 }
 
 .toast {
     visibility: hidden; 
     min-width: 250px;
-    color: #fff; 
+    color: #2E4F9B;
     text-align: center; 
     border-radius: 2px; 
     padding: 16px; 
@@ -54,7 +72,7 @@ h1 {
     top: 50%;
     transform: translate(-50%, -50%);
     font-size: 17px;
-    background-color: #5775AD;
+    background-color: #ddd;
 }
 
 .toast.show {
