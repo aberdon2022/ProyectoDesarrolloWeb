@@ -91,25 +91,6 @@ public class UserController {
         // Redirect to the user's friend list
         return "redirect:/friends/" + loggedInUser  + "?loggedInUser=" + loggedInUser;
     }
- /*   @GetMapping("/friends/{username}/show")
-    public String showFriend(Model model, @PathVariable String username) {
-        // Retrieve the friend's data, including their list of friends
-        User friend = userService.findUserByUsername(username);
-
-        if (friend == null) {
-            // Redirect to an error page or another appropriate page
-            return "redirect:/error";
-        }
-
-        List<User> friends = friend.getFriends();
-
-        // Add the friend's data to the model
-        model.addAttribute("friend", friend);
-        model.addAttribute("friends", friends);
-
-        // Return the name of the Mustache template that displays the friend's page
-        return "Friend";
-    }*/
 
     @GetMapping("/friends/{username}/delete")
     public String deleteFriend(Model model, @PathVariable String username, @RequestParam String friendUsername, @RequestParam String loggedInUser) {
@@ -118,6 +99,11 @@ public class UserController {
 
         // Retrieve the friend's data
         User friend = userService.findUserByUsername(friendUsername);
+
+
+        if (!loggedInUser.equals(username)) {
+            return "redirect:/error";
+        }
 
         // Debugging code
         if (user == null) {

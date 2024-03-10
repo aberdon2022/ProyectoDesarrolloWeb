@@ -9,25 +9,30 @@
 <body>
 <h1>Welcome, {{user.username}}!</h1>
 <a href="/logout" class= "logout">Logout</a>
-<a href="/friends/{{user.username}}?loggedInUser={{user.username}}" class= "friends">Friends</a>
 <h2>Profile</h2>
-
-<div class="film-container">
+<div class="friendsImg">
+    <a href="/friends/{{user.username}}?loggedInUser={{user.username}}" class= "friends">Friends</a>
+    <a href="/friends/{{user.username}}?loggedInUser={{user.username}}">
+        <img src="/images/friends1.png" alt="Friends">
+    </a>
+</div>
+<div class="item">
     <a href="/pending?username={{user.username}}" class="pending">
         <img src="/images/reloj.png" alt="Delete">
     </a>
-    <a class="film-titlePend" href="/pending?username={{user.username}}">Pending List</a>
+    <a class="titlePend" href="/pending?username={{user.username}}">Pending List</a>
+</div>
+<div class="item">
     <a href="/completed?username={{user.username}}" class="completed">
         <img src="/images/tasks-regular-300x253.png" alt="Delete">
     </a>
     <a class="film-titleComp" href="/completed?username={{user.username}}">Completed List</a>
 </div>
-<div>
+<div class="item">
     <a href="/forum" class="forum">
         <img src="/images/forum3.png" alt="Delete">
     </a>
     <a class="titleFor" href="/forum">Forum</a>
 </div>
-</a>
 </body>
 </html>

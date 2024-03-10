@@ -9,9 +9,12 @@
 <div id="friend-list">
 {{#friends}}
         <div>
-            <p>Friend: {{username}}</p>
-            <a href="/friends/{{username}}?loggedInUser={{friend.username}}" class="view">View friend</a>
-            <a href="/friends/{{friend.username}}/delete?friendUsername={{username}}&loggedInUser={{friend.username}}" class="delete">Delete friend</a>
+            <p>Friend: {{username}}
+                {{#isOwner}}
+                <a href="/friends/{{username}}?loggedInUser={{friend.username}}" class="view">View friend</a>
+                <a href="/friends/{{friend.username}}/delete?friendUsername={{username}}&loggedInUser={{friend.username}}" class="delete">Delete friend</a>
+                {{/isOwner}}
+            </p>
         </div>
 {{/friends}}
 </div>
