@@ -49,6 +49,7 @@ h2{
     /* Espacio entre la imagen y el título */
     margin: 70px 110px 20px;
     transition: transform 0.3s;
+    filter: brightness(0) invert(1);
 }
 .item img:hover {
     transform: scale(1.1); /* Aumenta el tamaño al 110% cuando pasa el cursor por encima */
