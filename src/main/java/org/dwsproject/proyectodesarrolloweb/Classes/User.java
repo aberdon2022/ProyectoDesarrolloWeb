@@ -1,12 +1,21 @@
 package org.dwsproject.proyectodesarrolloweb.Classes;
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import java.util.ArrayList;
 import java.util.List;
+
+@JsonIdentityInfo( //Break the infinite recursion
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 
 public class User {
     private long id;
     private String username;
     private String password;
     private ArrayList<User> friends;
+
     private List<Pelicula> pendingFilms;
     private List<Pelicula> completedFilms;
 
