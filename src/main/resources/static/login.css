@@ -62,3 +62,20 @@ h1 {
 #loginForm input[type="submit"]:hover {
     background-color: #3B558A; /* Cambia el color de fondo al pasar el ratón */
 }
+#toast {
+    visibility: hidden;
+    min-width: 50px;
+    margin-left: -125px;
+    background-color: none;
+    color: #bc0e0e;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 10px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    right: 590px;
+    bottom: 585px;
+    font-size: 15px;
+    transition: visibility 0.5s, opacity 0.5s linear;
+}
