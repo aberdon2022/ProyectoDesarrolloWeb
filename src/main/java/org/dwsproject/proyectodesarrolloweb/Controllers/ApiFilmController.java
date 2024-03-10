@@ -56,7 +56,7 @@ public class ApiFilmController {
         return ResponseEntity.ok(films);
     }
 
-    @PostMapping("/addpeli")
+    @PostMapping("/addpeli")//Add a film to the list of films
     public ResponseEntity<Pelicula> createFilm(@RequestPart("film") String filmJson, @RequestParam("image") MultipartFile imageFile, @RequestParam("listType") String listType, @RequestParam("username") String username) {
         User user = userService.findUserByUsername(username);
         if (user == null) {
@@ -71,15 +71,15 @@ public class ApiFilmController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        if ("pending".equals(listType) || "completed".equals(listType)) {
+        if ("pending".equals(listType) || "completed".equals(listType)) {//If the film is added to the pending or completed list, return a 201 status code
             return new ResponseEntity<>(HttpStatus.CREATED);
         } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);//If the listType is not pending or completed, return a 400 status code
         }
     }
 
     @DeleteMapping("/films/completed")
-    public ResponseEntity<String> deleteFilmC (@RequestParam String title, @RequestParam String username) {
+    public ResponseEntity<String> deleteFilmC (@RequestParam String title, @RequestParam String username) {//Delete a film from the completed list
         User user = userService.findUserByUsername(username);
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -93,7 +93,7 @@ public class ApiFilmController {
         }
     }
 
-    @DeleteMapping("/films/pending")
+    @DeleteMapping("/films/pending")//Delete a film from the pending list
     public ResponseEntity<String> deleteFilmP (@RequestParam String title, @RequestParam String username) {
         User user = userService.findUserByUsername(username);
         if (user == null) {

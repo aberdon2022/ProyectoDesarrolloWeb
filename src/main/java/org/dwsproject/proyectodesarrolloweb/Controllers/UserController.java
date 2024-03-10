@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     @Autowired
-    private UserService userService;//Inyect the service to the controller
+    private UserService userService;//uses methods of the UserService class
 
     @Autowired
-    private UserSession userSession;
+    private UserSession userSession;//uses methods of the UserSession class
 
     @GetMapping("/login")  
     public String login() {
@@ -35,7 +35,7 @@ public class UserController {
             userSession.setUser(user.getUsername());
             return "redirect:/profile/" + username;
         } else {
-            return "redirect:/login";
+            return "redirect:/login?error=true";//If the user does not exist or the password is incorrect return to the login page with an error message
         }
     }
 
@@ -46,7 +46,7 @@ public class UserController {
             model.addAttribute("user", user);
             return "profile";
         } else {
-            return "redirect:/login"; // Redirigir si no es user1
+            return "redirect:/login"; // Redirect if user not found
         }
     }
 
@@ -54,9 +54,9 @@ public class UserController {
     public String friends(Model model, @PathVariable String username, @RequestParam String loggedInUser) {
         User user = userService.findUserByUsername(username); // Retrieve the user based on the username path variable
         if (user != null) {
-            model.addAttribute("friend", user);
-            model.addAttribute("friends", user.getFriends());
-            model.addAttribute("isOwner", loggedInUser.equals(username));
+            model.addAttribute("friend", user);// Add the user's data to the model
+            model.addAttribute("friends", user.getFriends());// Add the user's friends to the model
+            model.addAttribute("isOwner", loggedInUser.equals(username));// Add a boolean to the model that indicates whether the logged-in user is the owner of the profile
             return "Friend";
         } else {
             return "redirect:/login"; // Redirect if user not found
