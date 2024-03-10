@@ -10,11 +10,15 @@
        {{#friends}}
        <div>
            <p>Friend: {{username}}</p>
+           <a href ="/friends/{{username}}" class="view">View friend</a>
            <a href="/friends/{{username}}/delete" class="delete">Delete friend</a>
            </div>
        </div>
        {{/friends}}
    </div>
+   <form action="/friends/user1/add" method="post">
+       <input type="text" name="friendUsername" placeholder="Enter username">
+       <button type="submit">Add friend</button>
    <a href="/profile" class="button">Return to Profile</a>
 </body>
 </html>

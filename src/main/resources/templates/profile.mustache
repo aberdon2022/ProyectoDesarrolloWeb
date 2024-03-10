@@ -7,12 +7,12 @@
 </head>
 
 <body>
-<h1>Welcome, User!</h1>
+<h1>Welcome, {{user.username}}!</h1>
 <a href="/logout" class= "logout">Logout</a>
-<a href="/friends" class="friendsimg">
+<a href="/friends/{{user.username}}" class="friendsimg">
     <img src="/images/friends1.png" alt="Friends">
 </a>
-<a href="/friends" class= "friends">Friends</a>
+<a href="/friends/{{user.username}}?loggedInUser={{user.username}}" class= "friends">Friends</a>
 <h2>Profile</h2>
 
 <div class="film-container">
@@ -27,12 +27,10 @@
 </div>
 <div>
     <a href="/forum" class="forum">
-            <img src="/images/forum3.png" alt="Delete">
+        <img src="/images/forum3.png" alt="Delete">
     </a>
     <a class="titleFor" href="/forum">Forum</a>
-    </div>
-
-
+</div>
 </a>
 </body>
 </html>

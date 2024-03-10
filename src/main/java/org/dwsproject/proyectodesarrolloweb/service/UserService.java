@@ -9,7 +9,6 @@ import java.util.List;
 @Service
 public class UserService {
     private ArrayList<User> usersdb = new ArrayList<>();
-    private ArrayList<User> friendsdb = new ArrayList<>();
 
     public UserService() {
         createFakeUsers();
@@ -17,13 +16,9 @@ public class UserService {
 
     public void createFakeUsers() {//Create fake users
         usersdb.add(new User("user1", "1"));
-        friendsdb.add(new User("user2", "2"));
-        friendsdb.add(new User("user3", "3"));
-        friendsdb.add(new User("user4", "4"));
-    }
-
-    public List<User> getFriends(){
-        return this.friendsdb;
+        usersdb.add(new User("user5", "5"));
+        usersdb.add(new User("user2", "2"));
+        usersdb.add(new User("user6", "6"));
     }
 
     public User findUserByUsername(String username) {//Find user by username
@@ -34,8 +29,10 @@ public class UserService {
         }
         return null;
     }
-    public void deleteFriends(String username){
-        friendsdb.removeIf(p -> p.getUsername().equals(username));
+
+    public void deleteFriend (String username){
+        User friend = findUserByUsername(username);
+        friend.deleteFriend(friend);
     }
 }
 

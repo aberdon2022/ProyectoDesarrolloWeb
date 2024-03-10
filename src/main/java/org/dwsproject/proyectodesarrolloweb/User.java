@@ -34,10 +34,14 @@ public class User {
     }
 
     public ArrayList<User> getFriends() {
-        return friends;
+        return this.friends;
     }
 
     public void addFriend(User user) {
         this.friends.add(user);
+    }
+
+    public void deleteFriend(User user) {
+        this.friends.remove(user);
     }
 }

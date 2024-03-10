@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{friend.username}}'s Friends</title>
+    <link rel="stylesheet" href="/friends.css">
+</head>
+<body>
+<h1>{{friend.username}}'s Friends</h1>
+<div id="friend-list">
+{{#friends}}
+        <div>
+            <p>Friend: {{username}}</p>
+            <a href="/friends/{{username}}?loggedInUser={{friend.username}}" class="view">View friend</a>
+            <a href="/friends/{{friend.username}}/delete?friendUsername={{username}}&loggedInUser={{friend.username}}" class="delete">Delete friend</a>
+        </div>
+{{/friends}}
+</div>
+{{#isOwner}}
+<form action="/friends/{{friend.username}}/add" method="post">
+    <input type="text" name="friendUsername" placeholder="Enter username">
+    <button type="submit">Add friend</button>
+</form>
+{{/isOwner}}
+<a href="/profile/{{friend.username}}" class="button">Return to Profile</a>
+</body>
+</html>
