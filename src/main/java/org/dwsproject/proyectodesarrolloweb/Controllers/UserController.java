@@ -71,6 +71,13 @@ public class UserController {
         // Retrieve the friend's data
         User newFriend = userService.findUserByUsername(friendUsername);
 
+        if (username.equals(friendUsername)) { //If the user tries to add himself as a friend
+            return "redirect:/error";
+        }
+        if (user.getFriends().contains(newFriend)) { //If the user tries to add a friend that is already in the list
+            return "redirect:/error";
+        }
+
         if (user == null || newFriend == null) {
             // Redirect to an error page or another appropriate page
             return "redirect:/error";
