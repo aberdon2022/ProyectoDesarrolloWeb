@@ -9,7 +9,7 @@
 </head>
 <body>
 <h1>View Films</h1>
-<a href="/profile" class="button">Return to Profile</a>
+<a href="/profile/{{user.username}}" class="button">Return to Profile</a>
 <div id="film-list">
     {{#films}}
         <div>
@@ -17,7 +17,7 @@
             <p>Year: {{year}}</p>
             <img src="{{imagePath}}">
             <div>
-                <a href="/pending/{{title}}/delete" class="delete">
+                <a href="/pending/{{title}}/delete?username={{user.username}}" class="delete">
                 <img src="/images/3221803.png" alt="Delete">
                 </a>
                 </div>
@@ -28,5 +28,5 @@
     {{/films}}
 </div>
 </body>
-<a href="/pending/add" class="add">Add Film</a>
+<a href="/pending/add?username={{user.username}}" class="add">Add Film</a>
 </html>

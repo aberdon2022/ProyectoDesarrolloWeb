@@ -1,5 +1,5 @@
 package org.dwsproject.proyectodesarrolloweb.service;
-import org.dwsproject.proyectodesarrolloweb.Pelicula;
+import org.dwsproject.proyectodesarrolloweb.Classes.Pelicula;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;

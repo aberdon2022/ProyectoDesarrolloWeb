@@ -9,21 +9,18 @@
 <body>
 <h1>Welcome, {{user.username}}!</h1>
 <a href="/logout" class= "logout">Logout</a>
-<a href="/friends/{{user.username}}" class="friendsimg">
-    <img src="/images/friends1.png" alt="Friends">
-</a>
 <a href="/friends/{{user.username}}?loggedInUser={{user.username}}" class= "friends">Friends</a>
 <h2>Profile</h2>
 
 <div class="film-container">
-    <a href="/pending" class="pending">
+    <a href="/pending?username={{user.username}}" class="pending">
         <img src="/images/reloj.png" alt="Delete">
     </a>
-    <a class="film-titlePend" href="/pending">Pending List</a>
-    <a href="/completed" class="completed">
+    <a class="film-titlePend" href="/pending?username={{user.username}}">Pending List</a>
+    <a href="/completed?username={{user.username}}" class="completed">
         <img src="/images/tasks-regular-300x253.png" alt="Delete">
     </a>
-    <a class="film-titleComp" href="/completed">Completed List</a>
+    <a class="film-titleComp" href="/completed?username={{user.username}}">Completed List</a>
 </div>
 <div>
     <a href="/forum" class="forum">

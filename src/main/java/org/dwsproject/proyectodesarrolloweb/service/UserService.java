@@ -1,10 +1,9 @@
 package org.dwsproject.proyectodesarrolloweb.service;
 
-import org.dwsproject.proyectodesarrolloweb.User;
+import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class UserService {
@@ -16,9 +15,13 @@ public class UserService {
 
     public void createFakeUsers() {//Create fake users
         usersdb.add(new User("user1", "1"));
-        usersdb.add(new User("user5", "5"));
         usersdb.add(new User("user2", "2"));
-        usersdb.add(new User("user6", "6"));
+        usersdb.add(new User("user3", "3"));
+        usersdb.add(new User("user4", "4"));
+    }
+
+    public boolean checkPassword (User user, String password) {//Check if the password is correct
+        return user.checkPassword(password);
     }
 
     public User findUserByUsername(String username) {//Find user by username

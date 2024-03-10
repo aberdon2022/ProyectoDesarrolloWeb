@@ -1,4 +1,4 @@
-package org.dwsproject.proyectodesarrolloweb;
+package org.dwsproject.proyectodesarrolloweb.Classes;
 
 public class Post {
 
@@ -8,7 +8,6 @@ public class Post {
     private String text;
 
     public Post() {
-
     }
 
     public Post(String user, String title, String text) {

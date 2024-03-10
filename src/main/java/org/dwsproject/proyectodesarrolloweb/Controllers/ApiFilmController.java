@@ -1,5 +1,6 @@
-package org.dwsproject.proyectodesarrolloweb;
+package org.dwsproject.proyectodesarrolloweb.Controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.dwsproject.proyectodesarrolloweb.Classes.Pelicula;
 import org.dwsproject.proyectodesarrolloweb.service.FilmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

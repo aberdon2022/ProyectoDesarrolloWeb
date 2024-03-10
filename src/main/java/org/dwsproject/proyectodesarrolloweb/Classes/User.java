@@ -1,4 +1,4 @@
-package org.dwsproject.proyectodesarrolloweb;
+package org.dwsproject.proyectodesarrolloweb.Classes;
 import java.util.ArrayList;
 
 public class User {
@@ -31,6 +31,10 @@ public class User {
 
     protected String getPassword() {
         return password;
+    }
+
+    public boolean checkPassword(String password) {
+        return this.getPassword().equals(password);
     }
 
     public ArrayList<User> getFriends() {

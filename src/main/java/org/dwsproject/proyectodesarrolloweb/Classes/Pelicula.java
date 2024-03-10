@@ -1,4 +1,4 @@
-package org.dwsproject.proyectodesarrolloweb;
+package org.dwsproject.proyectodesarrolloweb.Classes;
 public class Pelicula {
     private String title;
     private int year;

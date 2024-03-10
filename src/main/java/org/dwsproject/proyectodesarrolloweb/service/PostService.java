@@ -5,7 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.dwsproject.proyectodesarrolloweb.Post;
+import org.dwsproject.proyectodesarrolloweb.Classes.Post;
 import org.springframework.stereotype.Service;
 
 @Service

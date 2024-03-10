@@ -10,7 +10,7 @@
 </head>
 <body>
 <h1>Completed Films</h1>
-<a href="/profile" class="button">Return to Profile</a>
+<a href="/profile/{{user.username}}" class="button">Return to Profile</a>
 <div id="film-list">
     {{#films}}
         <div>
@@ -19,7 +19,7 @@
             <p>Rating: {{rating}}</p>
             <img src="{{imagePath}}" class= "imagen">
             <div>
-                <a href="/completed/{{title}}/delete" class="delete">
+                <a href="/completed/{{title}}/delete?username={{user.username}}" class="delete">
                     <img src="/images/3221803.png" alt="Delete">
                 </a>
             </div>
@@ -29,6 +29,6 @@
                     <p>No completed films yet.</p>
         {{/films}}
 </div>
-<a href="/completed/add" class="add">Add Film</a>
+<a href="/completed/add?username={{user.username}}" class="add">Add Film</a>
 </body>
 </html>

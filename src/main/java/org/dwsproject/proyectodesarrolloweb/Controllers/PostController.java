@@ -1,12 +1,15 @@
-package org.dwsproject.proyectodesarrolloweb;
+package org.dwsproject.proyectodesarrolloweb.Controllers;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 
 import jakarta.servlet.http.HttpSession;
 
+import org.dwsproject.proyectodesarrolloweb.Classes.Post;
+import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.dwsproject.proyectodesarrolloweb.service.ImageService;
 import org.dwsproject.proyectodesarrolloweb.service.PostService;
+import org.dwsproject.proyectodesarrolloweb.service.UserService;
 import org.dwsproject.proyectodesarrolloweb.service.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,11 +34,15 @@ public class PostController {
     @Autowired
     private ImageService imageService;
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping("/forum")//Show the actual posts
     public String showPosts(Model model, HttpSession session) {
 
         model.addAttribute("posts", postService.findAll());
         model.addAttribute("welcome", session.isNew());
+        model.addAttribute("loggedInUser", userSession.getUser());
 
         return "indexForum";
     }
@@ -51,6 +58,8 @@ public class PostController {
     @PostMapping("/forum/new")//Add a new post
     public String newPost(Model model, Post post, MultipartFile image) throws IOException {
 
+        User loggedInUser = userService.findUserByUsername(userSession.getUser());
+        post.setUser(userSession.getUser());
         postService.save(post);
 
         imageService.saveImage(POSTS_FOLDER, post.getId(), image);
@@ -59,7 +68,6 @@ public class PostController {
         userSession.incNumPosts();
 
         model.addAttribute("numPosts", userSession.getNumPosts());
-
         return "savedPost";
     }
 

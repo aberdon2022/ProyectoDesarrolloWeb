@@ -1,19 +1,21 @@
-package org.dwsproject.proyectodesarrolloweb;
+package org.dwsproject.proyectodesarrolloweb.Controllers;
 
+import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.dwsproject.proyectodesarrolloweb.service.UserService;
+import org.dwsproject.proyectodesarrolloweb.service.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 public class UserController {
 
     @Autowired
     private UserService userService;//Inyect the service to the controller
+
+    @Autowired
+    private UserSession userSession;
 
     @GetMapping("/login")  
     public String login() {
@@ -28,8 +30,9 @@ public class UserController {
     @PostMapping("/login")
     public String login(Model model, @RequestParam String username, @RequestParam String password) {
         User user = userService.findUserByUsername(username); //Obtain the user
-        if (user != null && username.equals(username) && password.equals(user.getPassword())) { //If the user exists and the password is correct
+        if (user != null && userService.checkPassword(user,password)) { //If the user exists and the password is correct
             model.addAttribute("user", user);
+            userSession.setUser(user.getUsername());
             return "redirect:/profile/" + username;
         } else {
             return "redirect:/login";
@@ -75,6 +78,8 @@ public class UserController {
 
         // Add the new friend to the user's friend list
         user.addFriend(newFriend);
+
+        newFriend.addFriend(user);
 
         // Debugging code
         System.out.println("Friend added: " + newFriend.getUsername());
