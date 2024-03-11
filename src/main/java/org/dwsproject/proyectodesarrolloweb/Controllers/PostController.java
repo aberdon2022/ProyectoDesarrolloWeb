@@ -70,7 +70,12 @@ public class PostController {
     public String showPost(Model model, @PathVariable long id) {
         //Obtain the post by its id
         Post post = postService.findById(id);
+        String loggedInUser = userSession.getUser();
+        if (post.getUser().equals(loggedInUser)) {
+            post.setOwner(true);
+        }
         model.addAttribute("post", post);
+        model.addAttribute("isOwner", post.getIsOwner());
         return "showPost";
     }
 
@@ -89,8 +94,15 @@ public class PostController {
     @GetMapping("/post/{id}/edit")//Show the form to edit a post by its id
     public String editPost(Model model, @PathVariable long id) throws IOException {
         Post post = postService.findById(id);
-        model.addAttribute("post", post);
-        return "editPost";
+        String loggedInUser = userSession.getUser();
+
+        if (post.getUser().equals(loggedInUser)) {
+            post.setOwner(true);
+            model.addAttribute("post", post);
+            return "editPost";
+        } else {
+            return "redirect:/error";
+        }
     }
     @PostMapping("/post/{id}/edit")//Edit a post by its id
     public String editPost(Model model, Post post, MultipartFile image) throws IOException {

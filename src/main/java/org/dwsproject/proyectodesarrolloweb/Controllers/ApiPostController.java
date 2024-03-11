@@ -41,7 +41,7 @@ public class ApiPostController {
         User user = userService.findUserByUsername(username);
 
         if (user == null) { //If the user does not exist, return 404
-            return ResponseEntity.status(404).build();
+            return ResponseEntity.notFound().build();
         }
 
         post.setUser(user.getUsername());
@@ -68,6 +68,9 @@ public class ApiPostController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePost(@PathVariable long id) throws IOException {
+        if (postService.findById(id) == null) { //If the post does not exist, return 404
+            return ResponseEntity.notFound().build();
+        }
         postService.deleteById(id);
         imageService.deleteImage("posts", id);
         return ResponseEntity.ok().build();
@@ -78,7 +81,7 @@ public class ApiPostController {
         Post originalPost = postService.findById(id);
 
         if (originalPost == null) { //If the post does not exist, return 404
-            return ResponseEntity.status(404).build();
+            return ResponseEntity.notFound().build();
         }
 
         post.setUser(originalPost.getUser());

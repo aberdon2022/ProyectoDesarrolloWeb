@@ -25,7 +25,7 @@ public class ApiUserController {
             userSession.setUser(user.getUsername());
             return ResponseEntity.ok(user);
         } else {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.notFound().build();
         }
     }
 

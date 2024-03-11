@@ -15,8 +15,8 @@ public class PostService {
     private AtomicLong nextId = new AtomicLong();//Create an id for the posts
 
     public PostService() {//When the service is created, create fake posts
-        save(new Post("User3", "Opinion Clueless", "Perfect"));
-        save(new Post("User4", "Opinion El padrino", "Horrible"));
+        save(new Post("User3", "Opinion Clueless", "Perfect", true));
+        save(new Post("User4", "Opinion El padrino", "Horrible", true));
     }
 
     public Collection<Post> findAll() {//Return all the posts

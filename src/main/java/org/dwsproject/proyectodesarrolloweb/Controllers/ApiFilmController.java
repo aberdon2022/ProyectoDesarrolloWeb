@@ -61,7 +61,6 @@ public class ApiFilmController {
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             Film film = objectMapper.readValue(filmJson, Film.class); //Convert the JSON string to a Film object

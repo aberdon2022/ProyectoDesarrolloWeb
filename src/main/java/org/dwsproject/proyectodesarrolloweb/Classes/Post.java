@@ -6,16 +6,17 @@ public class Post {
     private String user;
     private String title;
     private String text;
-
+    boolean isOwner;
 
     public Post() {
     }
 
-    public Post(String user, String title, String text) {
+    public Post(String user, String title, String text, boolean isOwner) {
         super();
         this.user = user;
         this.title = title;
         this.text = text;
+        this.isOwner = isOwner;
     }
 
     public Long getId() {
@@ -28,6 +29,14 @@ public class Post {
 
     public String getUser() {
         return user;
+    }
+
+    public boolean getIsOwner() {
+        return isOwner;
+    }
+
+    public void setOwner(boolean isOwner) {
+        this.isOwner = isOwner;
     }
 
     public void setUser(String user) {
