@@ -86,10 +86,16 @@ public class PostController {
 
     @GetMapping("/post/{id}/delete")//Delete a post by its id
     public String deletePost(Model model, @PathVariable long id) throws IOException {
-        postService.deleteById(id);
+        Post post = postService.findById(id);
+        String loggedInUser = userSession.getUser();
 
-        imageService.deleteImage(POSTS_FOLDER, id);
-        return "deletedPost";
+        if (post.getUser().equals(loggedInUser)) {
+            postService.deleteById(id);
+            imageService.deleteImage(POSTS_FOLDER, id);
+            return "deletedPost";
+        } else {
+            return "redirect:/error";
+        }
     }
     @GetMapping("/post/{id}/edit")//Show the form to edit a post by its id
     public String editPost(Model model, @PathVariable long id) throws IOException {

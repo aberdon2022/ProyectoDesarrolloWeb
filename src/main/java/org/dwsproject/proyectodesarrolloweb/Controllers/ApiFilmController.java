@@ -83,6 +83,19 @@ public class ApiFilmController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
+        List <Film> films = user.getCompletedFilms();
+        Film f = null;
+        for (Film film : films) {
+            if (film.getTitle().equals(title)) {
+                f = film;
+                break;
+            }
+        }
+
+        if (f == null) {
+            return new ResponseEntity<>("Film not found", HttpStatus.NOT_FOUND);
+        }
+
         try {
             filmService.deleteFilm(user, title, "completed");
             return new ResponseEntity<>("Film deleted", HttpStatus.OK);
@@ -96,6 +109,19 @@ public class ApiFilmController {
         User user = userService.findUserByUsername(username);
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        List <Film> films = user.getPendingFilms();
+        Film f = null;
+        for (Film film : films) {
+            if (film.getTitle().equals(title)) {
+                f = film;
+                break;
+            }
+        }
+
+        if (f == null) {
+            return new ResponseEntity<>("Film not found", HttpStatus.NOT_FOUND);
         }
 
         try {
