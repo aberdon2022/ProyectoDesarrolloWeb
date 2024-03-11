@@ -16,8 +16,8 @@ public class User {
     private String password;
     private ArrayList<User> friends;
 
-    private List<Pelicula> pendingFilms;
-    private List<Pelicula> completedFilms;
+    private List<Film> pendingFilms;
+    private List<Film> completedFilms;
 
     public User() {
         this.friends = new ArrayList<>();
@@ -33,11 +33,11 @@ public class User {
         this.completedFilms = new ArrayList<>();
     }
 
-    public List<Pelicula> getPendingFilms() {
+    public List<Film> getPendingFilms() {
         return pendingFilms;
     }
 
-    public List<Pelicula> getCompletedFilms() {
+    public List<Film> getCompletedFilms() {
         return completedFilms;
     }
 

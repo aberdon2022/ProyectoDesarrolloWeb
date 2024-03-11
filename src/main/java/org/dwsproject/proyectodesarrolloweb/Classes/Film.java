@@ -1,13 +1,13 @@
 package org.dwsproject.proyectodesarrolloweb.Classes;
-public class Pelicula {
+public class Film {
     private String title;
     private int year;
     private String imagePath;
     private int rating;
 
-    public Pelicula() {
+    public Film() {
     }
-    public Pelicula(String title, int year, String imagePath, int rating) {
+    public Film(String title, int year, String imagePath, int rating) {
         this.title = title;
         this.year = year;
         this.imagePath = imagePath;

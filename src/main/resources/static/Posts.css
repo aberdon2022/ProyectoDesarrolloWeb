@@ -93,5 +93,8 @@ a.return:hover {
     word-wrap: break-word;
 }
 .post-container img{
+    width: 500px;
+    height: 500px;
     max-width: 100%;
+    max-height: 100%;
 }

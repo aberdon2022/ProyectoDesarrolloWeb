@@ -1,6 +1,6 @@
 package org.dwsproject.proyectodesarrolloweb.Controllers;
 
-import org.dwsproject.proyectodesarrolloweb.Classes.Pelicula;
+import org.dwsproject.proyectodesarrolloweb.Classes.Film;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.dwsproject.proyectodesarrolloweb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ public class FilmController {
     @Autowired
     private UserService UserService;//use methods of the service UserService
     @PostMapping("/addpeli")//Add a film to the list
-    public String createFilm(Pelicula film, @RequestParam("image")MultipartFile imageFile, @RequestParam("listType") String listType, @RequestParam String username) {
+    public String createFilm(Film film, @RequestParam("image")MultipartFile imageFile, @RequestParam("listType") String listType, @RequestParam String username) {
         User user = UserService.findUserByUsername(username);
         try {
             filmService.addFilm(user, film, imageFile, listType);
