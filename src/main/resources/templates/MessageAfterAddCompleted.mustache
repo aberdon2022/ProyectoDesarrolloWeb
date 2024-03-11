@@ -14,11 +14,9 @@
             <a href="/completed?username={{user.username}}" class="button">View Completed Films</a>
         </div>
     </div>
-
     <div id="toast" class="toast">Film Added Successfully!</div>
-    
     <script>
-        // Muestra el toast
+        // Show toast
         var toast = document.getElementById("toast");
         toast.className = "toast show";
         setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);

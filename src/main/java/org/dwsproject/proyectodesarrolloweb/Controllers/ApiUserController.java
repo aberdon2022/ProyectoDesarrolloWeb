@@ -20,6 +20,7 @@ public class ApiUserController {
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestParam String username, @RequestParam String password) {
         User user = userService.findUserByUsername(username);
+
         if (user != null && userService.checkPassword(user,password)) {
             userSession.setUser(user.getUsername());
             return ResponseEntity.ok(user);
@@ -31,6 +32,7 @@ public class ApiUserController {
     @GetMapping("/profile/{username}")
     public ResponseEntity<User> profile(@PathVariable String username) {
         User user = userService.findUserByUsername(username);
+        
         if (user != null) {
             return ResponseEntity.ok(user);
         } else {

@@ -4,7 +4,6 @@ import org.dwsproject.proyectodesarrolloweb.Classes.Pelicula;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.dwsproject.proyectodesarrolloweb.service.FilmService;
 import org.dwsproject.proyectodesarrolloweb.service.UserService;
-import org.dwsproject.proyectodesarrolloweb.service.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,9 +26,11 @@ public class ApiFilmController {
     @GetMapping("/films")//Get all the films
     public ResponseEntity<List<Pelicula>> getAllFilms(@RequestParam String username) {
         User user = userService.findUserByUsername(username);
+
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
         List<Pelicula> films = new ArrayList<>();
         films.addAll(user.getPendingFilms());
         films.addAll(user.getCompletedFilms());
@@ -39,9 +40,11 @@ public class ApiFilmController {
     @GetMapping("/films/pending")//Get the pending films
     public ResponseEntity<List<Pelicula>> getPendingFilms(@RequestParam String username) {
         User user = userService.findUserByUsername(username);
+
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
         List<Pelicula> films = user.getPendingFilms();
         return ResponseEntity.ok(films);
     }
@@ -49,9 +52,11 @@ public class ApiFilmController {
     @GetMapping("/films/completed")//Get the completed films
     public ResponseEntity<List<Pelicula>> getCompletedFilms(@RequestParam String username) {
         User user = userService.findUserByUsername(username);
+
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
         List<Pelicula> films = user.getCompletedFilms();
         return ResponseEntity.ok(films);
     }
@@ -59,6 +64,7 @@ public class ApiFilmController {
     @PostMapping("/addpeli")//Add a film to the list of films
     public ResponseEntity<Pelicula> createFilm(@RequestPart("film") String filmJson, @RequestParam("image") MultipartFile imageFile, @RequestParam("listType") String listType, @RequestParam("username") String username) {
         User user = userService.findUserByUsername(username);
+        
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

@@ -39,6 +39,7 @@ public class PostService {
     public void deleteById(long id) {//Delete a post by id
         this.posts.remove(id);
     }
+    
     public void editById(Post post, long id){//Edit a post by id
         if (posts.containsKey(id)) {
             posts.replace(id, post);

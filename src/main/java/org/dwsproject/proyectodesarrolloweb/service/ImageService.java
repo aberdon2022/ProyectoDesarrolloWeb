@@ -48,6 +48,7 @@ public class ImageService {
         if(!Files.exists(imagePath)) {
             // If the image is not found on the disk, try to get it from memory
             byte[] image = filmService.getImage(folderName + "/" + imageId + ".jpg");
+            
             if (image != null) {
                 return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "image/jpeg").body(image);
             } else {

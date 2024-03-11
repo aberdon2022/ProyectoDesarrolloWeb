@@ -26,6 +26,7 @@ public class FilmService {
         imageCache.put(imageFile.getOriginalFilename(), bytes);
 
         film.setImagePath(imageFile.getOriginalFilename());//Save the image path 
+
         if ("pending".equals(listType)) {//add the film by the list type
             user.getPendingFilms().add(film);
         } else if ("completed".equals(listType)) {
@@ -39,7 +40,9 @@ public class FilmService {
 
     public void deleteFilm (User user, String title, String listType) {//Delete a film from the list
         List<Pelicula> films = "pending".equals(listType) ? user.getPendingFilms() : user.getCompletedFilms();
+
         for (Pelicula film : films) {
+            
             if (film.getTitle().equals(title)) {
                 // Delete the image from the disk
                 Path imagePath = Paths.get("src/main/resources/static" + film.getImagePath());

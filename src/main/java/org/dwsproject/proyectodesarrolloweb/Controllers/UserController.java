@@ -30,6 +30,7 @@ public class UserController {
     @PostMapping("/login")
     public String login(Model model, @RequestParam String username, @RequestParam String password) {
         User user = userService.findUserByUsername(username); //Obtain the user
+
         if (user != null && userService.checkPassword(user,password)) { //If the user exists and the password is correct
             model.addAttribute("user", user);
             userSession.setUser(user.getUsername());
@@ -42,6 +43,7 @@ public class UserController {
     @GetMapping("/profile/{username}")
     public String profile(Model model, @PathVariable String username) {
         User user = userService.findUserByUsername(username);
+
         if (user != null) {
             model.addAttribute("user", user);
             return "profile";
@@ -53,6 +55,7 @@ public class UserController {
     @GetMapping("/friends/{username}")
     public String friends(Model model, @PathVariable String username, @RequestParam String loggedInUser) {
         User user = userService.findUserByUsername(username); // Retrieve the user based on the username path variable
+        
         if (user != null) {
             model.addAttribute("friend", user);// Add the user's data to the model
             model.addAttribute("friends", user.getFriends());// Add the user's friends to the model

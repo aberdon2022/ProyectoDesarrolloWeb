@@ -1,4 +1,5 @@
 package org.dwsproject.proyectodesarrolloweb.Classes;
+
 public class Pelicula {
     private String title;
     private int year;
@@ -7,6 +8,7 @@ public class Pelicula {
 
     public Pelicula() {
     }
+    
     public Pelicula(String title, int year, String imagePath, int rating) {
         this.title = title;
         this.year = year;

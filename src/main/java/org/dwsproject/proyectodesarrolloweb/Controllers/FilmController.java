@@ -14,11 +14,14 @@ import org.dwsproject.proyectodesarrolloweb.service.FilmService;
 public class FilmController {
     @Autowired
     private FilmService filmService;//use methods of the service FilmService
+
     @Autowired
     private UserService UserService;//use methods of the service UserService
+
     @PostMapping("/addpeli")//Add a film to the list
     public String createFilm(Pelicula film, @RequestParam("image")MultipartFile imageFile, @RequestParam("listType") String listType, @RequestParam String username) {
         User user = UserService.findUserByUsername(username);
+
         try {
             filmService.addFilm(user, film, imageFile, listType);
         } catch (Exception e) {
@@ -91,9 +94,11 @@ public class FilmController {
     @GetMapping("/pending/{title}/delete")//Delete a film from the pending list
     public String deleteFilmP(Model model, @PathVariable String title, @RequestParam String username) {
         User user = UserService.findUserByUsername(username);
+
         if (user == null) {
             return "redirect:/";
         }
+        
         filmService.deleteFilm(user, title, "pending");
         model.addAttribute("user", user);
         return "deletedPendingFilm";
