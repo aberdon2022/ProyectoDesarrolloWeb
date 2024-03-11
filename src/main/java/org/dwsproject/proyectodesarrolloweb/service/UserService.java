@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 @Service
 public class UserService {
+
     private ArrayList<User> usersdb = new ArrayList<>();
 
     public UserService() {
@@ -25,7 +26,9 @@ public class UserService {
     }
 
     public User findUserByUsername(String username) {//Find user by username
+
         for (User user : usersdb) {
+            
             if (user.getUsername().equals(username)) {
                 return user;
             }

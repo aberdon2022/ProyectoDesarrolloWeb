@@ -38,10 +38,10 @@ h1 {
   width: 300px;
   display: flex;
   flex-direction: column;
-  background-color: rgba(255, 255, 255, 0.7); /* Fondo blanco semi-transparente */
+  background-color: rgba(255, 255, 255, 0.7); 
   border-radius: 10px;
   padding: 20px;
-  margin: 100px auto; /* Centra el contenedor verticalmente y horizontalmente */
+  margin: 100px auto; 
   margin-top: 50px;
   float: none;
   }

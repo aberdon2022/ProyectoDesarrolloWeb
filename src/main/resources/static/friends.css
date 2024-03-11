@@ -15,8 +15,8 @@ body::before {
     width: 100%;
     height: 100%;
     background: url('images/palomitas.webp') center/cover;
-    opacity: 0.4; /* Cambia la opacidad de la imagen de fondo */
-    z-index: -1; /* Coloca el pseudo-elemento detrás del contenido */
+    opacity: 0.4; 
+    z-index: -1; 
     filter: blur(5px);
 }
 
@@ -38,15 +38,14 @@ h1 {
 
 div {
     list-style: none;
-    margin: 0 auto; /* Centra el contenedor horizontalmente */
-    max-width: 600px; /* Define un ancho máximo para el contenedor */
-    padding: 20px; /* Añade espacio alrededor del contenido */
+    margin: 0 auto; 
+    max-width: 600px; 
+    padding: 20px; 
 }
 div > div {
-    display: flex; /* Utiliza flexbox para alinear los elementos horizontalmente */
-    justify-content: space-between; /* Distribuye los elementos de manera uniforme en el contenedor */
-    align-items: center; /* Centra verticalmente los elementos en el contenedor */
-    margin-bottom: 10px; /* Espacio entre cada elemento amigo */
+    display: flex; 
+    justify-content: space-between; 
+    margin-bottom: 10px; 
 }
 
 div p {
@@ -89,3 +88,33 @@ a.delete:hover {
     text-decoration: underline;
 }
 
+
+form {
+   
+    margin: 0 auto;
+    width: 300px;
+   
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+  }
+  
+  input[type="text"] {
+    width: 93%;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    outline: none;
+    background-color: #f0f0f0;
+  }
+  
+  button[type="submit"] {
+    width: 100%;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #ccc;
+    cursor: pointer;
+    outline: none;
+    background-color: #999;
+  }

@@ -15,8 +15,8 @@ body::before {
     width: 100%;
     height: 100%;
     background: url('images/series-netflix.webp') center/cover;
-    opacity: 0.4; /* Cambia la opacidad de la imagen de fondo */
-    z-index: -1; /* Coloca el pseudo-elemento detrás del contenido */
+    opacity: 0.4; 
+    z-index: -1; 
 }
 h1 {
     text-align: center;
@@ -38,26 +38,26 @@ h2{
 }
 
 .item {
-    text-align: center; /* Centrar el contenido dentro del div */
-    display: inline-block; /* Hacer que los elementos div se muestren en línea */
-    margin: 0 10px; /* Espacio entre cada elemento */
+    text-align: center; 
+    display: inline-block; 
+    margin: 0 10px;
 }
 
 .item img {
-    width: 150px; /* Ajustar el ancho de las imágenes */
-    display: block; /* Eliminar el espacio adicional debajo de las imágenes */
-    /* Espacio entre la imagen y el título */
+    width: 150px; 
+    display: block; 
+   
     margin: 70px 110px 20px;
     transition: transform 0.3s;
     filter: brightness(0) invert(1);
 }
 .item img:hover {
-    transform: scale(1.1); /* Aumenta el tamaño al 110% cuando pasa el cursor por encima */
+    transform: scale(1.1); 
 }
 
 
 .item a {
-    display: block; /* Para que los elementos ocupen toda la anchura disponible */
+    display: block; 
     font-size: 20px;
     color: #ddd;
     text-decoration: none !important;
@@ -74,11 +74,11 @@ a.logout{
     border-radius: 5px;
     margin-bottom: 15px;
     float: right;
-    transition: background-color 0.3s; /* Agrega una transición suave */
+    transition: background-color 0.3s; 
 }
 
 a.logout:hover {
-    background-color: #BD300D; /* Cambia el color de fondo al pasar el ratón */
+    background-color: #BD300D; 
 }
 a.friends {
     font-weight: bold;
