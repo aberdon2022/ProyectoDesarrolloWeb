@@ -74,8 +74,8 @@ h1 {
     padding: 16px;
     position: fixed;
     z-index: 1;
-    right: 590px;
-    bottom: 585px;
+    right: 87vh;
+    bottom: 75vh;
     font-size: 15px;
     transition: visibility 0.5s, opacity 0.5s linear;
 }
