@@ -1,57 +1,78 @@
 package org.dwsproject.proyectodesarrolloweb.service;
+import jakarta.transaction.Transactional;
 import org.dwsproject.proyectodesarrolloweb.Classes.Film;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
+import org.dwsproject.proyectodesarrolloweb.Repositories.FilmRepository;
+import org.dwsproject.proyectodesarrolloweb.Repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class FilmService {
 
+    @Autowired
+    private ImageService imageService;
+    private AtomicLong nextId = new AtomicLong();//Create an id for the posts
 
-    private Map<String, byte[]> imageCache = new HashMap<>();//Create a cache for the images of the films
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private FilmRepository filmRepository;
 
     public void addFilm(User user, Film film, MultipartFile imageFile, String listType) throws IOException {
-        String folder = "src/main/resources/static/images/";//Create a folder for the images
-        byte[] bytes = imageFile.getBytes();//Get the bytes of the image
-        Path path = Paths.get(folder + imageFile.getOriginalFilename());//Create a path for the image
-        Files.write(path, bytes);//Write the bytes to the path
+        System.out.println("addFilm method called with film title: " + film.getTitle()); // Log when method is called
+        //Retrieve the id of the image
+        long imageId = imageService.getNextId();
+        film.setImageId(imageId);
+        imageService.saveImage("FilmsImages", film.getImageId(), imageFile);//Save the image in the folder
+        film.setUser(user);
 
-        imageCache.put(imageFile.getOriginalFilename(), bytes);
+        if ("pending".equals(listType)) {
+            film.setStatus(Film.FilmStatus.PENDING);
+        } else {
+            film.setStatus(Film.FilmStatus.COMPLETED);
+        }
 
-        film.setImagePath(imageFile.getOriginalFilename());//Save the image path 
-        if ("pending".equals(listType)) {//add the film by the list type
-            user.getPendingFilms().add(film);
-        } else if ("completed".equals(listType)) {
-            user.getCompletedFilms().add(film);
+        filmRepository.save(film);
+        user = userRepository.findById(user.getId()).orElse(null); // Retrieve the user again
+        if (user != null) {
+            if ("pending".equals(listType)) {
+                user.getPendingFilms().add(film);
+            } else {
+                user.getCompletedFilms().add(film);
+            }
+            userRepository.save(user);
         }
     }
 
-    public byte[] getImage(String imageName) {
-        return imageCache.get(imageName);
-    }
-
-    public void deleteFilm (User user, String title, String listType) {//Delete a film from the list
+    @Transactional
+    public void deleteFilm(User user, long filmId, String listType) throws IOException {
         List<Film> films = "pending".equals(listType) ? user.getPendingFilms() : user.getCompletedFilms();
+        Film filmToDelete = null;
+
         for (Film film : films) {
-            if (film.getTitle().equals(title)) {
-                // Delete the image from the disk
-                Path imagePath = Paths.get("src/main/resources/static" + film.getImagePath());
-                try {
-                    Files.deleteIfExists(imagePath);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                // Remove the film from the list
-                films.remove(film);
+            if (film.getFilmId() == filmId) {
+                filmToDelete = film;
                 break;
             }
+        }
+        if (filmToDelete != null) {
+            if ("pending".equals(listType)) {
+                user.getPendingFilms().remove(filmToDelete);
+            } else {
+                user.getCompletedFilms().remove(filmToDelete);
+            }
+            filmRepository.delete(filmToDelete); // Delete the film from the repository
+            imageService.deleteImage("FilmsImages", filmToDelete.getImageId());
+            userRepository.save(user); // Save the user after removing the film from the list
+        } else {
+            System.out.println("Film not found in the list");
         }
     }
 }

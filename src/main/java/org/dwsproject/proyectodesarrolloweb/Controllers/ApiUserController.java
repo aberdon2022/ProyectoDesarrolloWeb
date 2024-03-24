@@ -1,6 +1,7 @@
 package org.dwsproject.proyectodesarrolloweb.Controllers;
 
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
+import org.dwsproject.proyectodesarrolloweb.Repositories.UserRepository;
 import org.dwsproject.proyectodesarrolloweb.service.UserService;
 import org.dwsproject.proyectodesarrolloweb.service.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +18,12 @@ public class ApiUserController {
     @Autowired
     private UserSession userSession;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestParam String username, @RequestParam String password) {
-        User user = userService.findUserByUsername(username);
+        User user = userRepository.findByUsername(username);
 
         if (user != null && userService.checkPassword(user,password)) {
             userSession.setUser(user.getUsername());

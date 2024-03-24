@@ -1,17 +1,58 @@
 package org.dwsproject.proyectodesarrolloweb.Classes;
+import jakarta.persistence.*;
+
+@Entity
 public class Film {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long filmId;
     private String title;
     private int year;
-    private String imagePath;
     private int rating;
+    private long imageId;
+
+    @Enumerated(EnumType.STRING)
+    private FilmStatus status;
+    public enum FilmStatus {
+        PENDING,
+        COMPLETED
+    }
+
+    public FilmStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(FilmStatus status) {
+        this.status = status;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
     public Film() {
     }
-    public Film(String title, int year, String imagePath, int rating) {
+
+    public Film(String title, int year, int rating) {
         this.title = title;
         this.year = year;
-        this.imagePath = imagePath;
         this.rating = rating;
+    }
+
+    public long getFilmId() {
+        return filmId;
+    }
+
+    public void setFilmId(long id) {
+        this.filmId = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getTitle() {
@@ -30,12 +71,12 @@ public class Film {
         this.year = year;
     }
 
-    public String getImagePath() {
-        return imagePath;
+    public long getImageId() { // Changed from getImagePath to getImageId
+        return imageId; // Changed from imagePath to imageId
     }
 
-    public void setImagePath(String imagePath) {
-        this.imagePath = "/images/" + imagePath;
+    public void setImageId(long imageId) { // Changed from setImagePath to setImageId
+        this.imageId = imageId; // Changed from imagePath to imageId
     }
 
     public int getRating() {

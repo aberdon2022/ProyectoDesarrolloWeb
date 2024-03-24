@@ -12,22 +12,22 @@
 <h1>Completed Films</h1>
 <a href="/profile/{{user.username}}" class="button">Return to Profile</a>
 <div id="film-list">
-    {{#films}}
+    {{#completed}}
         <div>
             <h2>Title: {{title}}</h2>
             <p>Year: {{year}}</p>
             <p>Rating: {{rating}}</p>
-            <img src="{{imagePath}}" class= "imagen">
+            <img src="/images/FilmsImages/image-{{imageId}}.jpg" class= "imagen">
             <div>
-                <a href="/completed/{{title}}/delete?username={{user.username}}" class="delete">
+                <a href="/completed/{{filmId}}/delete?username={{user.username}}" class="delete">
                     <img src="/images/3221803.png" alt="Delete">
                 </a>
             </div>
         </div>
-    {{/films}}
-    {{^films}}
-                    <p>No completed films yet.</p>
-        {{/films}}
+    {{/completed}}
+    {{^completed}}
+        <p>No completed films yet.</p>
+    {{/completed}}
 </div>
 <a href="/completed/add?username={{user.username}}" class="add">Add Film</a>
 </body>

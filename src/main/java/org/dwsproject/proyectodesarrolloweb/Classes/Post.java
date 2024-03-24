@@ -1,19 +1,27 @@
 package org.dwsproject.proyectodesarrolloweb.Classes;
+import jakarta.persistence.*;
 
+
+@Entity
 public class Post {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String user;
+    private String username;
     private String title;
     private String text;
     boolean isOwner;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public Post() {
     }
 
-    public Post(String user, String title, String text, boolean isOwner) {
+    public Post(String username, String title, String text, boolean isOwner) {
         super();
-        this.user = user;
+        this.username = username;
         this.title = title;
         this.text = text;
         this.isOwner = isOwner;
@@ -28,7 +36,7 @@ public class Post {
     }
 
     public String getUser() {
-        return user;
+        return username;
     }
 
     public boolean getIsOwner() {
@@ -40,7 +48,7 @@ public class Post {
     }
 
     public void setUser(String user) {
-        this.user = user;
+        this.username = username;
     }
 
     public String getTitle() {

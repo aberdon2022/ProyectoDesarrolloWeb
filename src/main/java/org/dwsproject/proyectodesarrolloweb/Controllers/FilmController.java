@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.dwsproject.proyectodesarrolloweb.service.FilmService;
 
+import java.io.IOException;
+import java.sql.SQLOutput;
+
 @Controller
 public class FilmController {
     @Autowired
@@ -58,15 +61,21 @@ public class FilmController {
     public String viewPending(Model model, @RequestParam String username) {
         User user = UserService.findUserByUsername(username);
         model.addAttribute("user", user);
-        model.addAttribute("films", user.getPendingFilms());
+        model.addAttribute("pending", user.getPendingFilms());
         return "ViewPendingList";
     }
 
     @GetMapping("/completed")//show the completed list
     public String viewCompleted(Model model, @RequestParam String username) {
         User user = UserService.findUserByUsername(username);
+        for (Film film : user.getCompletedFilms()) {
+            System.out.println("Film Title: " + film.getTitle());
+            System.out.println("Film year: " + film.getYear());
+            System.out.println("Film rating: " + film.getRating());
+            System.out.println("Film imageId: " + film.getImageId());
+        }
         model.addAttribute("user", user);
-        model.addAttribute("films", user.getCompletedFilms());
+        model.addAttribute("completed", user.getCompletedFilms());
         return "ViewCompletedList";
     }
 
@@ -84,22 +93,22 @@ public class FilmController {
         return "MessageAfterAddCompleted";
     }
 
-    @GetMapping ("/completed/{title}/delete")//Delete a film from the completed list
-    public String deleteFilmC(Model model, @PathVariable String title, @RequestParam String username) {
+    @GetMapping ("/completed/{filmId}/delete")//Delete a film from the completed list
+    public String deleteFilmC(Model model, @PathVariable long filmId, @RequestParam String username) throws IOException {
         User user = UserService.findUserByUsername(username);
-        filmService.deleteFilm(user, title, "completed");
+        filmService.deleteFilm(user, filmId, "completed");
         model.addAttribute("user", user);
         return "deletedCompletedFilm";
     }
-    @GetMapping("/pending/{title}/delete")//Delete a film from the pending list
-    public String deleteFilmP(Model model, @PathVariable String title, @RequestParam String username) {
+    @GetMapping("/pending/{filmId}/delete")//Delete a film from the pending list
+    public String deleteFilmP(Model model, @PathVariable long filmId, @RequestParam String username) throws IOException {
         User user = UserService.findUserByUsername(username);
 
         if (user == null) {
             return "redirect:/";
         }
         
-        filmService.deleteFilm(user, title, "pending");
+        filmService.deleteFilm(user, filmId, "pending");
         model.addAttribute("user", user);
         return "deletedPendingFilm";
     }

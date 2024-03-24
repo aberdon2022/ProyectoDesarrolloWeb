@@ -56,7 +56,7 @@ public class ApiFilmController {
     }
 
     @PostMapping("/addpeli")//Add a film to the list of films
-    public ResponseEntity<Film> createFilm(@RequestPart("film") String filmJson, @RequestParam("image") MultipartFile imageFile, @RequestParam("listType") String listType, @RequestParam("username") String username) {
+    public ResponseEntity<Film> createFilm (@RequestPart("film") String filmJson, @RequestParam("image") MultipartFile imageFile, @RequestParam("listType") String listType, @RequestParam("username") String username) {
         User user = userService.findUserByUsername(username);
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -66,7 +66,7 @@ public class ApiFilmController {
             Film film = objectMapper.readValue(filmJson, Film.class); //Convert the JSON string to a Film object
             filmService.addFilm(user, film, imageFile, listType);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         if ("pending".equals(listType) || "completed".equals(listType)) {//If the film is added to the pending or completed list, return a 201 status code
@@ -77,58 +77,59 @@ public class ApiFilmController {
     }
 
     @DeleteMapping("/films/completed")
-    public ResponseEntity<String> deleteFilmC (@RequestParam String title, @RequestParam String username) {//Delete a film from the completed list
+    public ResponseEntity<String> deleteFilmC (@RequestParam long filmId, @RequestParam String username) {//Delete a film from the completed list
         User user = userService.findUserByUsername(username);
+
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         List <Film> films = user.getCompletedFilms();
-        Film f = null;
+        Film fp = null;
         for (Film film : films) {
-            if (film.getTitle().equals(title)) {
-                f = film;
+            if (film.getFilmId() == filmId) {
+                fp = film;
                 break;
             }
         }
 
-        if (f == null) {
+        if (fp == null) {
             return new ResponseEntity<>("Film not found", HttpStatus.NOT_FOUND);
         }
 
         try {
-            filmService.deleteFilm(user, title, "completed");
+            filmService.deleteFilm(user, filmId, "completed");
             return new ResponseEntity<>("Film deleted", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
 
     @DeleteMapping("/films/pending")//Delete a film from the pending list
-    public ResponseEntity<String> deleteFilmP (@RequestParam String title, @RequestParam String username) {
+    public ResponseEntity<String> deleteFilmP (@RequestParam long filmId, @RequestParam String username) {
         User user = userService.findUserByUsername(username);
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         List <Film> films = user.getPendingFilms();
-        Film f = null;
+        Film fc = null;
         for (Film film : films) {
-            if (film.getTitle().equals(title)) {
-                f = film;
+            if (film.getFilmId() == filmId) {
+                fc = film;
                 break;
             }
         }
 
-        if (f == null) {
+        if (fc == null) {
             return new ResponseEntity<>("Film not found", HttpStatus.NOT_FOUND);
         }
 
         try {
-            filmService.deleteFilm(user, title, "pending");
+            filmService.deleteFilm(user, filmId, "pending");
             return new ResponseEntity<>("Film deleted", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
 }

@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -17,11 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class ImageService {
 
-    @Autowired
-    private FilmService filmService;//use methods of the service FilmService
-
-    private static final Path FILES_FOLDER = Paths.get(System.getProperty("user.dir"), "images");//Create a folder to store the images
-
+    private static final Path FILES_FOLDER = Paths.get("src/main/resources/static/images");//Create a folder to store the images
+    private AtomicLong nextId = new AtomicLong();//Create an id for the images
     private Path createFilePath(long imageId, Path folder) {//Create a path for the image
         return folder.resolve("image-" + imageId + ".jpg");
     }
@@ -45,27 +43,19 @@ public class ImageService {
 
         Resource file = new UrlResource(imagePath.toUri());//Create a resource from the image path 
 
-        if(!Files.exists(imagePath)) {
-            // If the image is not found on the disk, try to get it from memory
-            byte[] image = filmService.getImage(folderName + "/" + imageId + ".jpg");
-            
-            if (image != null) {
-                return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "image/jpeg").body(image);
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        } else {
-            return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "image/jpeg").body(file);
-        }
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "image/jpeg").body(file);//Create a response from the resource
     }
 
-    public void deleteImage(String folderName, long imageId) throws IOException {//Delete an image from the folder 
+    public void deleteImage(String folderName, long imageId) throws IOException {//Delete an image from the folder
 
         Path folder = FILES_FOLDER.resolve(folderName);
 
         Path imageFile = createFilePath(imageId, folder);
 
         Files.deleteIfExists(imageFile);
+    }
+    public long getNextId() {//Return the next id for the images
+        return nextId.getAndIncrement();
     }
 
 }
