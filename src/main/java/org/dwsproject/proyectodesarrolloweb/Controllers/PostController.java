@@ -1,11 +1,11 @@
 package org.dwsproject.proyectodesarrolloweb.Controllers;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.List;
 
 import jakarta.servlet.http.HttpSession;
 
+import org.dwsproject.proyectodesarrolloweb.Classes.Image;
 import org.dwsproject.proyectodesarrolloweb.Classes.Post;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.dwsproject.proyectodesarrolloweb.service.ImageService;
@@ -13,20 +13,14 @@ import org.dwsproject.proyectodesarrolloweb.service.PostService;
 import org.dwsproject.proyectodesarrolloweb.service.UserService;
 import org.dwsproject.proyectodesarrolloweb.service.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 public class PostController {
 
-    private static final String POSTS_FOLDER = "posts";//Create a folder for the posts
-//Use the methods of the service PostService, UserSession and ImageService
     @Autowired
     private PostService postService;
 
@@ -58,16 +52,19 @@ public class PostController {
     }
 
     @PostMapping("/forum/new")
-    public String newPost(Model model, @RequestParam String username, Post post, MultipartFile image) throws IOException {
+    public String newPost(Model model, @RequestParam String username, Post post, @RequestParam(value = "imageFile", required = false) MultipartFile imageFile) throws IOException {
         User user = userService.findUserByUsername(username);
 
         if (user != null) {
             post.setUser(user);
-            postService.savePost(post);
-
-            if (image != null && !image.isEmpty()) {
-                imageService.saveImage(POSTS_FOLDER, post.getId(), image);
+            if (imageFile != null && !imageFile.isEmpty()) {
+                Image newImage = imageService.createImage(imageFile);
+                Image savedImage = imageService.saveImage(newImage);
+                post.setImageId(savedImage.getId()); // set the image id in the post
+            } else {
+                post.setImageId(null); // set the image id in the post to null
             }
+            postService.savePost(post);
             userSession.incNumPosts();
             model.addAttribute("numPosts", userSession.getNumPosts());
             return "redirect:/forum";
@@ -82,15 +79,11 @@ public class PostController {
         Post post = postService.findById(id);
         String loggedInUser = userSession.getUser().getUsername();
         boolean isOwner = post.getUser().getUsername().equals(loggedInUser);
+        boolean imageExists = post.getImageId() != null;
         model.addAttribute("post", post);
         model.addAttribute("isOwner", isOwner);
-        model.addAttribute("imageExists", imageService.imageExists(POSTS_FOLDER, id));
+        model.addAttribute("imageExists", imageExists);
         return "showPost";
-    }
-
-    @GetMapping("/post/{id}/image")//Download the image of a post by its id
-    public ResponseEntity<Object> downloadImage(@PathVariable int id) throws MalformedURLException {
-        return imageService.createResponseFromImage(POSTS_FOLDER, id);
     }
 
     @GetMapping("/post/{id}/delete")//Delete a post by its id
@@ -99,8 +92,9 @@ public class PostController {
         String loggedInUser = userSession.getUser().getUsername();
 
         if (post.getUser().getUsername().equals(loggedInUser)) {
+            long ImageId = post.getImageId();
             postService.deleteById(id);
-            imageService.deleteImage(POSTS_FOLDER, id);
+            imageService.deleteImage(ImageId);
             return "deletedPost";
         } else {
             return "redirect:/error/403";
@@ -111,25 +105,30 @@ public class PostController {
         Post post = postService.findById(id);
         String loggedInUser = userSession.getUser().getUsername();
         boolean isOwner = post.getUser().getUsername().equals(loggedInUser);
-       if (isOwner) {
-           model.addAttribute("post", post);
-           return "editPost";
-       }else {
+        if (isOwner) {
+            model.addAttribute("post", post);
+            return "editPost";
+        }else {
             return "redirect:/error/401";
         }
     }
 
     @PostMapping("/post/{id}/edit")//Edit a post by its id
-    public String editPost(Model model, Post post, MultipartFile image) throws IOException {
-
+    public String editPost(Model model, Post post, @RequestParam(value = "imageFile", required = false) MultipartFile imageFile) throws IOException {
         User loggedInUser = userSession.getUser();
 
         post.setUser(loggedInUser);
-        postService.editById(post, post.getId());
 
-        if (image != null && !image.isEmpty()) { //Save the image if it exists
-            imageService.saveImage(POSTS_FOLDER, post.getId(), image);
+        if (imageFile != null && !imageFile.isEmpty()) { // If a new image file is provided, save the new image
+            Image newImage = imageService.createImage(imageFile);
+            Image savedImage = imageService.saveImage(newImage);
+            post.setImageId(savedImage.getId()); // Set the image id in the post to the id of the new image
+        } else { // If a new image file is not provided, keep the existing image id
+            Post existingPost = postService.findById(post.getId());
+            post.setImageId(existingPost.getImageId());
         }
+
+        postService.editById(post, post.getId());
         model.addAttribute("post", post);
         return "redirect:/forum";
     }

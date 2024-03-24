@@ -10,7 +10,9 @@ public class Film {
     private String title;
     private int year;
     private int rating;
-    private long imageId;
+
+    @Column (name = "image_id")
+    private Long imageId;
 
     @Enumerated(EnumType.STRING)
     private FilmStatus status;
@@ -76,19 +78,19 @@ public class Film {
         this.year = year;
     }
 
-    public long getImageId() { // Changed from getImagePath to getImageId
-        return imageId; // Changed from imagePath to imageId
-    }
-
-    public void setImageId(long imageId) { // Changed from setImagePath to setImageId
-        this.imageId = imageId; // Changed from imagePath to imageId
-    }
-
     public int getRating() {
         return rating;
     }
 
     public void setRating(int rating) {
         this.rating = rating;
+    }
+
+    public long getImageId() {
+        return imageId;
+    }
+
+    public void setImageId (long imageId) {
+        this.imageId = imageId;
     }
 }

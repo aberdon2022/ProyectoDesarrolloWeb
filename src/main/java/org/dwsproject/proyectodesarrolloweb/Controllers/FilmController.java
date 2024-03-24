@@ -1,5 +1,4 @@
 package org.dwsproject.proyectodesarrolloweb.Controllers;
-
 import org.dwsproject.proyectodesarrolloweb.Classes.Film;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.dwsproject.proyectodesarrolloweb.service.UserService;
@@ -9,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.dwsproject.proyectodesarrolloweb.service.FilmService;
+import java.io.IOException;
 
 import java.io.IOException;
 import java.sql.SQLOutput;
@@ -24,7 +24,6 @@ public class FilmController {
     @PostMapping("/addpeli")//Add a film to the list
     public String createFilm(Film film, @RequestParam("image")MultipartFile imageFile, @RequestParam("listType") String listType, @RequestParam String username) {
         User user = UserService.findUserByUsername(username);
-
         try {
             filmService.addFilm(user, film, imageFile, listType);
         } catch (Exception e) {

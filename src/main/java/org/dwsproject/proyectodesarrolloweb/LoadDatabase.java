@@ -30,8 +30,13 @@ public class LoadDatabase {
             saveUserIfNotExists("user4", "4");
 
             // Save posts only after ensuring users exist
-            savePostIfNotExists(new Post("Opinion Clueless", "Perfecta",  userService.findUserByUsername("user3")));
-            savePostIfNotExists(new Post("Opinion El padrino", "Horrible", userService.findUserByUsername("user4")));
+            Post post1 = new Post("Opinion Clueless", "Perfecta", userService.findUserByUsername("user3"));
+            post1.setImageId(null); // explicitly set imageId to null
+            savePostIfNotExists(post1);
+
+            Post post2 = new Post("Opinion El padrino", "Horrible", userService.findUserByUsername("user4"));
+            post2.setImageId(null); // explicitly set imageId to null
+            savePostIfNotExists(post2);
         };
     }
 

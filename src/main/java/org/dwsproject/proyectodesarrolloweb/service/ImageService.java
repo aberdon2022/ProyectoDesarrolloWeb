@@ -1,66 +1,45 @@
 package org.dwsproject.proyectodesarrolloweb.service;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.concurrent.atomic.AtomicLong;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
+import org.dwsproject.proyectodesarrolloweb.Classes.Image;
+import org.dwsproject.proyectodesarrolloweb.Repositories.ImageRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class ImageService {
+    @Autowired
+    private ImageRepository imageRepository;
 
-    private static final Path FILES_FOLDER = Paths.get("src/main/resources/static/images");//Create a folder to store the images
-    private AtomicLong nextId = new AtomicLong();//Create an id for the images
-    private Path createFilePath(long imageId, Path folder) {//Create a path for the image
-        return folder.resolve("image-" + imageId + ".jpg");
+    public Image createImage(MultipartFile imageFile) throws IOException {
+        if (imageFile != null && !imageFile.isEmpty()) {
+            Image image = new Image();
+            image.setData(imageFile.getBytes());
+            return image;
+        }
+        return null; // Return null if no image file is provided or it's empty
     }
 
-    public void saveImage(String folderName, long imageId, MultipartFile image) throws IOException {
-
-        Path folder = FILES_FOLDER.resolve(folderName);//Create a folder for the images
-
-        Files.createDirectories(folder);//Create the folder if it does not exist
-
-        Path newFile = createFilePath(imageId, folder);//Create a path for the new image
-
-        image.transferTo(newFile);//Transfer the image to the new path
+    public Image saveImage (Image image) {
+        return imageRepository.save(image);
     }
 
-    public ResponseEntity<Object> createResponseFromImage(String folderName, long imageId) throws MalformedURLException {//Create a response from the image to show it in the web page
-
-        Path folder = FILES_FOLDER.resolve(folderName);
-
-        Path imagePath = createFilePath(imageId, folder);
-
-        Resource file = new UrlResource(imagePath.toUri());//Create a resource from the image path 
-
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "image/jpeg").body(file);//Create a response from the resource
+    public void deleteImage (long id) {
+        imageRepository.deleteById(id);
     }
 
-    public void deleteImage(String folderName, long imageId) throws IOException {//Delete an image from the folder
-
-        Path folder = FILES_FOLDER.resolve(folderName);
-
-        Path imageFile = createFilePath(imageId, folder);
-
-        Files.deleteIfExists(imageFile);
+    public Image getImage (long id) {
+        return imageRepository.findById(id).orElse(null);
     }
 
-
-    public boolean imageExists(String folderName, long imageId) {//Check if the image exists
-        Path folder = FILES_FOLDER.resolve(folderName);
-        Path imageFile = createFilePath(imageId, folder);
-        return Files.exists(imageFile);
-    }
-
-    public long getNextId() {//Return the next id for the images
-        return nextId.getAndIncrement();
+    public ByteArrayResource getImageAsResource(long id) {
+        Image image = getImage(id);
+        if (image != null) {
+            return new ByteArrayResource(image.getData());
+        } else {
+            return null;
+        }
     }
 }

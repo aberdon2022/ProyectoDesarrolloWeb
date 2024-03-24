@@ -1,4 +1,5 @@
 package org.dwsproject.proyectodesarrolloweb.Controllers;
+import org.dwsproject.proyectodesarrolloweb.Classes.Image;
 import org.dwsproject.proyectodesarrolloweb.Classes.Post;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.dwsproject.proyectodesarrolloweb.service.ImageService;
@@ -45,12 +46,12 @@ public class ApiPostController {
         }
 
         post.setUser(user);
-        postService.savePost(post);
-
         if (image != null && !image.isEmpty()) { //If the image is not empty, save the image
-            imageService.saveImage("posts", post.getId(), image);
+            Image newImage = imageService.createImage(image);
+            Image savedImage = imageService.saveImage(newImage);
+            post.setImageId(savedImage.getId());
         }
-
+        postService.savePost(post);
         userSession.incNumPosts();
         return ResponseEntity.ok(post);
     }
@@ -72,7 +73,7 @@ public class ApiPostController {
             return ResponseEntity.notFound().build();
         }
         postService.deleteById(id);
-        imageService.deleteImage("posts", id);
+        imageService.deleteImage(id);
         return ResponseEntity.ok().build();
     }
 
@@ -88,7 +89,9 @@ public class ApiPostController {
         postService.editById(post, id);
 
         if (image != null && !image.isEmpty()) { //If the image is not empty, save the image
-            imageService.saveImage("posts", id, image);
+            Image newImage = imageService.createImage(image);
+            Image savedImage = imageService.saveImage(newImage);
+            post.setImageId(savedImage.getId());
         }
         
         return ResponseEntity.ok(post);

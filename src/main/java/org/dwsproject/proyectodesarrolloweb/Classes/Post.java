@@ -14,6 +14,9 @@ public class Post {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(name = "image_id")
+    private Long imageId;
+
     public Post() {
     }
 
@@ -54,6 +57,14 @@ public class Post {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Long getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(Long imageId) {
+        this.imageId = imageId;
     }
 
     @Override

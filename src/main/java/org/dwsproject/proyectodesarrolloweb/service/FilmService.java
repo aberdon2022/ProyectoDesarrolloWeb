@@ -1,6 +1,6 @@
 package org.dwsproject.proyectodesarrolloweb.service;
-import jakarta.transaction.Transactional;
 import org.dwsproject.proyectodesarrolloweb.Classes.Film;
+import org.dwsproject.proyectodesarrolloweb.Classes.Image;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.dwsproject.proyectodesarrolloweb.Repositories.FilmRepository;
 import org.dwsproject.proyectodesarrolloweb.Repositories.UserRepository;
@@ -9,18 +9,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class FilmService {
 
     @Autowired
     private ImageService imageService;
-    private AtomicLong nextId = new AtomicLong();//Create an id for the posts
 
     @Autowired
     private UserRepository userRepository;
@@ -31,9 +28,9 @@ public class FilmService {
     public void addFilm(User user, Film film, MultipartFile imageFile, String listType) throws IOException {
         System.out.println("addFilm method called with film title: " + film.getTitle()); // Log when method is called
         //Retrieve the id of the image
-        long imageId = imageService.getNextId();
-        film.setImageId(imageId);
-        imageService.saveImage("FilmsImages", film.getImageId(), imageFile);//Save the image in the folder
+        Image image = imageService.createImage(imageFile);
+        image = imageService.saveImage(image);
+        film.setImageId(image.getId());
         film.setUser(user);
 
         List<Film> auxList;
@@ -67,7 +64,7 @@ public class FilmService {
             }
             userRepository.save(user);
             filmRepository.delete(filmToDelete); // Delete the film from the repository
-            imageService.deleteImage("FilmsImages", filmToDelete.getImageId());
+            imageService.deleteImage(filmToDelete.getImageId());
         } else {
             System.out.println("Film not found in the list");
         }
