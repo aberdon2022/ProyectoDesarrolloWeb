@@ -19,9 +19,45 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
-    public void deleteFriend (String username){
-        User friend = findUserByUsername(username);
-        friend.deleteFriend(friend);
+    public String addFriend (String username, String friendUsername) {
+        User user = userRepository.findByUsername(username);
+        User friend = userRepository.findByUsername(friendUsername);
+
+        if (user != null && friend != null) {
+            if (!user.getFriends().contains(friend)) {
+                if (user.equals(friend)) {
+                    return "You cannot add yourself as a friend";
+                }
+                user.addFriend(friend);
+                friend.addFriend(user);
+                userRepository.save(user);
+                userRepository.save(friend);
+                return "Friend added successfully";
+            } else {
+                return "Friend already exists in the user's friend list";
+            }
+        } else {
+            return "User or friend not found";
+        }
+    }
+
+    public String deleteFriend(String username, String friendUsername) {
+        User user = userRepository.findByUsername(username);
+        User friend = userRepository.findByUsername(friendUsername);
+
+        if (user != null && friend != null) {
+            if (user.getFriends().contains(friend)) {
+                user.deleteFriend(friend); //Delete the friend from the user's friend list
+                friend.deleteFriend(user); //Delete the user from the friend's friend list
+                userRepository.save(user);
+                userRepository.save(friend);
+                return "Friend deleted successfully.";
+            } else {
+                return "Friend not found in the user's friend list.";
+            }
+        } else {
+            return "User or friend not found.";
+        }
     }
 }
 

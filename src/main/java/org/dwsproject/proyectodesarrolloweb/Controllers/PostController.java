@@ -94,7 +94,7 @@ public class PostController {
             imageService.deleteImage(POSTS_FOLDER, id);
             return "deletedPost";
         } else {
-            return "redirect:/error";
+            return "redirect:/error/400";
         }
     }
     @GetMapping("/post/{id}/edit")//Show the form to edit a post by its id
@@ -107,7 +107,7 @@ public class PostController {
             model.addAttribute("post", post);
             return "editPost";
         } else {
-            return "redirect:/error";
+            return "redirect:/error/401";
         }
     }
     @PostMapping("/post/{id}/edit")//Edit a post by its id

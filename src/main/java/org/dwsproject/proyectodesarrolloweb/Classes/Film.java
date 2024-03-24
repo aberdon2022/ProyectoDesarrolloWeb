@@ -13,6 +13,11 @@ public class Film {
 
     @Enumerated(EnumType.STRING)
     private FilmStatus status;
+
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
+
     public enum FilmStatus {
         PENDING,
         COMPLETED
@@ -26,9 +31,7 @@ public class Film {
         this.status = status;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+
 
     public Film() {
     }

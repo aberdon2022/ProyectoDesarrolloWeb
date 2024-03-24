@@ -33,25 +33,19 @@ public class FilmService {
         imageService.saveImage("FilmsImages", film.getImageId(), imageFile);//Save the image in the folder
         film.setUser(user);
 
+        List<Film> auxList;
         if ("pending".equals(listType)) {
             film.setStatus(Film.FilmStatus.PENDING);
+            auxList = user.getPendingFilms();
         } else {
             film.setStatus(Film.FilmStatus.COMPLETED);
+            auxList = user.getCompletedFilms();
         }
-
+        auxList.add(film);
+        userRepository.save(user);
         filmRepository.save(film);
-        user = userRepository.findById(user.getId()).orElse(null); // Retrieve the user again
-        if (user != null) {
-            if ("pending".equals(listType)) {
-                user.getPendingFilms().add(film);
-            } else {
-                user.getCompletedFilms().add(film);
-            }
-            userRepository.save(user);
-        }
     }
 
-    @Transactional
     public void deleteFilm(User user, long filmId, String listType) throws IOException {
         List<Film> films = "pending".equals(listType) ? user.getPendingFilms() : user.getCompletedFilms();
         Film filmToDelete = null;
@@ -68,9 +62,9 @@ public class FilmService {
             } else {
                 user.getCompletedFilms().remove(filmToDelete);
             }
+            userRepository.save(user);
             filmRepository.delete(filmToDelete); // Delete the film from the repository
             imageService.deleteImage("FilmsImages", filmToDelete.getImageId());
-            userRepository.save(user); // Save the user after removing the film from the list
         } else {
             System.out.println("Film not found in the list");
         }

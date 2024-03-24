@@ -2,9 +2,12 @@ package org.dwsproject.proyectodesarrolloweb.Classes;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Cascade;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @JsonIdentityInfo( //Break the infinite recursion
@@ -21,36 +24,28 @@ public class User {
     private String password;
 
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
-    private List<Film> pendingFilms;
+    @OneToMany(mappedBy = "user")
+    private final List<Film> pendingFilms = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
-    private List<Film> completedFilms;
+    @OneToMany(mappedBy = "user")
+    private final List<Film> completedFilms = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "user_friends",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "friend_id"))
-    private List<User> friends;
+    private final Set<User> friends = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
-    private List<Post> posts;
+    private final List<Post> posts = new ArrayList<>();
 
     public User() {
-        this.friends = new ArrayList<>();
-        this.pendingFilms = new ArrayList<>();
-        this.completedFilms = new ArrayList<>();
-        this.posts = new ArrayList<>();
     }
 
     public User(String username, String password) {
         this.username = username;
         this.password = password;
-        this.friends = new ArrayList<>();
-        this.pendingFilms = new ArrayList<>();
-        this.completedFilms = new ArrayList<>();
-        this.posts = new ArrayList<>();
     }
 
     public List<Film> getPendingFilms() {
@@ -85,19 +80,19 @@ public class User {
         return password;
     }
 
-    public boolean checkPassword(String password) {
+    public boolean checkPassword (String password) {
         return this.getPassword().equals(password);
     }
 
-    public List<User> getFriends() {
-        return this.friends;
+    public Set<User> getFriends() {
+        return friends;
     }
 
-    public void addFriend(User user) {
-        this.friends.add(user);
+    public void addFriend (User friend) {
+        this.friends.add(friend);
     }
 
-    public void deleteFriend(User user) {
-        this.friends.remove(user);
+    public void deleteFriend (User friend) {
+        this.friends.remove(friend);
     }
 }

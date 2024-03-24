@@ -1,7 +1,6 @@
 package org.dwsproject.proyectodesarrolloweb.Classes;
 import jakarta.persistence.*;
 
-
 @Entity
 public class Post {
     @Id
