@@ -1,57 +1,44 @@
 package org.dwsproject.proyectodesarrolloweb;
-import org.dwsproject.proyectodesarrolloweb.Classes.Post;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.dwsproject.proyectodesarrolloweb.Repositories.UserRepository;
-import org.dwsproject.proyectodesarrolloweb.service.PostService;
-import org.dwsproject.proyectodesarrolloweb.service.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Configuration
 public class LoadDatabase {
     private final UserRepository userRepository;
-    private final UserService userService;
-    private final PostService postService;
 
-    public LoadDatabase(UserRepository userRepository, PostService postService, UserService userService) {
+    public LoadDatabase(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.postService = postService;
-        this.userService = userService;
     }
 
     @Bean
     CommandLineRunner initDatabase() {
         return args -> {
-            saveUserIfNotExists("user1", "1");
-            saveUserIfNotExists("user2", "2");
-            saveUserIfNotExists("user3", "3");
-            saveUserIfNotExists("user4", "4");
+            List<User> allUsers = userRepository.findAll();
+            Map<String, List<User>> usersGrouped = allUsers.stream()
+                    .collect(Collectors.groupingBy(User::getUsername));
 
-            // Save posts only after ensuring users exist
-            savePostIfNotExists(new Post("Opinion Clueless", "Perfecta",  userService.findUserByUsername("user3")));
-            savePostIfNotExists(new Post("Opinion El padrino", "Horrible", userService.findUserByUsername("user4")));
+            for (List<User> users : usersGrouped.values()) {
+                if (users.size() > 1) {
+                    for (int i = 1; i < users.size(); i++) {
+                        userRepository.delete(users.get(i));
+                    }
+                }
+            }
+            User user1 = userRepository.findByUsername("user1");
+            if (user1 == null) {
+                userRepository.save(new User("user1", "1"));
+            }
+            User user2 = userRepository.findByUsername("user2");
+            if (user2 == null) {
+                userRepository.save(new User("user2", "2"));
+            }
         };
     }
-
-    private void saveUserIfNotExists(String username, String password) {
-        User existingUser = userRepository.findByUsername(username);
-        if (existingUser == null) {
-            userRepository.save(new User(username, password));
-        }
-    }
-
-    private void savePostIfNotExists(Post post) {
-        List<Post> existingPosts = postService.findAll();
-        boolean postExists = existingPosts.stream().anyMatch(existingPost ->
-                existingPost.getUser().getUsername().equals(post.getUser().getUsername()) &&
-                        existingPost.getTitle().equals(post.getTitle()) &&
-                        existingPost.getText().equals(post.getText())
-        );
-        if (!postExists) {
-            postService.savePost(post);
-        }
-    }
 }
-

@@ -11,15 +11,12 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+
     public boolean checkPassword (User user, String password) {//Check if the password is correct
         return user.checkPassword(password);
     }
     public User findUserByUsername(String username) {
         return userRepository.findByUsername(username);
-    }
-
-    public User findUserById(long id) {
-        return userRepository.findById(id).orElse(null);
     }
 
     public String addFriend (String username, String friendUsername) {
