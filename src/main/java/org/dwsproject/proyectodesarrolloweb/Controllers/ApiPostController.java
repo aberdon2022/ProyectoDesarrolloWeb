@@ -44,8 +44,8 @@ public class ApiPostController {
             return ResponseEntity.notFound().build();
         }
 
-        post.setUser(user.getUsername());
-        postService.save(post);
+        post.setUser(user);
+        postService.savePost(post);
 
         if (image != null && !image.isEmpty()) { //If the image is not empty, save the image
             imageService.saveImage("posts", post.getId(), image);

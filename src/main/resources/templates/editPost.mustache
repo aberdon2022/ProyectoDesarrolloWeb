@@ -7,12 +7,9 @@
     <title>Post</title>
 </head>
 <body>
-    <h1>{{post.user}} - {{post.title}}</h1>
+    <h1>{{post.user.username}} - {{post.title}}</h1>
     	    <form id="newPostForm" action="/post/{{post.id}}/edit" method="post" enctype="multipart/form-data">
-    		    <label for="user">User:</label>
-    		    <br>
-                <input type="text" id="user" name="user" value='{{post.user}}' required readonly>
-                <br>
+                <input type="hidden" id="user" name="username" value='{{post.user.username}}'>
                 <label for="title">Title:</label>
                 <br>
                 <input type="text" id="title" name="title" value='{{post.title}}' required>

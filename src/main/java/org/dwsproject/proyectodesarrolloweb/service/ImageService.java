@@ -58,4 +58,14 @@ public class ImageService {
         return nextId.getAndIncrement();
     }
 
+
+    public boolean imageExists(String folderName, long imageId) {//Check if the image exists
+        Path folder = FILES_FOLDER.resolve(folderName);
+        Path imageFile = createFilePath(imageId, folder);
+        return Files.exists(imageFile);
+    }
+
+    public long getNextId() {//Return the next id for the images
+        return nextId.getAndIncrement();
+    }
 }

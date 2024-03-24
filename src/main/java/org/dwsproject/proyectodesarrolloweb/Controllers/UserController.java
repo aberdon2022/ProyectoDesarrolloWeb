@@ -34,7 +34,7 @@ public class UserController {
 
         if (user != null && userService.checkPassword(user,password)) { //If the user exists and the password is correct
             model.addAttribute("user", user);
-            userSession.setUser(user.getUsername());
+            userSession.setUser(user);
             return "redirect:/profile/" + username;
         } else {
             return "redirect:/login?error=true";//If the user does not exist or the password is incorrect return to the login page with an error message

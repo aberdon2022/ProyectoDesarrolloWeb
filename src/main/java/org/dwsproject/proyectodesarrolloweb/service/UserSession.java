@@ -1,5 +1,5 @@
 package org.dwsproject.proyectodesarrolloweb.service;
-
+import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
@@ -7,14 +7,14 @@ import org.springframework.web.context.annotation.SessionScope;
 @SessionScope
 public class UserSession {//information about the actual user
 
-    private String user;
+    private User user;
     private int numPosts;
 
-    public void setUser(String user) {
+    public void setUser(User user) {
         this.user = user;
     }
 
-    public String getUser() {
+    public User getUser() {
         return user;
     }
 

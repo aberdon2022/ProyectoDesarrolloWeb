@@ -6,10 +6,8 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String username;
     private String title;
     private String text;
-    boolean isOwner;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -18,36 +16,18 @@ public class Post {
     public Post() {
     }
 
-    public Post(String username, String title, String text, boolean isOwner) {
-        super();
-        this.username = username;
+    public Post(String title, String text, User user) {
         this.title = title;
         this.text = text;
-        this.isOwner = isOwner;
+        this.user = user;
     }
 
     public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getUser() {
-        return username;
-    }
-
-    public boolean getIsOwner() {
-        return isOwner;
-    }
-
-    public void setOwner(boolean isOwner) {
-        this.isOwner = isOwner;
-    }
-
-    public void setUser(String user) {
-        this.username = username;
     }
 
     public String getTitle() {
@@ -66,9 +46,25 @@ public class Post {
         this.text = text;
     }
 
-    @Override
-    public String toString() {
-        return "Post [id="+id+", user=" + user + ", title=" + title + ", text=" + text + "]";
+    public User getUser() {
+        return user;
     }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", text='" + text + '\'' +
+                ", user=" + user +
+                '}';
+    }
+
+    public long getUserId() {
+        return user.getId();
+    }
 }

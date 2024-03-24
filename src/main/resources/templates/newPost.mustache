@@ -11,9 +11,7 @@
 <body>
     <h1>New Post</h1>
 	    <form id="newPostForm" action="/forum/new" method="post" enctype="multipart/form-data">
-		    <label for="user">User:</label>
-		    <br>
-            <input type="text" id="user" name="user" value='{{#user}}{{.}}{{/user}}' required readonly>
+            <input type="hidden" id="user" name="username" value='{{user.username}}'>
             <br>
             <label for="title">Title:</label>
             <br>

@@ -26,7 +26,7 @@ public class ApiUserController {
         User user = userRepository.findByUsername(username);
 
         if (user != null && userService.checkPassword(user,password)) {
-            userSession.setUser(user.getUsername());
+            userSession.setUser(user);
             return ResponseEntity.ok(user);
         } else {
             return ResponseEntity.notFound().build();
