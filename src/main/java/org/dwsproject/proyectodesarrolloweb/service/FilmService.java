@@ -5,10 +5,13 @@ import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.dwsproject.proyectodesarrolloweb.Repositories.FilmRepository;
 import org.dwsproject.proyectodesarrolloweb.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -68,5 +71,34 @@ public class FilmService {
         } else {
             System.out.println("Film not found in the list");
         }
+    }
+
+    public ResponseEntity<List<Film>> getAllFilms(String username) {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        List<Film> films = new ArrayList<>();
+        films.addAll(user.getPendingFilms());
+        films.addAll(user.getCompletedFilms());
+        return ResponseEntity.ok(films);
+    }
+
+    public ResponseEntity<List<Film>> getPendingFilms(String username) {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        List<Film> films = user.getPendingFilms();
+        return ResponseEntity.ok(films);
+    }
+
+    public ResponseEntity<List<Film>> getCompletedFilms(String username) {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        List<Film> films = user.getCompletedFilms();
+        return ResponseEntity.ok(films);
     }
 }

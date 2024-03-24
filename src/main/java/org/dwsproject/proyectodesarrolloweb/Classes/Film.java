@@ -1,4 +1,5 @@
 package org.dwsproject.proyectodesarrolloweb.Classes;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -16,6 +17,7 @@ public class Film {
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JsonIgnore // Break the infinite recursion
     private User user;
 
     public enum FilmStatus {

@@ -5,8 +5,13 @@ import org.dwsproject.proyectodesarrolloweb.Repositories.UserRepository;
 import org.dwsproject.proyectodesarrolloweb.service.UserService;
 import org.dwsproject.proyectodesarrolloweb.service.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/users")
@@ -29,47 +34,63 @@ public class ApiUserController {
             userSession.setUser(user);
             return ResponseEntity.ok(user);
         } else {
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
 
     @GetMapping("/profile/{username}")
     public ResponseEntity<User> profile(@PathVariable String username) {
         User user = userService.findUserByUsername(username);
-        
+
         if (user != null) {
             return ResponseEntity.ok(user);
         } else {
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/friends/{username}")
+    public ResponseEntity<Map<String, Object>> friends(@PathVariable String username) {
+        User user = userService.findUserByUsername(username);
+
+        if (user != null) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("username", user.getUsername());
+            response.put("friends", user.getFriends().stream().map(User::getUsername).collect(Collectors.toList()));
+            return ResponseEntity.ok(response);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @PostMapping("/friends/{username}/add")
-    public ResponseEntity<User> addFriend(@PathVariable String username, @RequestParam String friendUsername) {
-        User user = userService.findUserByUsername(username);
-        User newFriend = userService.findUserByUsername(friendUsername);
-
-        if (username.equals(friendUsername) || user.getFriends().contains(newFriend) || user == null || newFriend == null) {
-            return ResponseEntity.badRequest().build();
+    public ResponseEntity<Map<String, String>> addFriend(@PathVariable String username, @RequestParam String friendUsername) {
+        Map<String, String> response = new HashMap<>();
+        if (username == null || friendUsername == null) {
+            response.put("message", "Username or friend username not provided");
+            return ResponseEntity.badRequest().body(response);
         }
 
-        user.addFriend(newFriend);
-        newFriend.addFriend(user);
-
-        return ResponseEntity.ok(user);
+        String result = userService.addFriend(username, friendUsername);
+        response.put("message", result);
+        if (result.equals("Friend added successfully")) {
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.badRequest().body(response);
+        }
     }
 
     @DeleteMapping("/friends/{username}/delete")
     public ResponseEntity<User> deleteFriend(@PathVariable String username, @RequestParam String friendUsername) {
-        User user = userService.findUserByUsername(username);
-        User friend = userService.findUserByUsername(friendUsername);
-
-        if (user == null || friend == null) {
-            return ResponseEntity.badRequest().build();
+        if (username == null || friendUsername == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        user.deleteFriend(friend);
-
-        return ResponseEntity.ok(user);
+        String response = userService.deleteFriend(username, friendUsername);
+        if (response.equals("Friend deleted successfully.")) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }

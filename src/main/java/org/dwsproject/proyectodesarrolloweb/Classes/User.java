@@ -1,5 +1,6 @@
 package org.dwsproject.proyectodesarrolloweb.Classes;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cascade;
@@ -11,8 +12,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @JsonIdentityInfo( //Break the infinite recursion
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
+        generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "username"))
@@ -25,9 +25,11 @@ public class User {
 
 
     @OneToMany(mappedBy = "user")
+    @JsonView(Views.Public.class)
     private final List<Film> pendingFilms = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
+    @JsonView(Views.Public.class)
     private final List<Film> completedFilms = new ArrayList<>();
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
