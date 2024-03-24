@@ -11,7 +11,8 @@
     <div class="post-container">
 	    <p>User: {{post.user.username}}</p>
 	    <p>Title: {{post.title}}</p>
-	    <p>Text: {{post.text}}</p>
+	    <p>Text:</p>
+        <div>{{{post.text}}}</div>
         {{#imageExists}}
             <img src="/imageFile/{{post.imageId}}" class="img">
         {{/imageExists}}

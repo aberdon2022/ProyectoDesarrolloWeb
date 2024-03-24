@@ -10,6 +10,17 @@
 </head>
 <body>
 <h1>Completed Films</h1>
+
+<form action="/completed" method="get">
+    <input type="hidden" name="username" value="{{user.username}}">
+    <label for = "minRating">Minimum Rating:</label>
+    <input type="number" id="minRating" name="minRating" min="0" max="5">
+    <label for = "maxRating">Maximum Rating:</label>
+    <input type = "number" id="maxRating" name="maxRating" min="0" max="5">
+    <input type = "submit" value = "Filter">
+</form>
+
+<br>
 <a href="/profile/{{user.username}}" class="button">Return to Profile</a>
 <div id="film-list">
     {{#completed}}

@@ -2,6 +2,7 @@ package org.dwsproject.proyectodesarrolloweb.Controllers;
 import org.dwsproject.proyectodesarrolloweb.Classes.Film;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.dwsproject.proyectodesarrolloweb.service.UserService;
+import org.dwsproject.proyectodesarrolloweb.service.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,9 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.dwsproject.proyectodesarrolloweb.service.FilmService;
 import java.io.IOException;
-
-import java.io.IOException;
-import java.sql.SQLOutput;
+import java.util.List;
 
 @Controller
 public class FilmController {
@@ -20,6 +19,9 @@ public class FilmController {
 
     @Autowired
     private UserService UserService;//use methods of the service UserService
+
+    @Autowired
+    private UserSession userSession;//use methods of the service UserSession
 
     @PostMapping("/addpeli")//Add a film to the list
     public String createFilm(Film film, @RequestParam("image")MultipartFile imageFile, @RequestParam("listType") String listType, @RequestParam String username) {
@@ -65,16 +67,22 @@ public class FilmController {
     }
 
     @GetMapping("/completed")//show the completed list
-    public String viewCompleted(Model model, @RequestParam String username) {
-        User user = UserService.findUserByUsername(username);
-        for (Film film : user.getCompletedFilms()) {
-            System.out.println("Film Title: " + film.getTitle());
-            System.out.println("Film year: " + film.getYear());
-            System.out.println("Film rating: " + film.getRating());
-            System.out.println("Film imageId: " + film.getImageId());
+    public String viewCompleted(Model model, @RequestParam String username, @RequestParam (required = false) Integer minRating, @RequestParam (required = false) Integer maxRating) {
+        User loggedInUser = userSession.getUser();
+
+        if (loggedInUser == null || !loggedInUser.getUsername().equals(username)) {
+            return "redirect:/error/403";
         }
+
+        User user = UserService.findUserByUsername(username);
         model.addAttribute("user", user);
-        model.addAttribute("completed", user.getCompletedFilms());
+        List<Film> completedFilms;
+        if (minRating != null && maxRating != null) {
+            completedFilms = filmService.findCompletedFilmsByRating(user,minRating, maxRating);
+        } else {
+            completedFilms = user.getCompletedFilms();
+        }
+        model.addAttribute("completed", completedFilms);
         return "ViewCompletedList";
     }
 
@@ -94,6 +102,10 @@ public class FilmController {
 
     @GetMapping ("/completed/{filmId}/delete")//Delete a film from the completed list
     public String deleteFilmC(Model model, @PathVariable long filmId, @RequestParam String username) throws IOException {
+        User loggedInUser = userSession.getUser();
+        if (loggedInUser == null || !loggedInUser.getUsername().equals(username)) {
+            return "redirect:/error/403";
+        }
         User user = UserService.findUserByUsername(username);
         filmService.deleteFilm(user, filmId, "completed");
         model.addAttribute("user", user);

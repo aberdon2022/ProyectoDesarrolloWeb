@@ -14,33 +14,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class CustomErrorController implements ErrorController {
     @GetMapping("/error/{errorCode}")
     public String handleCustomError(@PathVariable int errorCode, Model model) {
-        String errorMessage;
-        switch (errorCode) {
-            case 403:
-                errorMessage = "Forbidden";
-                break;
-            case 500:
-                errorMessage = "Internal server error";
-                break;
-            case 404:
-                errorMessage = "Page not found";
-                break;
-            case 400:
-                errorMessage = "Bad request";
-                break;
-            case 401:
-                errorMessage = "Unauthorized access";
-                break;
-            default:
-                errorMessage = "An error occurred";
-                break;
-        }
+        String errorMessage = switch (errorCode) {
+            case 403 -> "Forbidden";
+            case 500 -> "Internal server error";
+            case 404 -> "Page not found";
+            case 400 -> "Bad request";
+            case 401 -> "Unauthorized access";
+            default -> "An error occurred";
+        };
         model.addAttribute("errorCode", errorCode);
         model.addAttribute("errorMessage", errorMessage);
         return "Error";
-    }
-
-    public String getErrorPath() {
-        return "/error";
     }
 }

@@ -98,4 +98,8 @@ public class FilmService {
         List<Film> films = user.getCompletedFilms();
         return ResponseEntity.ok(films);
     }
+
+    public List<Film> findCompletedFilmsByRating(User user, int minRating, int maxRating) {
+        return filmRepository.findCompletedFilmsByRating(user, minRating, maxRating);
+    }
 }

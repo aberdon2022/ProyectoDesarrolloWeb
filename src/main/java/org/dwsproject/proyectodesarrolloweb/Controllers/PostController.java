@@ -1,10 +1,7 @@
 package org.dwsproject.proyectodesarrolloweb.Controllers;
-
-import java.io.IOException;
-import java.util.List;
-
 import jakarta.servlet.http.HttpSession;
-
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Safelist;
 import org.dwsproject.proyectodesarrolloweb.Classes.Image;
 import org.dwsproject.proyectodesarrolloweb.Classes.Post;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
@@ -15,8 +12,14 @@ import org.dwsproject.proyectodesarrolloweb.service.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.List;
 
 @Controller
 public class PostController {
@@ -57,6 +60,7 @@ public class PostController {
 
         if (user != null) {
             post.setUser(user);
+
             if (imageFile != null && !imageFile.isEmpty()) {
                 Image newImage = imageService.createImage(imageFile);
                 Image savedImage = imageService.saveImage(newImage);
@@ -90,11 +94,13 @@ public class PostController {
     public String deletePost(Model model, @PathVariable long id) throws IOException {
         Post post = postService.findById(id);
         String loggedInUser = userSession.getUser().getUsername();
-
-        if (post.getUser().getUsername().equals(loggedInUser)) {
-            long ImageId = post.getImageId();
+        boolean isOwner = post.getUser().getUsername().equals(loggedInUser);
+        if (isOwner) {
+            Long ImageId = post.getImageId();
             postService.deleteById(id);
-            imageService.deleteImage(ImageId);
+            if (ImageId != null) {
+                imageService.deleteImage(ImageId);
+            }
             return "deletedPost";
         } else {
             return "redirect:/error/403";

@@ -8,6 +8,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.dwsproject.proyectodesarrolloweb.Classes.Post;
 import org.dwsproject.proyectodesarrolloweb.Repositories.PostRepository;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Safelist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +33,8 @@ public class PostService {
     }
 
     public void savePost(Post post) {//Save a post with an id
+        String sanitizedText = Jsoup.clean(post.getText(), Safelist.basic());
+        post.setText(sanitizedText);
         postRepository.save(post);
     }
 
@@ -39,6 +43,8 @@ public class PostService {
     }
     
     public void editById(Post post, long id){//Edit a post by id
+        String sanitizedText = Jsoup.clean(post.getText(), Safelist.basic());
+        post.setText(sanitizedText);
         postRepository.save(post);
     }
 
