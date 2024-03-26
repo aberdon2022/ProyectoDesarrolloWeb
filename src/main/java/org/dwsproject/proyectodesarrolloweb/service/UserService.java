@@ -20,7 +20,12 @@ public class UserService {
     }
 
     public boolean checkPassword (User user, String password) {//Check if the password is correct
-        return user.checkPassword(password);
+        User dbUser = userRepository.findByUsername(user.getUsername());
+        if (dbUser != null) {
+            return user.getPassword().equals(password);
+        } else {
+            return false;
+        }
     }
     public User findUserByUsername(String username) {
         return userRepository.findByUsername(username);

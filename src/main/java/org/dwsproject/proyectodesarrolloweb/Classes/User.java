@@ -75,12 +75,8 @@ public class User {
         return username;
     }
 
-    protected String getPassword() {
+    public String getPassword() {
         return password;
-    }
-
-    public boolean checkPassword (String password) {
-        return this.getPassword().equals(password);
     }
 
     public Set<User> getFriends() {
