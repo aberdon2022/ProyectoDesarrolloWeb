@@ -11,6 +11,7 @@
 <body>
 <h1>Completed Films</h1>
 
+<a href="/profile/{{user.username}}" class="button">Return to Profile</a>
 <form action="/completed" method="get">
     <input type="hidden" name="username" value="{{user.username}}">
     <label for = "minRating">Minimum Rating:</label>
@@ -21,7 +22,6 @@
 </form>
 
 <br>
-<a href="/profile/{{user.username}}" class="button">Return to Profile</a>
 <div id="film-list">
     {{#completed}}
         <div>

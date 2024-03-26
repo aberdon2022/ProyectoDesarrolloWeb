@@ -148,3 +148,26 @@ a.add:hover {
         width: 100%;
     }
   }
+
+form {
+  float: right;
+  background-color: #26689e;
+  padding: 10px;
+  border-radius: 5px;
+  color: #fff;
+}
+
+form input[type=submit] {
+  background-color: #F34F1B;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  padding: 3px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-radius: 2px;
+}
+form input[type=submit]:hover {
+  background-color: #B42901;
+}
+
