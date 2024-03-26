@@ -59,15 +59,7 @@ public class FilmController {
     }
 
     @GetMapping("/pending")//Show the pending list
-    public String viewPending(Model model, @RequestParam String username) {
-        User user = UserService.findUserByUsername(username);
-        model.addAttribute("user", user);
-        model.addAttribute("pending", user.getPendingFilms());
-        return "ViewPendingList";
-    }
-
-    @GetMapping("/completed")//show the completed list
-    public String viewCompleted(Model model, @RequestParam String username, @RequestParam (required = false) Integer minRating, @RequestParam (required = false) Integer maxRating) {
+    public String viewPending(Model model, @RequestParam String username, @RequestParam (required = false) Integer minRating, @RequestParam (required = false) Integer maxRating, @RequestParam (required = false) String sort, @RequestParam (required = false) String order) {
         User loggedInUser = userSession.getUser();
 
         if (loggedInUser == null || !loggedInUser.getUsername().equals(username)) {
@@ -76,12 +68,39 @@ public class FilmController {
 
         User user = UserService.findUserByUsername(username);
         model.addAttribute("user", user);
+
+        List<Film> pendingFilms = user.getPendingFilms();
+
+        if (sort != null && order != null) {
+            pendingFilms = filmService.sortFilms(user, null, null, sort, order, Film.FilmStatus.PENDING);
+        }
+
+        model.addAttribute("pending", pendingFilms);
+        return "ViewPendingList";
+    }
+
+    @GetMapping("/completed")//show the completed list
+    public String viewCompleted(Model model, @RequestParam String username, @RequestParam (required = false) Integer minRating, @RequestParam (required = false) Integer maxRating, @RequestParam (required = false) String sort, @RequestParam (required = false) String order, @RequestParam (required = false, defaultValue = "false") Boolean applySort) {
+        User loggedInUser = userSession.getUser();
+
+        if (loggedInUser == null || !loggedInUser.getUsername().equals(username)) {
+            return "redirect:/error/403";
+        }
+
+        User user = UserService.findUserByUsername(username);
+        model.addAttribute("user", user);
+
         List<Film> completedFilms;
         if (minRating != null && maxRating != null) {
             completedFilms = filmService.findCompletedFilmsByRating(user,minRating, maxRating);
         } else {
             completedFilms = user.getCompletedFilms();
         }
+
+        if (applySort && sort != null && order != null) {
+            completedFilms = filmService.sortFilms(user, minRating, maxRating, sort, order, Film.FilmStatus.COMPLETED);
+        }
+
         model.addAttribute("completed", completedFilms);
         return "ViewCompletedList";
     }
