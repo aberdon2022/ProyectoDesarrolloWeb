@@ -4,6 +4,7 @@ import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.dwsproject.proyectodesarrolloweb.service.UserService;
 import org.dwsproject.proyectodesarrolloweb.service.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -41,6 +42,26 @@ public class UserController {
         }
     }
 
+    @GetMapping("/register")
+    public String register () {
+        return "register";
+    }
+
+    @PostMapping("/register")
+    public String register(Model model, @RequestParam String username, @RequestParam String password, RedirectAttributes redirectAttributes) {
+        User user = new User(username, password); //Create a new user
+        String message = userService.registerUser(user); //Register the user
+
+        if (message.equals("User registered successfully")) {
+            model.addAttribute("user", user);
+            userSession.setUser(user);
+            return "redirect:/profile/" + username;
+        } else {
+            redirectAttributes.addFlashAttribute("message", message);
+            return "redirect:/register";
+        }
+    }
+
     @GetMapping("/profile/{username}")
     public String profile(Model model, @PathVariable String username) {
         User user = userService.findUserByUsername(username);
@@ -54,19 +75,14 @@ public class UserController {
     }
 
     @GetMapping("/friends/{username}")
-    public String friends(Model model, @PathVariable String username, @RequestParam String loggedInUser) {
+    public String friends(Model model, @PathVariable String username) {
         User user = userService.findUserByUsername(username); // Retrieve the user from the database
-        User loggedInUserObj = userService.findUserByUsername(loggedInUser); // Retrieve the logged-in user from the database
+        User loggedInUserObj = userSession.getUser(); // Retrieve the logged-in user from the database
 
-        if (user != null && loggedInUser.equals(user.getUsername())) {
+        if (user != null) {
             model.addAttribute("friend", user);// Add the user's data to the model
             model.addAttribute("friends", user.getFriends());// Add the user's friends to the model
-            model.addAttribute("isOwner", true);// Add a boolean to the model that indicates whether the logged-in user is the owner of the profile
-            return "Friend";
-        } else if (user != null && loggedInUserObj != null && user.getFriends().contains(loggedInUserObj)) {
-            model.addAttribute("friend", user);// Add the user's data to the model
-            model.addAttribute("friends", user.getFriends());// Add the user's friends to the model
-            model.addAttribute("isOwner", false);// Add a boolean to the model that indicates whether the logged-in user is the owner of the profile
+            model.addAttribute("isOwner", user.equals(loggedInUserObj));// Add a boolean to the model that indicates whether the logged-in user is the owner of the profile
             return "Friend";
         } else {
             return "redirect:/error/403"; //
