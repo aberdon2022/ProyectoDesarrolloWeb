@@ -1,6 +1,4 @@
 package org.dwsproject.proyectodesarrolloweb.Controllers;
-
-import org.dwsproject.proyectodesarrolloweb.Classes.Friendship;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.dwsproject.proyectodesarrolloweb.service.UserService;
 import org.dwsproject.proyectodesarrolloweb.service.UserSession;
@@ -9,9 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.Comparator;
-import java.util.stream.Collectors;
 
 @Controller
 public class UserController {

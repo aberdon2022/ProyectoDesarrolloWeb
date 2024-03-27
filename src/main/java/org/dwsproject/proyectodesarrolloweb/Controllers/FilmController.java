@@ -59,7 +59,7 @@ public class FilmController {
     }
 
     @GetMapping("/pending")//Show the pending list
-    public String viewPending(Model model, @RequestParam String username, @RequestParam (required = false) Integer minRating, @RequestParam (required = false) Integer maxRating, @RequestParam (required = false) String sort, @RequestParam (required = false) String order) {
+    public String viewPending(Model model, @RequestParam String username, @RequestParam (required = false) String sort, @RequestParam (required = false) String order) {
         User loggedInUser = userSession.getUser();
 
         if (loggedInUser == null || !loggedInUser.getUsername().equals(username)) {
@@ -79,7 +79,7 @@ public class FilmController {
         return "ViewPendingList";
     }
 
-    @GetMapping("/completed")//show the completed list
+    @PostMapping("/completed")//show the completed list
     public String viewCompleted(Model model, @RequestParam String username, @RequestParam (required = false) Integer minRating, @RequestParam (required = false) Integer maxRating, @RequestParam (required = false) String sort, @RequestParam (required = false) String order, @RequestParam (required = false, defaultValue = "false") Boolean applySort) {
         User loggedInUser = userSession.getUser();
 
@@ -91,13 +91,13 @@ public class FilmController {
         model.addAttribute("user", user);
 
         List<Film> completedFilms;
-        if (minRating != null && maxRating != null) {
-            completedFilms = filmService.findCompletedFilmsByRating(user,minRating, maxRating);
-        } else if (minRating==null && maxRating!=null) {
-            completedFilms = filmService.findCompletedFilmsByRating(user, 0, maxRating);
-        }else if (maxRating==null && minRating !=null) {
-            completedFilms = filmService.findCompletedFilmsByRating(user, minRating, 5);
-        } else{
+        if (minRating != null && maxRating != null) { //If minRating and maxRating are specified, filter the films by rating
+            completedFilms = filmService.findCompletedFilmsByRating (user,minRating, maxRating);
+        } else if (minRating != null) { // MinRating is not null, maxRating is null
+            completedFilms = filmService.findCompletedFilmsByRating (user, minRating, 5);
+        } else if (maxRating != null) { // MaxRating is not null, minRating is null
+            completedFilms = filmService.findCompletedFilmsByRating (user, 0, maxRating);
+        } else {
             completedFilms = userService.getCompletedFilms(user.getId());
         }
 
