@@ -47,22 +47,6 @@ public class User {
         this.password = password;
     }
 
-    public List<Film> getPendingFilms() {
-        List<Film> pendingFilms = this.pendingFilms.stream()
-                .filter(film -> film.getStatus() == Film.FilmStatus.PENDING)
-                .collect(Collectors.toList());
-        pendingFilms.forEach(film -> System.out.println("Pending film: " + film.getTitle()));
-        return pendingFilms;
-    }
-
-    public List<Film> getCompletedFilms() {
-        List<Film> completedFilms = this.completedFilms.stream()
-                .filter(film -> film.getStatus() == Film.FilmStatus.COMPLETED)
-                .collect(Collectors.toList());
-        completedFilms.forEach(film -> System.out.println("Completed film: " + film.getTitle()));
-        return completedFilms;
-    }
-
     public long getId() {
         return id;
     }

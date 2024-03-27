@@ -29,6 +29,13 @@ public class FilmService {
     @Autowired
     private FilmRepository filmRepository;
 
+    @Autowired
+    private UserService userService;
+
+    public void saveFilm(Film film) {
+        filmRepository.save(film);
+    }
+
     public void addFilm(User user, Film film, MultipartFile imageFile, String listType) throws IOException {
         System.out.println("addFilm method called with film title: " + film.getTitle()); // Log when method is called
         //Retrieve the id of the image
@@ -40,18 +47,18 @@ public class FilmService {
         List<Film> auxList;
         if ("pending".equals(listType)) {
             film.setStatus(Film.FilmStatus.PENDING);
-            auxList = user.getPendingFilms();
+            auxList = userService.getPendingFilms(user.getId());
         } else {
             film.setStatus(Film.FilmStatus.COMPLETED);
-            auxList = user.getCompletedFilms();
+            auxList = userService.getCompletedFilms(user.getId());
         }
         auxList.add(film);
-        userRepository.save(user);
+        userService.saveUser(user);
         filmRepository.save(film);
     }
 
     public void deleteFilm(User user, long filmId, String listType) throws IOException {
-        List<Film> films = "pending".equals(listType) ? user.getPendingFilms() : user.getCompletedFilms();
+        List<Film> films = "pending".equals(listType) ? userService.getPendingFilms(user.getId()) : userService.getCompletedFilms(user.getId());
         Film filmToDelete = null;
 
         for (Film film : films) {
@@ -62,11 +69,11 @@ public class FilmService {
         }
         if (filmToDelete != null) {
             if ("pending".equals(listType)) {
-                user.getPendingFilms().remove(filmToDelete);
+                userService.getPendingFilms(user.getId()).remove(filmToDelete);
             } else {
-                user.getCompletedFilms().remove(filmToDelete);
+                userService.getCompletedFilms(user.getId()).remove(filmToDelete);
             }
-            userRepository.save(user);
+            userService.saveUser(user);
             filmRepository.delete(filmToDelete); // Delete the film from the repository
             imageService.deleteImage(filmToDelete.getImageId());
         } else {
@@ -75,31 +82,31 @@ public class FilmService {
     }
 
     public ResponseEntity<List<Film>> getAllFilms(String username) {
-        User user = userRepository.findByUsername(username);
+        User user = userService.findUserByUsername(username);
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         List<Film> films = new ArrayList<>();
-        films.addAll(user.getPendingFilms());
-        films.addAll(user.getCompletedFilms());
+        films.addAll(userService.getPendingFilms(user.getId()));
+        films.addAll(userService.getCompletedFilms(user.getId()));
         return ResponseEntity.ok(films);
     }
 
     public ResponseEntity<List<Film>> getPendingFilms(String username) {
-        User user = userRepository.findByUsername(username);
+        User user = userService.findUserByUsername(username);
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        List<Film> films = user.getPendingFilms();
+        List<Film> films = userService.getPendingFilms(user.getId());
         return ResponseEntity.ok(films);
     }
 
     public ResponseEntity<List<Film>> getCompletedFilms(String username) {
-        User user = userRepository.findByUsername(username);
+        User user = userService.findUserByUsername(username);
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        List<Film> films = user.getCompletedFilms();
+        List<Film> films = userService.getCompletedFilms(user.getId());
         return ResponseEntity.ok(films);
     }
 

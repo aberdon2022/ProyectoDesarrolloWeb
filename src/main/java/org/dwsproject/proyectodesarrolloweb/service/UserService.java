@@ -1,14 +1,22 @@
 package org.dwsproject.proyectodesarrolloweb.service;
 
+import org.dwsproject.proyectodesarrolloweb.Classes.Film;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
+import org.dwsproject.proyectodesarrolloweb.Repositories.FilmRepository;
 import org.dwsproject.proyectodesarrolloweb.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+
 @Service
 public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private FilmRepository filmRepository;
 
     public String registerUser (User user) {
         if (userRepository.findByUsername(user.getUsername()) == null) {//Check if the user already exists
@@ -17,6 +25,18 @@ public class UserService {
         } else {
             return "User already exists";
         }
+    }
+
+    public void saveUser (User user) {
+        userRepository.save(user);
+    }
+
+    public List<Film> getPendingFilms (Long userId) {
+        return filmRepository.findByUserIdAndStatus(userId, Film.FilmStatus.PENDING);
+    }
+
+    public List<Film> getCompletedFilms (Long userId) {
+        return filmRepository.findByUserIdAndStatus(userId, Film.FilmStatus.COMPLETED);
     }
 
     public boolean checkPassword (User user, String password) {//Check if the password is correct

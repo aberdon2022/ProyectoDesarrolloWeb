@@ -18,14 +18,14 @@ public class FilmController {
     private FilmService filmService;//use methods of the service FilmService
 
     @Autowired
-    private UserService UserService;//use methods of the service UserService
+    private UserService userService;//use methods of the service UserService
 
     @Autowired
     private UserSession userSession;//use methods of the service UserSession
 
     @PostMapping("/addpeli")//Add a film to the list
     public String createFilm(Film film, @RequestParam("image")MultipartFile imageFile, @RequestParam("listType") String listType, @RequestParam String username) {
-        User user = UserService.findUserByUsername(username);
+        User user = userService.findUserByUsername(username);
         try {
             filmService.addFilm(user, film, imageFile, listType);
         } catch (Exception e) {
@@ -44,17 +44,17 @@ public class FilmController {
 
     @GetMapping("/pending/add")//Show the form to add a film to the pending list
     public String pending(Model model, @RequestParam String username) {
-        User user = UserService.findUserByUsername(username);
+        User user = userService.findUserByUsername(username);
         model.addAttribute("user", user);
-        model.addAttribute("films", user.getPendingFilms());
+        model.addAttribute("films", userService.getPendingFilms(user.getId()));
         return "AddPendingList";
     }
 
     @GetMapping("/completed/add")//Show the form to add a film to the completed list
     public String completed(Model model, @RequestParam String username) {
-        User user = UserService.findUserByUsername(username);
+        User user = userService.findUserByUsername(username);
         model.addAttribute("user", user);
-        model.addAttribute("films", user.getCompletedFilms());
+        model.addAttribute("films", userService.getCompletedFilms(user.getId()));
         return "AddCompletedList";
     }
 
@@ -66,10 +66,10 @@ public class FilmController {
             return "redirect:/error/403";
         }
 
-        User user = UserService.findUserByUsername(username);
+        User user = userService.findUserByUsername(username);
         model.addAttribute("user", user);
 
-        List<Film> pendingFilms = user.getPendingFilms();
+        List<Film> pendingFilms = userService.getPendingFilms(user.getId());
 
         if (sort != null && order != null) {
             pendingFilms = filmService.sortFilms(user, null, null, sort, order, Film.FilmStatus.PENDING);
@@ -87,14 +87,14 @@ public class FilmController {
             return "redirect:/error/403";
         }
 
-        User user = UserService.findUserByUsername(username);
+        User user = userService.findUserByUsername(username);
         model.addAttribute("user", user);
 
         List<Film> completedFilms;
         if (minRating != null && maxRating != null) {
             completedFilms = filmService.findCompletedFilmsByRating(user,minRating, maxRating);
         } else {
-            completedFilms = user.getCompletedFilms();
+            completedFilms = userService.getCompletedFilms(user.getId());
         }
 
         if (applySort && sort != null && order != null) {
@@ -107,14 +107,14 @@ public class FilmController {
 
     @GetMapping("/pending/confirmed")//Show a message after adding a film to the pending list
     public String confirmPending(Model model, @RequestParam String username) {
-        User user = UserService.findUserByUsername(username);
+        User user = userService.findUserByUsername(username);
         model.addAttribute("user", user);
         return "MessageAfterAddPending";
     }
 
     @GetMapping("/completed/confirmed")//Show a message after adding a film to the completed list
     public String confirmCompleted(Model model, @RequestParam String username) {
-        User user = UserService.findUserByUsername(username);
+        User user = userService.findUserByUsername(username);
         model.addAttribute("user", user);
         return "MessageAfterAddCompleted";
     }
@@ -125,14 +125,14 @@ public class FilmController {
         if (loggedInUser == null || !loggedInUser.getUsername().equals(username)) {
             return "redirect:/error/403";
         }
-        User user = UserService.findUserByUsername(username);
+        User user = userService.findUserByUsername(username);
         filmService.deleteFilm(user, filmId, "completed");
         model.addAttribute("user", user);
         return "deletedCompletedFilm";
     }
     @GetMapping("/pending/{filmId}/delete")//Delete a film from the pending list
     public String deleteFilmP(Model model, @PathVariable long filmId, @RequestParam String username) throws IOException {
-        User user = UserService.findUserByUsername(username);
+        User user = userService.findUserByUsername(username);
 
         if (user == null) {
             return "redirect:/";
