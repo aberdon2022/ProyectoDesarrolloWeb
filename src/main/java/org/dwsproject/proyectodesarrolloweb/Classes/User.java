@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cascade;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -29,15 +30,12 @@ public class User {
     @JsonView(Views.Public.class)
     private final List<Film> completedFilms = new ArrayList<>();
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(
-            name = "user_friends",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "friend_id"))
-    private final Set<User> friends = new HashSet<>();
+    @OneToMany(mappedBy = "user1")
+    private final Set<Friendship> friendships = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
     private final List<Post> posts = new ArrayList<>();
+
 
     public User() {
     }
@@ -46,6 +44,7 @@ public class User {
         this.username = username;
         this.password = password;
     }
+
 
     public long getId() {
         return id;
@@ -63,16 +62,16 @@ public class User {
         return password;
     }
 
-    public Set<User> getFriends() {
-        return friends;
+    public Set<Friendship> getFriends() {
+        return friendships;
     }
 
-    public void addFriend (User friend) {
-        this.friends.add(friend);
+    public void addFriend (Friendship friendship) {
+        this.friendships.add(friendship);
     }
 
-    public void deleteFriend (User friend) {
-        this.friends.remove(friend);
+    public void deleteFriend (Friendship friendship) {
+        this.friendships.remove(friendship);
     }
 
     public void setUsername(String username) {
