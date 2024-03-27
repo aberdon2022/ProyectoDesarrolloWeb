@@ -79,7 +79,7 @@ public class FilmController {
         return "ViewPendingList";
     }
 
-    @PostMapping("/completed")//show the completed list
+    @GetMapping("/completed")//show the completed list
     public String viewCompleted(Model model, @RequestParam String username, @RequestParam (required = false) Integer minRating, @RequestParam (required = false) Integer maxRating, @RequestParam (required = false) String sort, @RequestParam (required = false) String order, @RequestParam (required = false, defaultValue = "false") Boolean applySort) {
         User loggedInUser = userSession.getUser();
 
