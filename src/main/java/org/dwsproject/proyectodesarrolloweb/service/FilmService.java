@@ -3,14 +3,18 @@ import org.dwsproject.proyectodesarrolloweb.Classes.Film;
 import org.dwsproject.proyectodesarrolloweb.Classes.Image;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.dwsproject.proyectodesarrolloweb.Repositories.FilmRepository;
+import org.dwsproject.proyectodesarrolloweb.Repositories.FilmSpecification;
 import org.dwsproject.proyectodesarrolloweb.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -100,6 +104,27 @@ public class FilmService {
     }
 
     public List<Film> findCompletedFilmsByRating(User user, int minRating, int maxRating) {
-        return filmRepository.findCompletedFilmsByRating(user, minRating, maxRating);
+        return filmRepository.findAll(Specification.where(FilmSpecification.isCompleted())
+                .and(FilmSpecification.hasRatingBetween(minRating, maxRating))
+                .and(FilmSpecification.isOwnedByUser(user)));
+    }
+
+    public List<Film> sortFilms (User user, Integer minRating, Integer maxRating, String sort, String order, Film.FilmStatus status) {
+        Sort sortOrder = Sort.by(sort);
+
+        if ("desc".equals(order)) {
+            sortOrder = sortOrder.descending();
+        } else {
+            sortOrder = sortOrder.ascending();
+        }
+
+        Specification<Film> spec = Specification.where(FilmSpecification.hasStatus(status))
+                .and(FilmSpecification.isOwnedByUser(user));
+
+        if (minRating != null && maxRating != null) {
+            spec = spec.and(FilmSpecification.hasRatingBetween(minRating, maxRating));
+        }
+
+        return filmRepository.findAll(spec, sortOrder);
     }
 }

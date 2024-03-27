@@ -18,6 +18,21 @@
     <input type="number" id="minRating" name="minRating" min="0" max="5">
     <label for = "maxRating">Maximum Rating:</label>
     <input type = "number" id="maxRating" name="maxRating" min="0" max="5">
+    <label for = "sort">Sort by:</label>
+    <select id="sort" name="sort">
+        <option value="title">Title</option>
+        <option value="year">Year</option>
+        <option value="rating">Rating</option>
+    </select>
+    <label for = "order">Order:</label>
+    <select id="order" name="order">
+        <option value="asc">Ascending</option>
+        <option value="desc">Descending</option>
+    </select>
+    <label for = "applySort" class="custom-checkbox">
+        <input type = "checkbox" id="applySort" name="applySort" style="opacity: 0; position: absolute; width: 0;">
+        <span class="checkbox-indicator"></span> Apply Sort
+    </label>
     <input type = "submit" value = "Filter">
 </form>
 

@@ -7,10 +7,6 @@
 <body>
 <h1>{{friend.username}} Friends</h1>
 
-{{#message}}
-    <p>{{message}}</p>
-{{/message}}
-
 <div id="friend-list">
 {{#friends}}
         <div>
@@ -26,7 +22,11 @@
     {{^friends}}
         <p>No friends found</p>
     {{/friends}}
+
 {{#isOwner}}
+{{#message}}
+         <p id="message">{{message}}</p>
+{{/message}}
 <form action="/friends/{{friend.username}}/add?loggedInUser={{username}}" method="post">
     <input type="text" name="friendUsername" placeholder="Enter username">
     <button type="submit">Add friend</button>

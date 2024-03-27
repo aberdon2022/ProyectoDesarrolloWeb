@@ -152,3 +152,56 @@ a.add:hover {
         width: 100%;
     }
 }
+
+form {
+    float: right;
+    color: #fff;
+}
+
+form input[type=submit] {
+    background-color: #7C7C7C;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    padding: 3px 5px;
+    border-radius: 2px;
+    transition: background-color 0.2s;
+    margin-left: 10px;
+    font-size: 15px;
+}
+form input[type=submit]:hover {
+    background-color: #5D5D5D;
+}
+form input {
+    display: inline-flex;
+    margin-right: 10px;
+    background-color: #ddd;
+    border: none;
+    color: #000E54;
+    padding: 2px;
+    border-radius: 2px;
+}
+form input:focus{
+    outline: none;
+}
+form input:active{
+    outline: none;
+}
+form select:focus {
+    outline: none;
+}
+form select:active {
+    outline: none;
+}
+form select {
+    display: inline-flex;
+    margin-right: 10px;
+    background-color: #ddd;
+    border: none;
+    color: #000E54;
+    padding: 2px;
+    border-radius: 2px;
+}
+form label{
+    color: #ddd;
+}

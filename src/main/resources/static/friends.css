@@ -88,33 +88,73 @@ a.delete:hover {
     text-decoration: underline;
 }
 
+a.view {
+    color: #000E54;
+    text-decoration: none;
+    float: right;
+    margin-left: 400px;
+    margin-top: -18px;
+    margin-right: 120px;
+}
+a.view:hover {
+    text-decoration: underline;
+}
+a.delete, a.view {
+    white-space: nowrap;
+}
+
 
 form {
    
     margin: 0 auto;
     width: 300px;
    
-    border: 1px solid #ccc;
+    border: 1px solid #ddd;
     border-radius: 10px;
     padding: 20px;
   }
   
   input[type="text"] {
-    width: 93%;
-    border: 1px solid #ccc;
-    padding: 10px;
-    margin-bottom: 10px;
-    outline: none;
-    background-color: #f0f0f0;
+      width: 93%;
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 10px;
+      outline: none;
+      background-color: #d9e5fc;
+      transition: background-color 0.3s;
   }
+input[type="text"]::placeholder {
+    color: #000E54;
+}
   
   button[type="submit"] {
+      color: #ddd;
     width: 100%;
     border: 1px solid #ccc;
     padding: 10px;
     margin-bottom: 10px;
-    background-color: #ccc;
+    background-color: #7c848a;
     cursor: pointer;
     outline: none;
-    background-color: #999;
+      transition: background-color 0.3s;
   }
+button[type="submit"]:hover {
+    background-color: #5a5d63;
+}
+
+#message {
+    text-align: center;
+    color: #ddd;
+    animation: fadeOut 4s forwards;
+    margin-top: -30px;
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+        visibility: hidden;
+    }
+}

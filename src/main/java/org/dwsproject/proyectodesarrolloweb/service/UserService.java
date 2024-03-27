@@ -4,15 +4,28 @@ import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.dwsproject.proyectodesarrolloweb.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 @Service
 public class UserService {
 
     @Autowired
     private UserRepository userRepository;
 
+    public String registerUser (User user) {
+        if (userRepository.findByUsername(user.getUsername()) == null) {//Check if the user already exists
+            userRepository.save(user);//Save the user
+            return "User registered successfully";
+        } else {
+            return "User already exists";
+        }
+    }
+
     public boolean checkPassword (User user, String password) {//Check if the password is correct
-        return user.checkPassword(password);
+        User dbUser = userRepository.findByUsername(user.getUsername());
+        if (dbUser != null) {
+            return user.getPassword().equals(password);
+        } else {
+            return false;
+        }
     }
     public User findUserByUsername(String username) {
         return userRepository.findByUsername(username);
