@@ -1,10 +1,7 @@
 package org.dwsproject.proyectodesarrolloweb.service;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.Objects;
 
 import org.dwsproject.proyectodesarrolloweb.Classes.Post;
 import org.dwsproject.proyectodesarrolloweb.Repositories.PostRepository;
@@ -18,9 +15,9 @@ public class PostService {
 
     @Autowired
     private PostRepository postRepository;
-    public Collection<Post> findAllByUserId(long userId) {//Return all the posts by user id
+    public List<Post> findAllByUserId(String username) {//Return all the posts by user id
         List<Post> posts = postRepository.findAll();
-        posts.removeIf(post -> post.getUser().getId() != userId);
+        posts.removeIf(post -> !Objects.equals(post.getUser().getUsername(), username));
         return posts;
     }
 

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -37,12 +38,17 @@ public class PostController {
     private UserService userService;
 
     @GetMapping("/forum")//Show the actual posts
-    public String showPosts(Model model, HttpSession session) {
+    public String showPosts(Model model, HttpSession session, @RequestParam(value = "username", required = false) String username) {
 
-        List<Post> posts = postService.findAll(); //Obtain all the posts
+        List<Post> posts;
+        if (username != null && !username.isEmpty()) {
+            posts = postService.findAllByUserId(username);
+        } else {
+            posts = postService.findAll(); //Obtain all the posts
+        }
         posts.forEach(post -> post.setUser(userService.findUserById(post.getUserId())));
-
-        model.addAttribute("posts", postService.findAll());
+        
+        model.addAttribute("posts", posts);
         model.addAttribute("welcome", session.isNew());
         model.addAttribute("loggedInUser", userSession.getUser().getUsername());
         return "indexForum";

@@ -9,6 +9,10 @@
 </head>
 <body>
 <h1>Posts</h1>
+<form action="/forum" method="get">
+    <input type="text" name="username" placeholder="Search by username...">
+    <button type="submit">Buscar</button>
+</form>
 {{#posts}}
     <a href="post/{{id}}" class="post-link">{{user.username}} - {{title}}</a><br>
 {{/posts}}

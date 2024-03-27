@@ -69,3 +69,35 @@ a.return {
 a.return:hover {
     background-color: #0B1C4B;
 }
+form {
+    float: right;
+}
+input[type="text"] {
+    display: inline-flex;
+    margin-right: 5px;
+    background-color: #ddd;
+    border: none;
+    color: #000E54;
+    padding: 4px;
+    border-radius: 2px;
+}
+form input:focus{
+    outline: none;
+}
+form input:active{
+    outline: none;
+}
+form button[type=submit] {
+    background-color: #7C7C7C;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    padding: 3px 5px;
+    border-radius: 2px;
+    transition: background-color 0.2s;
+    margin-left: 10px;
+    font-size: 15px;
+}
+form button[type=submit]:hover {
+    background-color: #5D5D5D;
+}
