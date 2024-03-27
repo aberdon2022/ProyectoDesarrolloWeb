@@ -82,6 +82,21 @@ public class User {
         this.password = password;
     }
 
+    public void setPendingFilms(List<Film> pendingFilms) {
+        this.pendingFilms.clear();
+        if (pendingFilms != null) {
+            this.pendingFilms.addAll(pendingFilms);
+        }
+    }
+
+    public void setCompletedFilms(List<Film> completedFilms) {
+        this.completedFilms.clear();
+        if (completedFilms != null) {
+            this.completedFilms.addAll(completedFilms);
+        }
+    }
+
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
