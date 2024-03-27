@@ -20,15 +20,17 @@
     <input type="submit" value="Submit">
 </form>
 <script>
-// Check if the URL has 'error=true'
-var url = window.location.href;
-var authenticationError = url.includes('error=true');
+    // Check if the URL has 'error=true'
+    var url = window.location.href;
+    var authenticationError = url.includes('error=true');
 
-if (authenticationError) {
-    var toast = document.getElementById("toast");
-    toast.style.visibility = "visible";
-    setTimeout(function(){ toast.style.visibility = "hidden"; }, 3000);
-}
+    if (authenticationError) {
+        var toast = document.getElementById("toast");
+        toast.style.visibility = "visible";
+        setTimeout(function () {
+            toast.style.visibility = "hidden";
+        }, 3000);
+    }
 </script>
 </body>
 </html>

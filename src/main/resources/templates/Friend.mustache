@@ -8,30 +8,31 @@
 <h1>{{friend.username}} Friends</h1>
 
 <div id="friend-list">
-{{#friends}}
+    {{#friends}}
         <div>
             <p>Friend: {{username}}
                 {{#isOwner}}
-                <a href="/friends/{{username}}?loggedInUser={{friend.username}}" class="view">View friend</a>
-                <a href="/friends/{{friend.username}}/delete?friendUsername={{username}}&loggedInUser={{friend.username}}" class="delete">Delete friend</a>
+                    <a href="/friends/{{username}}?loggedInUser={{friend.username}}" class="view">View friend</a>
+                    <a href="/friends/{{friend.username}}/delete?friendUsername={{username}}
+                    &loggedInUser={{friend.username}}" class="delete">Delete friend</a>
                 {{/isOwner}}
             </p>
         </div>
-{{/friends}}
-</div>
-    {{^friends}}
-        <p>No friends found</p>
     {{/friends}}
+</div>
+{{^friends}}
+    <p>No friends found</p>
+{{/friends}}
 
 {{#isOwner}}
-{{#message}}
-         <p id="message">{{message}}</p>
-{{/message}}
-<form action="/friends/{{friend.username}}/add?loggedInUser={{username}}" method="post">
+    {{#message}}
+        <p id="message">{{message}}</p>
+    {{/message}}
+    <form action="/friends/{{friend.username}}/add?loggedInUser={{username}}" method="post">
     <input type="text" name="friendUsername" placeholder="Enter username">
     <button type="submit">Add friend</button>
-</form>
-<a href="/profile/{{friend.username}}" class="button">Return to Profile</a>
+    </form>
+    <a href="/profile/{{friend.username}}" class="button">Return to Profile</a>
 {{/isOwner}}
 </body>
 </html>

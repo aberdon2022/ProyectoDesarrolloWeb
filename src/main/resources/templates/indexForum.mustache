@@ -8,17 +8,17 @@
     <title>Forum</title>
 </head>
 <body>
-	<h1>Posts</h1>
-    	{{#posts}}
-    	<a href="post/{{id}}" class="post-link">{{user.username}} - {{title}}</a><br>
-    	{{/posts}}
+<h1>Posts</h1>
+{{#posts}}
+    <a href="post/{{id}}" class="post-link">{{user.username}} - {{title}}</a><br>
+{{/posts}}
 
-    	{{^posts}}
-        <p>No posts yet.</p>
-        {{/posts}}
-	<br>
-	<a href="forum/new" class="new_post">New Post</a>
-	<br>
-	<a href="/profile/{{loggedInUser}}" class="return">Back</a>
+{{^posts}}
+    <p>No posts yet.</p>
+{{/posts}}
+<br>
+<a href="forum/new" class="new_post">New Post</a>
+<br>
+<a href="/profile/{{loggedInUser}}" class="return">Back</a>
 </body>
 </html>

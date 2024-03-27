@@ -9,48 +9,48 @@
     <title>FilmList</title>
 </head>
 <body>
-    <h1>Add film</h1>
-        <form id="filmForm" action="/addpeli" method="post" enctype="multipart/form-data">
-            <label for="title">Title:</label>
-            <br>
-            <input type="text" id="title" name="title" required>
-            <br>
-            <label for="year">Year:</label>
-            <br>
-            <input type="number" id="year" name="year" min="0" required>
-            <br>
-            <label for="image">Image:</label>
-            <br>
-            <input type="file" id="image" name="image" required>
-            <br>
-            <label for="rating">Rating:</label>
-            <br>
-            <div class="stars">
-                <input class="star star-5" id="star-5" type="radio" name="rating" value="5"/>
-                <label class="star star-5" for="star-5"></label>
-                <input class="star star-4" id="star-4" type="radio" name="rating" value="4"/>
-                <label class="star star-4" for="star-4"></label>
-                <input class="star star-3" id="star-3" type="radio" name="rating" value="3"/>
-                <label class="star star-3" for="star-3"></label>
-                <input class="star star-2" id="star-2" type="radio" name="rating" value="2"/>
-                <label class="star star-2" for="star-2"></label>
-                <input class="star star-1" id="star-1" type="radio" name="rating" value="1"/>
-                <label class="star star-1" for="star-1"></label>
-            </div>
-             <!-- Hidden field to store the rating -->
-            <input type="hidden" name="username" value="{{user.username}}">
-            <input type="hidden" id="rating" name="rating">
-            <input type="hidden" name="listType" value="completed">
-            <input type="submit" value="Submit">
-        </form>
-        <script>
-        <!--Captures the value of the selected rating and assigns it to the hidden field before submitting the form -->
-        document.getElementById('filmForm').addEventListener('submit', function(event) {
-            var selectedRating = document.querySelector('input[name="rating"]:checked');
-            if (selectedRating) {
-                document.getElementById('rating').value = selectedRating.value;
-            }
-        });
-    </script>
+<h1>Add film</h1>
+<form id="filmForm" action="/addpeli" method="post" enctype="multipart/form-data">
+    <label for="title">Title:</label>
+    <br>
+    <input type="text" id="title" name="title" required>
+    <br>
+    <label for="year">Year:</label>
+    <br>
+    <input type="number" id="year" name="year" min="0" required>
+    <br>
+    <label for="image">Image:</label>
+    <br>
+    <input type="file" id="image" name="image" required>
+    <br>
+    <label for="rating">Rating:</label>
+    <br>
+    <div class="stars">
+        <input class="star star-5" id="star-5" type="radio" name="rating" value="5"/>
+        <label class="star star-5" for="star-5"></label>
+        <input class="star star-4" id="star-4" type="radio" name="rating" value="4"/>
+        <label class="star star-4" for="star-4"></label>
+        <input class="star star-3" id="star-3" type="radio" name="rating" value="3"/>
+        <label class="star star-3" for="star-3"></label>
+        <input class="star star-2" id="star-2" type="radio" name="rating" value="2"/>
+        <label class="star star-2" for="star-2"></label>
+        <input class="star star-1" id="star-1" type="radio" name="rating" value="1"/>
+        <label class="star star-1" for="star-1"></label>
+    </div>
+    <!-- Hidden field to store the rating -->
+    <input type="hidden" name="username" value="{{user.username}}">
+    <input type="hidden" id="rating" name="rating">
+    <input type="hidden" name="listType" value="completed">
+    <input type="submit" value="Submit">
+</form>
+<script>
+    <!--Captures the value of the selected rating and assigns it to the hidden field before submitting the form -->
+    document.getElementById('filmForm').addEventListener('submit', function (event) {
+        var selectedRating = document.querySelector('input[name="rating"]:checked');
+        if (selectedRating) {
+            document.getElementById('rating').value = selectedRating.value;
+        }
+    });
+</script>
 </body>
 </html>

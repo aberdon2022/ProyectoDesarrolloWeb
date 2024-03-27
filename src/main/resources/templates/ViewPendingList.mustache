@@ -12,17 +12,17 @@
 <a href="/profile/{{user.username}}" class="button">Return to Profile</a>
 <form action="/pending" method="get">
     <input type="hidden" name="username" value="{{user.username}}">
-    <label for = "sort">Sort by:</label>
+    <label for="sort">Sort by:</label>
     <select id="sort" name="sort">
         <option value="title">Title</option>
         <option value="year">Year</option>
     </select>
-    <label for = "order">Order:</label>
+    <label for="order">Order:</label>
     <select id="order" name="order">
         <option value="asc">Ascending</option>
         <option value="desc">Descending</option>
     </select>
-<input type = "submit" value = "Filter">
+    <input type="submit" value="Filter">
 </form>
 <br>
 <div id="film-list">
@@ -35,11 +35,11 @@
                 <a href="/pending/{{filmId}}/delete?username={{user.username}}" class="delete">
                 <img src="/images/3221803.png" alt="Delete">
                 </a>
-                </div>
+            </div>
         </div>
-        {{/pending}}
-        {{^pending}}
-                <p>No pending films yet.</p>
+    {{/pending}}
+    {{^pending}}
+        <p>No pending films yet.</p>
     {{/pending}}
 </div>
 </body>

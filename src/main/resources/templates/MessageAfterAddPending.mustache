@@ -14,12 +14,14 @@
         <a href="/pending?username={{user.username}}" class="button">View Pending Fims</a>
     </div>
 </div>
-    <div id="toast" class="toast">Film Added Successfully!</div>
-    <script>
-        // Show toast
-        var toast = document.getElementById("toast");
-        toast.className = "toast show";
-        setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
-    </script>
+<div id="toast" class="toast">Film Added Successfully!</div>
+<script>
+    // Show toast
+    var toast = document.getElementById("toast");
+    toast.className = "toast show";
+    setTimeout(function () {
+        toast.className = toast.className.replace("show", "");
+    }, 3000);
+</script>
 </body>
 </html>

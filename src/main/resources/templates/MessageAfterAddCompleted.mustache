@@ -8,18 +8,20 @@
 </head>
 <body>
 <h1>What do you want to do now?</h1>
-    <div class="container">
-        <div class="message">
-            <a href="/completed/add?username={{user.username}}" class="button">Add Another Film</a>
-            <a href="/completed?username={{user.username}}" class="button">View Completed Films</a>
-        </div>
+<div class="container">
+    <div class="message">
+        <a href="/completed/add?username={{user.username}}" class="button">Add Another Film</a>
+        <a href="/completed?username={{user.username}}" class="button">View Completed Films</a>
     </div>
-    <div id="toast" class="toast">Film Added Successfully!</div>
-    <script>
-        // Show toast
-        var toast = document.getElementById("toast");
-        toast.className = "toast show";
-        setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
-    </script>
+</div>
+<div id="toast" class="toast">Film Added Successfully!</div>
+<script>
+    // Show toast
+    var toast = document.getElementById("toast");
+    toast.className = "toast show";
+    setTimeout(function () {
+        toast.className = toast.className.replace("show", "");
+    }, 3000);
+</script>
 </body>
 </html>

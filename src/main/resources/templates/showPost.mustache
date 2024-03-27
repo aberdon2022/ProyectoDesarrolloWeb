@@ -7,22 +7,22 @@
     <title>Post</title>
 </head>
 <body>
-    <h1>{{post.user.username}} - {{post.title}}</h1>
-    <div class="post-container">
-	    <p>User: {{post.user.username}}</p>
-	    <p>Title: {{post.title}}</p>
-	    <p>Text:</p>
-        <div>{{{post.text}}}</div>
-        {{#imageExists}}
-            <img src="/imageFile/{{post.imageId}}" class="img">
-        {{/imageExists}}
-    </div>
-	<br>
-    {{#isOwner}}
-            <a href="/post/{{post.id}}/edit" class="edit">Edit post</a>
-    {{/isOwner}}
-	<a href="/post/{{post.id}}/delete" class="delete">Delete post</a>
-	<br>
-	<a href="/forum" class= "return">Back</a>
+<h1>{{post.user.username}} - {{post.title}}</h1>
+<div class="post-container">
+    <p>User: {{post.user.username}}</p>
+    <p>Title: {{post.title}}</p>
+    <p>Text:</p>
+    <div>{{{post.text}}}</div>
+    {{#imageExists}}
+        <img src="/imageFile/{{post.imageId}}" class="img">
+    {{/imageExists}}
+</div>
+<br>
+{{#isOwner}}
+    <a href="/post/{{post.id}}/edit" class="edit">Edit post</a>
+{{/isOwner}}
+<a href="/post/{{post.id}}/delete" class="delete">Delete post</a>
+<br>
+<a href="/forum" class="return">Back</a>
 </body>
 </html>
