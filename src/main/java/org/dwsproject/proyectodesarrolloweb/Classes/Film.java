@@ -1,20 +1,29 @@
 package org.dwsproject.proyectodesarrolloweb.Classes;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 
 @Entity
 public class Film {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonView(Views.Public.class)
     private long filmId;
+
+    @JsonView(Views.Public.class)
     private String title;
+
+    @JsonView(Views.Public.class)
     private int year;
+
+    @JsonView(Views.Public.class)
     private int rating;
 
     @Column (name = "image_id")
     private Long imageId;
 
     @Enumerated(EnumType.STRING)
+    @JsonView(Views.Public.class)
     private FilmStatus status;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})

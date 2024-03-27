@@ -44,17 +44,15 @@ public class FilmService {
         film.setImageId(image.getId());
         film.setUser(user);
 
-        List<Film> auxList;
         if ("pending".equals(listType)) {
             film.setStatus(Film.FilmStatus.PENDING);
-            auxList = userService.getPendingFilms(user.getId());
+            userService.getPendingFilms(user.getId());
         } else {
             film.setStatus(Film.FilmStatus.COMPLETED);
-            auxList = userService.getCompletedFilms(user.getId());
+            userService.getCompletedFilms(user.getId());
         }
-        auxList.add(film);
-        userService.saveUser(user);
         filmRepository.save(film);
+        userService.saveUser(user);
     }
 
     public void deleteFilm(User user, long filmId, String listType) throws IOException {

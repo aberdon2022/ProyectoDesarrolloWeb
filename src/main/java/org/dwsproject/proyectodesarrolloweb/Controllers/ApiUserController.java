@@ -1,7 +1,11 @@
 package org.dwsproject.proyectodesarrolloweb.Controllers;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import org.dwsproject.proyectodesarrolloweb.Classes.Film;
 import org.dwsproject.proyectodesarrolloweb.Classes.Friendship;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
+import org.dwsproject.proyectodesarrolloweb.Classes.Views;
+import org.dwsproject.proyectodesarrolloweb.Repositories.FilmRepository;
 import org.dwsproject.proyectodesarrolloweb.Repositories.UserRepository;
 import org.dwsproject.proyectodesarrolloweb.service.UserService;
 import org.dwsproject.proyectodesarrolloweb.service.UserSession;
@@ -12,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -28,6 +33,9 @@ public class ApiUserController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private FilmRepository filmRepository;
+
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestParam String username, @RequestParam String password) {
         User user = userRepository.findByUsername(username);
@@ -42,14 +50,14 @@ public class ApiUserController {
 
     @GetMapping("/profile/{username}")
     public ResponseEntity<User> profile(@PathVariable String username) {
-        User user = userService.findUserByUsername(username);
-
+        User user = userService.getUserProfile(username);
         if (user != null) {
             return ResponseEntity.ok(user);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
 
     @GetMapping("/friends/{username}")
     public ResponseEntity<Map<String, Object>> friends(@PathVariable String username) {

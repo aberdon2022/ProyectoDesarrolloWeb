@@ -50,6 +50,19 @@ public class UserService {
         return filmRepository.findByUserIdAndStatus(userId, Film.FilmStatus.PENDING);
     }
 
+    public User getUserProfile (String username) {
+        User user = findUserByUsername(username);
+        if (user != null) {
+            // Fetch pending and completed films directly from the database
+            List<Film> pendingFilms = filmRepository.findByUserIdAndStatus(user.getId(), Film.FilmStatus.PENDING);
+            List<Film> completedFilms = filmRepository.findByUserIdAndStatus(user.getId(), Film.FilmStatus.COMPLETED);
+
+            user.setPendingFilms(pendingFilms);
+            user.setCompletedFilms(completedFilms);
+        }
+        return user;
+    }
+
     public List<Film> getCompletedFilms (Long userId) {
         return filmRepository.findByUserIdAndStatus(userId, Film.FilmStatus.COMPLETED);
     }
