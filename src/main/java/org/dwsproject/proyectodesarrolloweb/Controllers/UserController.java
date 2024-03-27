@@ -82,6 +82,7 @@ public class UserController {
             model.addAttribute("friend", user);// Add the user's data to the model
             model.addAttribute("friends", user.getFriends());// Add the user's friends to the model
             model.addAttribute("isOwner", user.equals(loggedInUserObj));// Add a boolean to the model that indicates whether the logged-in user is the owner of the profile
+            model.addAttribute("loggedInUser", loggedInUserObj);
             return "Friend";
         } else {
             return "redirect:/error/403"; //

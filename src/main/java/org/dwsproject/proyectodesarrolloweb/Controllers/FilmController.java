@@ -93,7 +93,11 @@ public class FilmController {
         List<Film> completedFilms;
         if (minRating != null && maxRating != null) {
             completedFilms = filmService.findCompletedFilmsByRating(user,minRating, maxRating);
-        } else {
+        } else if (minRating==null && maxRating!=null) {
+            completedFilms = filmService.findCompletedFilmsByRating(user, 0, maxRating);
+        }else if (maxRating==null && minRating !=null) {
+            completedFilms = filmService.findCompletedFilmsByRating(user, minRating, 5);
+        } else{
             completedFilms = userService.getCompletedFilms(user.getId());
         }
 

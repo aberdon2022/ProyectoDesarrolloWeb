@@ -11,8 +11,7 @@
 <div class="post-container">
     <p>User: {{post.user.username}}</p>
     <p>Title: {{post.title}}</p>
-    <p>Text:</p>
-    <div>{{{post.text}}}</div>
+    <p>Text: {{{post.text}}}</p>
     {{#imageExists}}
         <img src="/imageFile/{{post.imageId}}" class="img">
     {{/imageExists}}
@@ -21,7 +20,9 @@
 {{#isOwner}}
     <a href="/post/{{post.id}}/edit" class="edit">Edit post</a>
 {{/isOwner}}
+{{#isOwner}}
 <a href="/post/{{post.id}}/delete" class="delete">Delete post</a>
+{{/isOwner}}
 <br>
 <a href="/forum" class="return">Back</a>
 </body>
