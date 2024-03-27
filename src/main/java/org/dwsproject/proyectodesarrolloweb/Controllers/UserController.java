@@ -3,8 +3,6 @@ package org.dwsproject.proyectodesarrolloweb.Controllers;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.dwsproject.proyectodesarrolloweb.service.UserService;
 import org.dwsproject.proyectodesarrolloweb.service.UserSession;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,11 +11,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class UserController {
 
-    @Autowired
-    private UserService userService;//uses methods of the UserService class
 
-    @Autowired
-    private UserSession userSession;//uses methods of the UserSession class
+    private final UserService userService;//uses methods of the UserService class
+
+    private final UserSession userSession;//uses methods of the UserSession class
+
+    public UserController(UserService userService, UserSession userSession) {
+        this.userService = userService;
+        this.userSession = userSession;
+    }
 
     @GetMapping("/login")  
     public String login() {
@@ -94,6 +96,7 @@ public class UserController {
 
         String message = userService.addFriend(username, friendUsername);
         redirectAttributes.addFlashAttribute("message", message);
+        redirectAttributes.addFlashAttribute("loggedInUser", loggedInUser);
 
         // Redirect to the user's friend list
         return "redirect:/friends/" + loggedInUser  + "?loggedInUser=" + loggedInUser;
