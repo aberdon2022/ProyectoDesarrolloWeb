@@ -11,6 +11,9 @@ public class Image {
     @Column(columnDefinition = "MEDIUMBLOB")
     private byte[] data;
 
+    @Column(name = "originalImageName")
+    private String originalImageName;
+
     public long getId() {
         return id;
     }
@@ -25,5 +28,13 @@ public class Image {
 
     public void setData (byte[] data) {
         this.data = data;
+    }
+
+    public String getOriginalImageName() {
+        return originalImageName;
+    }
+
+    public void setOriginalImageName(String originalImageName) {
+        this.originalImageName = originalImageName;
     }
 }

@@ -17,6 +17,7 @@ public class ImageService {
         if (imageFile != null && !imageFile.isEmpty()) {
             Image image = new Image();
             image.setData(imageFile.getBytes());
+            image.setOriginalImageName(imageFile.getOriginalFilename());
             return image;
         }
         return null; // Return null if no image file is provided or it's empty
