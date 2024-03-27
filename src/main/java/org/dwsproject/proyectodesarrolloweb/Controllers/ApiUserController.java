@@ -1,5 +1,6 @@
 package org.dwsproject.proyectodesarrolloweb.Controllers;
 
+import org.dwsproject.proyectodesarrolloweb.Classes.Friendship;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.dwsproject.proyectodesarrolloweb.Repositories.UserRepository;
 import org.dwsproject.proyectodesarrolloweb.service.UserService;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -56,7 +58,10 @@ public class ApiUserController {
         if (user != null) {
             Map<String, Object> response = new HashMap<>();
             response.put("username", user.getUsername());
-            response.put("friends", user.getFriends().stream().map(User::getUsername).collect(Collectors.toList()));
+            response.put("friends", user.getFriends().stream()
+                    .sorted(Comparator.comparing(Friendship::getTimestamp))
+                    .map(friendship -> friendship.getUser1().equals(user) ? friendship.getUser2().getUsername() : friendship.getUser1().getUsername())
+                    .collect(Collectors.toList()));
             return ResponseEntity.ok(response);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

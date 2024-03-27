@@ -1,13 +1,18 @@
 package org.dwsproject.proyectodesarrolloweb.service;
 
 import org.dwsproject.proyectodesarrolloweb.Classes.Film;
+import org.dwsproject.proyectodesarrolloweb.Classes.Friendship;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.dwsproject.proyectodesarrolloweb.Repositories.FilmRepository;
 import org.dwsproject.proyectodesarrolloweb.Repositories.UserRepository;
+import org.dwsproject.proyectodesarrolloweb.Repositories.FriendshipRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -17,6 +22,9 @@ public class UserService {
 
     @Autowired
     private FilmRepository filmRepository;
+
+    @Autowired
+    private FriendshipRepository friendshipRepository;
 
     public String registerUser (User user) {
         if (userRepository.findByUsername(user.getUsername()) == null) {//Check if the user already exists
@@ -29,6 +37,13 @@ public class UserService {
 
     public void saveUser (User user) {
         userRepository.save(user);
+    }
+
+    public List<User> getFriends (User user) {
+        return user.getFriends().stream()
+                .sorted(Comparator.comparing(Friendship::getTimestamp))
+                .map(friendship -> friendship.getUser1().equals(user) ? friendship.getUser2() : friendship.getUser1())
+                .collect(Collectors.toList());
     }
 
     public List<Film> getPendingFilms (Long userId) {
@@ -56,25 +71,40 @@ public class UserService {
     }
 
     public String addFriend (String username, String friendUsername) {
+
+        if (username.equals(friendUsername)) {
+            return "You can't add yourself as a friend";
+        }
+
         User user = userRepository.findByUsername(username);
         User friend = userRepository.findByUsername(friendUsername);
 
         if (user != null && friend != null) {
-            if (!user.getFriends().contains(friend)) {
-                if (user.equals(friend)) {
-                    return "You cannot add yourself as a friend";
-                }
-                user.addFriend(friend);
-                friend.addFriend(user);
-                userRepository.save(user);
-                userRepository.save(friend);
-                return "Friend added successfully";
-            } else {
-                return "Friend already exists in the user's friend list";
+            Friendship existingFriendship = friendshipRepository.findByUser1AndAndUser2(user, friend);
+            if (existingFriendship != null) {
+                return "Friend already added";
             }
-        } else {
-            return "User or friend not found";
+            // Create a Friendship entity where user1 is the logged-in user and user2 is the friend
+            Friendship friendship1 = new Friendship();
+            friendship1.setUser1(user);
+            friendship1.setUser2(friend);
+            friendship1.setTimestamp(LocalDateTime.now());
+
+
+            // Create a Friendship entity where user1 is the friend and user2 is the logged-in user
+            Friendship friendship2 = new Friendship();
+            friendship2.setUser1(friend);
+            friendship2.setUser2(user);
+            friendship2.setTimestamp(LocalDateTime.now());
+
+            friendshipRepository.save(friendship1);
+            friendshipRepository.save(friendship2);
+
+            return "Friend added successfully";
+            } else {
+                return "User or friend not found";
         }
+
     }
 
     public String deleteFriend(String username, String friendUsername) {
@@ -82,17 +112,17 @@ public class UserService {
         User friend = userRepository.findByUsername(friendUsername);
 
         if (user != null && friend != null) {
-            if (user.getFriends().contains(friend)) {
-                user.deleteFriend(friend); //Delete the friend from the user's friend list
-                friend.deleteFriend(user); //Delete the user from the friend's friend list
-                userRepository.save(user);
-                userRepository.save(friend);
-                return "Friend deleted successfully.";
+            Friendship friendship1 = friendshipRepository.findByUser1AndAndUser2(user, friend); // Find the friendship where user1 is the logged-in user and user2 is the friend
+            Friendship friendship2 = friendshipRepository.findByUser1AndAndUser2(friend, user); // Find the friendship where user1 is the friend and user2 is the logged-in user
+            if (friendship1 != null && friendship2 != null) {
+                friendshipRepository.delete(friendship1);
+                friendshipRepository.delete(friendship2);
+                return "Friend deleted successfully";
             } else {
-                return "Friend not found in the user's friend list.";
+                return "Friend not found";
             }
         } else {
-            return "User or friend not found.";
+            return "User or friend not found";
         }
     }
 }

@@ -1,5 +1,6 @@
 package org.dwsproject.proyectodesarrolloweb.Controllers;
 
+import org.dwsproject.proyectodesarrolloweb.Classes.Friendship;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.dwsproject.proyectodesarrolloweb.service.UserService;
 import org.dwsproject.proyectodesarrolloweb.service.UserSession;
@@ -8,6 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.Comparator;
+import java.util.stream.Collectors;
 
 @Controller
 public class UserController {
@@ -80,7 +84,7 @@ public class UserController {
 
         if (user != null) {
             model.addAttribute("friend", user);// Add the user's data to the model
-            model.addAttribute("friends", user.getFriends());// Add the user's friends to the model
+            model.addAttribute("friends", userService.getFriends(user));// Add the user's friends to the model
             model.addAttribute("isOwner", user.equals(loggedInUserObj));// Add a boolean to the model that indicates whether the logged-in user is the owner of the profile
             model.addAttribute("loggedInUser", loggedInUserObj);
             return "Friend";
