@@ -51,7 +51,7 @@ public class ApiPostController {
             Image savedImage = imageService.saveImage(newImage);
             post.setImageId(savedImage.getId());
         }
-        postService.savePost(post);
+        postService.sanitizeAndSavePost(post);
         userSession.incNumPosts();
         return ResponseEntity.ok(post);
     }

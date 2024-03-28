@@ -82,7 +82,7 @@ public class FilmService {
     public ResponseEntity<List<Film>> getAllFilms(String username) {
         User user = userService.findUserByUsername(username);
         if (user == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         List<Film> films = new ArrayList<>();
         films.addAll(userService.getPendingFilms(user.getId()));
@@ -93,7 +93,7 @@ public class FilmService {
     public ResponseEntity<List<Film>> getPendingFilms(String username) {
         User user = userService.findUserByUsername(username);
         if (user == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         List<Film> films = userService.getPendingFilms(user.getId());
         return ResponseEntity.ok(films);
@@ -102,7 +102,7 @@ public class FilmService {
     public ResponseEntity<List<Film>> getCompletedFilms(String username) {
         User user = userService.findUserByUsername(username);
         if (user == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         List<Film> films = userService.getCompletedFilms(user.getId());
         return ResponseEntity.ok(films);

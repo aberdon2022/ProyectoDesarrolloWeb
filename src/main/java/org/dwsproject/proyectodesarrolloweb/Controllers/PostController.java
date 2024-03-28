@@ -1,7 +1,5 @@
 package org.dwsproject.proyectodesarrolloweb.Controllers;
 import jakarta.servlet.http.HttpSession;
-import org.jsoup.Jsoup;
-import org.jsoup.safety.Safelist;
 import org.dwsproject.proyectodesarrolloweb.Classes.Image;
 import org.dwsproject.proyectodesarrolloweb.Classes.Post;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -42,7 +39,14 @@ public class PostController {
 
         List<Post> posts;
         if (username != null && !username.isEmpty()) {
+            User user = userService.findUserByUsername(username);
+            if (user == null) {
+                model.addAttribute("userNotFound", true);
+                model.addAttribute("loggedInUser", userSession.getUser().getUsername());
+                return "indexForum";
+            }
             posts = postService.findAllByUserId(username);
+
         } else {
             posts = postService.findAll(); //Obtain all the posts
         }
@@ -74,7 +78,7 @@ public class PostController {
             } else {
                 post.setImageId(null); // set the image id in the post to null
             }
-            postService.savePost(post);
+            postService.sanitizeAndSavePost(post);
             userSession.incNumPosts();
             model.addAttribute("numPosts", userSession.getNumPosts());
             return "redirect:/forum";
@@ -97,7 +101,7 @@ public class PostController {
     }
 
     @GetMapping("/post/{id}/delete")//Delete a post by its id
-    public String deletePost(Model model, @PathVariable long id) throws IOException {
+    public String deletePost (Model model, @PathVariable long id) throws IOException {
         Post post = postService.findById(id);
         String loggedInUser = userSession.getUser().getUsername();
         boolean isOwner = post.getUser().getUsername().equals(loggedInUser);
