@@ -27,6 +27,21 @@ public class FilmController {
     @PostMapping("/addpeli")//Add a film to the list
     public String createFilm(Film film, @RequestParam("image")MultipartFile imageFile, @RequestParam("listType") String listType, @RequestParam String username) {
         User user = userService.findUserByUsername(username);
+
+        //Check for file type
+        String contentType = imageFile.getContentType();
+        if (contentType != null) {
+            switch (contentType) {
+                case "image/jpeg":
+                case "image/png":
+                case "image/gif":
+                case "image/bmp":
+                    break;
+                default:
+                    return "redirect:/error/400";
+            }
+        }
+
         try {
             filmService.addFilm(user, film, imageFile, listType);
         } catch (Exception e) {
