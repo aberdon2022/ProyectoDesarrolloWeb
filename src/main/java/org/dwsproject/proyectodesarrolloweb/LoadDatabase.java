@@ -29,7 +29,8 @@ public class LoadDatabase implements CommandLineRunner {
                 new User("user1", "1"),
                 new User("user2", "2"),
                 new User("user3", "3"),
-                new User("user4", "4")
+                new User("user4", "4"),
+                new User("admin", "admin")
         };
 
         for (User user : users) {

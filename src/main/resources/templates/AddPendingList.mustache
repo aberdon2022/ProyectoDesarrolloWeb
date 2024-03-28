@@ -8,22 +8,22 @@
     <title>Add Film</title>
 </head>
 <body>
-<h1>Add Film</h1>
-<form id="filmForm" action="/addpeli" method="post" enctype="multipart/form-data">
-    <label for="title">Title:</label><br>
-    <input type="text" id="title" name="title" required>
-    <br>
-    <label for="year">Year:</label>
-    <br>
-    <input type="number" id="year" name="year" min="0" required>
-    <br>
-    <label for="image">Image:</label>
-    <br>
-    <input type="file" id="image" name="image" required>
-    <br>
-    <input type="hidden" name="username" value="{{user.username}}">
-    <input type="hidden" name="listType" value="pending">
-    <input type="submit" value="Submit">
-</form>
+    <h1>Add Film</h1>
+    <form id="filmForm" action="/addpeli" method="post" enctype="multipart/form-data">
+        <label for="title">Title:</label><br>
+        <input type="text" id="title" name="title" required>
+        <br>
+        <label for="year">Year:</label>
+        <br>
+        <input type="number" id="year" name="year" min="0" required>
+        <br>
+        <label for="image">Image:</label>
+        <br>
+        <input type="file" id="image" name="image" required>
+        <br>
+        <input type="hidden" name="username" value="{{user.username}}">
+        <input type="hidden" name="listType" value="pending">
+        <input type="submit" value="Submit">
+    </form>
 </body>
 </html>
