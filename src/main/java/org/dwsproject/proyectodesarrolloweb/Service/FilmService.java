@@ -90,7 +90,7 @@ public class FilmService {
     public boolean validateFilm (Film film) {
         RestTemplate restTemplate = new RestTemplate();
         String omdbApiKey = "aa74510";
-        String omdbUrl = "http://www.omdbapi.com/?apikey=" + omdbApiKey + "&t=" + film.getTitle();
+        String omdbUrl = "http://www.omdbapi.com/?apikey=" + omdbApiKey + "&t=" + film.getTitle() + "&y=" + film.getYear();
 
         ResponseEntity<String> response = null;
 

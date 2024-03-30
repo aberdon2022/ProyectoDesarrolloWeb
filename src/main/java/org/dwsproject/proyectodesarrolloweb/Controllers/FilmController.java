@@ -44,8 +44,10 @@ public class FilmController {
 
         try {
             filmService.addFilm(user, film, imageFile, listType);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            return "redirect:/error/400";
+        } catch (IOException e) {
+            return "redirect:/error/500";
         }
         // Redirect to the corresponding list
         if ("pending".equals(listType)) {
