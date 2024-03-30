@@ -1,4 +1,7 @@
 package org.dwsproject.proyectodesarrolloweb.Service;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.dwsproject.proyectodesarrolloweb.Classes.Film;
 import org.dwsproject.proyectodesarrolloweb.Classes.Image;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
@@ -11,6 +14,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,6 +47,10 @@ public class FilmService {
         image = imageService.saveImage(image);
         film.setImageId(image.getId());
         film.setUser(user);
+
+        if (!validateFilm(film)) {
+            throw new IllegalArgumentException("The film does not exist or could be not validated");
+        }
 
         if ("pending".equals(listType)) {
             film.setStatus(Film.FilmStatus.PENDING);
@@ -76,6 +85,37 @@ public class FilmService {
         } else {
             System.out.println("Film not found in the list");
         }
+    }
+
+    public boolean validateFilm (Film film) {
+        RestTemplate restTemplate = new RestTemplate();
+        String omdbApiKey = "aa74510";
+        String omdbUrl = "http://www.omdbapi.com/?apikey=" + omdbApiKey + "&t=" + film.getTitle();
+
+        ResponseEntity<String> response = null;
+
+        try {
+            response = restTemplate.getForEntity(omdbUrl, String.class);
+        } catch (HttpServerErrorException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        if (response.getStatusCode() == HttpStatus.OK) {
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+                JsonNode root = mapper.readTree(response.getBody());
+                if (root.path("Response").asText().equals("True")) {
+                    String title = root.path("Title").asText();
+                    int year = root.path("Year").asInt();
+                    return title.equals(film.getTitle()) && year == film.getYear();
+                }
+            } catch (JsonProcessingException e ) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+        return false;
     }
 
     public ResponseEntity<List<Film>> getAllFilms(String username) {
