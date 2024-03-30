@@ -21,13 +21,11 @@ public class LoadDatabase implements CommandLineRunner {
     private final UserRepository userRepository;
     private final UserService userService;
     private final PostService postService;
-    private final TrailerService trailerService;
 
-    public LoadDatabase(UserRepository userRepository, PostService postService, UserService userService, TrailerService trailerService) {
+    public LoadDatabase(UserRepository userRepository, PostService postService, UserService userService) {
         this.userRepository = userRepository;
         this.postService = postService;
         this.userService = userService;
-        this.trailerService = trailerService;
     }
 
     @Override

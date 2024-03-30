@@ -20,7 +20,7 @@ public class ImageService {
             image.setOriginalImageName(imageFile.getOriginalFilename());
             return image;
         }
-        return null; // Return null if no image file is provided or it's empty
+        return null; // Return null if no image file is provided, or it's empty
     }
 
     public Image saveImage (Image image) {

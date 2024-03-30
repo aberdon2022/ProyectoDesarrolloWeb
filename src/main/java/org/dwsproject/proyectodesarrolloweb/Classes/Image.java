@@ -11,7 +11,7 @@ public class Image {
     @Column(columnDefinition = "MEDIUMBLOB")
     private byte[] data;
 
-    @Column(name = "originalImageName")
+    @Column(name = "original_image_name")
     private String originalImageName;
 
     public long getId() {

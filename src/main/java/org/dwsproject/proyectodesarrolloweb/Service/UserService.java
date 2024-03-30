@@ -93,7 +93,7 @@ public class UserService {
         User friend = userRepository.findByUsername(friendUsername);
 
         if (user != null && friend != null) {
-            Friendship existingFriendship = friendshipRepository.findByUser1AndAndUser2(user, friend);
+            Friendship existingFriendship = friendshipRepository.findByUser1AndUser2(user, friend);
             if (existingFriendship != null) {
                 return "Friend already added";
             }
@@ -125,8 +125,8 @@ public class UserService {
         User friend = userRepository.findByUsername(friendUsername);
 
         if (user != null && friend != null) {
-            Friendship friendship1 = friendshipRepository.findByUser1AndAndUser2(user, friend); // Find the friendship where user1 is the logged-in user and user2 is the friend
-            Friendship friendship2 = friendshipRepository.findByUser1AndAndUser2(friend, user); // Find the friendship where user1 is the friend and user2 is the logged-in user
+            Friendship friendship1 = friendshipRepository.findByUser1AndUser2(user, friend); // Find the friendship where user1 is the logged-in user and user2 is the friend
+            Friendship friendship2 = friendshipRepository.findByUser1AndUser2(friend, user); // Find the friendship where user1 is the friend and user2 is the logged-in user
             if (friendship1 != null && friendship2 != null) {
                 friendshipRepository.delete(friendship1);
                 friendshipRepository.delete(friendship2);
