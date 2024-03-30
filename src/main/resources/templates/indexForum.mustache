@@ -4,15 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
-    <link rel="stylesheet" href="/forum.css">
+    <link rel="stylesheet" href="/css/forum.css">
     <title>Forum</title>
 </head>
 <body>
 <h1>Posts</h1>
-<form action="/forum" method="get">
-    <input type="text" name="username" placeholder="Search by username...">
-    <button type="submit">Buscar</button>
-</form>
+<div class="post-list">
 {{#posts}}
     <a href="post/{{id}}" class="post-link">{{user.username}} - {{title}}</a><br>
 {{/posts}}
@@ -20,7 +17,12 @@
 {{^posts}}
     <p>No posts yet.</p>
 {{/posts}}
-
+</div>
+<form action="/forum" method="get">
+    <input type="text" name="username" placeholder="Search by username...">
+    <button type="submit">Buscar</button>
+</form>
+<br>
 {{#userNotFound}}
     <p class="notFound">User not found.</p>
 {{/userNotFound}}

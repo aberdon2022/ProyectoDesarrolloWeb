@@ -1,0 +1,123 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 15px;
+    padding: 0;
+    background-color: black;
+    color: #ddd;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('../images/foro.jpg') center/cover;
+    opacity: 0.4; 
+    z-index: -1; 
+}
+h1 {
+    text-align: center;
+    padding: 1.7rem;
+    background-image: url('../images/cinta2.jpg');
+    background-size: contain;
+    width: 100%;
+    height: 30px;
+    color: black;
+    margin: 0 0 2rem 0;
+    border-radius: 10px;
+    font-family: 'Roboto', sans-serif;
+    opacity: 0.6;
+    margin-left: -15px;
+}
+a.post-link {
+    font-weight: bold;
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #ddd;
+    color: #2E4F9B;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+a.new_post {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #26689e;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    transition: background-color 0.1s ease;
+}
+a.new_post:hover {
+    background-color: #2E4F9B;
+}
+
+a.return {
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #112A6A;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 15px;
+    transition: background-color 0.1s ease;
+}
+a.return:hover {
+    background-color: #0B1C4B;
+}
+form {
+    position: absolute;
+    top: 135px;
+    right: 20px;
+}
+input[type="text"] {
+    display: inline-flex;
+    margin-right: 5px;
+    background-color: #ddd;
+    border: none;
+    color: #000E54;
+    padding: 4px;
+    border-radius: 2px;
+}
+form input:focus{
+    outline: none;
+}
+form input:active{
+    outline: none;
+}
+form button[type=submit] {
+    background-color: #7C7C7C;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    padding: 3px 5px;
+    border-radius: 2px;
+    transition: background-color 0.2s;
+    margin-left: 10px;
+    font-size: 15px;
+}
+form button[type=submit]:hover {
+    background-color: #5D5D5D;
+}
+.notFound {
+    position: absolute;
+    top: 160px;
+    right: 20px;
+    color: #ddd;
+    animation: fadeOut 4s forwards;
+    margin-top: 20px;
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+        visibility: hidden;
+    }
+}

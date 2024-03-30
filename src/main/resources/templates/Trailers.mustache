@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
-    <link rel="stylesheet" href="/trailers.css">
+    <link rel="stylesheet" href="/css/trailers.css">
     <title>Trailers</title>
 </head>
 <body>
@@ -33,7 +33,9 @@
     <div class="trailer">
         <h2>{{title}}</h2>
         <p>{{description}}</p>
-        <video src="/trailer/uploads/{{id}}" controls></video>
+        <video width="350px" height="250px" controls>
+                <source src="/trailer/uploads/{{id}}">
+        </video>
         {{#isAdmin}}
             <a href="/trailer/delete/{{id}}" class="delete">
                 <img src="/images/3221803.png" alt="Delete">

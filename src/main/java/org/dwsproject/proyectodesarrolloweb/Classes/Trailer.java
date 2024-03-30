@@ -8,10 +8,10 @@ public class Trailer {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "filePath")
+    @Column(name = "file_path")
     private String filePath;
 
-    @Column(name = "originalFileName")
+    @Column(name = "original_file_name")
     private String originalFileName;
 
     @Column(name = "description")
@@ -20,7 +20,16 @@ public class Trailer {
     @Column(name = "title")
     private String title;
 
-    
+    public Trailer(String filePath, String originalFileName, String description, String title) {
+        this.filePath = filePath;
+        this.originalFileName = originalFileName;
+        this.description = description;
+        this.title = title;
+    }
+
+    public Trailer() {
+    }
+
     public Long getId() {
         return id;
     }

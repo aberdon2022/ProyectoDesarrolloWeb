@@ -3,10 +3,10 @@ import jakarta.servlet.http.HttpSession;
 import org.dwsproject.proyectodesarrolloweb.Classes.Image;
 import org.dwsproject.proyectodesarrolloweb.Classes.Post;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
-import org.dwsproject.proyectodesarrolloweb.service.ImageService;
-import org.dwsproject.proyectodesarrolloweb.service.PostService;
-import org.dwsproject.proyectodesarrolloweb.service.UserService;
-import org.dwsproject.proyectodesarrolloweb.service.UserSession;
+import org.dwsproject.proyectodesarrolloweb.Service.ImageService;
+import org.dwsproject.proyectodesarrolloweb.Service.PostService;
+import org.dwsproject.proyectodesarrolloweb.Service.UserService;
+import org.dwsproject.proyectodesarrolloweb.Service.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -41,6 +41,8 @@ public class PostController {
         if (username != null && !username.isEmpty()) {
             User user = userService.findUserByUsername(username);
             if (user == null) {
+                posts = postService.findAll();
+                model.addAttribute("posts", posts);
                 model.addAttribute("userNotFound", true);
                 model.addAttribute("loggedInUser", userSession.getUser().getUsername());
                 return "indexForum";

@@ -1,6 +1,6 @@
 package org.dwsproject.proyectodesarrolloweb.Controllers;
 
-import org.dwsproject.proyectodesarrolloweb.service.ImageService;
+import org.dwsproject.proyectodesarrolloweb.Service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.MediaType;

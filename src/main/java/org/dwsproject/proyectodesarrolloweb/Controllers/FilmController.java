@@ -1,14 +1,14 @@
 package org.dwsproject.proyectodesarrolloweb.Controllers;
 import org.dwsproject.proyectodesarrolloweb.Classes.Film;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
-import org.dwsproject.proyectodesarrolloweb.service.UserService;
-import org.dwsproject.proyectodesarrolloweb.service.UserSession;
+import org.dwsproject.proyectodesarrolloweb.Service.UserService;
+import org.dwsproject.proyectodesarrolloweb.Service.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.dwsproject.proyectodesarrolloweb.service.FilmService;
+import org.dwsproject.proyectodesarrolloweb.Service.FilmService;
 import java.io.IOException;
 import java.util.List;
 
@@ -123,7 +123,9 @@ public class FilmController {
         if(title != null && !title.isEmpty()){
             completedFilms = filmService.findCompletedFilmsByTitle(user, title);
             if (completedFilms.isEmpty()) {
+                completedFilms = userService.getCompletedFilms(user.getId());
                 model.addAttribute("filmNotFound", true);
+                model.addAttribute("completed", completedFilms);
                 return "ViewCompletedList";
             }
         }

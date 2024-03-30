@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.6/handlebars.min.js"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
-    <link rel="stylesheet" href="/ViewCompleted.css">
+    <link rel="stylesheet" href="/css/ViewCompleted.css">
     <title>Completed Films</title>
 </head>
 <body>
@@ -42,6 +42,9 @@
     <input type="text" id="title" name="title">
     <button type="submit">Buscar</button>
 </form>
+{{#filmNotFound}}
+    <p class="notFound">Film not found</p>
+{{/filmNotFound}}
 <br>
 <div id="film-list">
     {{#completed}}
@@ -61,9 +64,6 @@
         <p>No completed films yet.</p>
     {{/completed}}
 </div>
-{{#filmNotFound}}
-    <p class="notFound">Film not found.</p>
-{{/filmNotFound}}
 <a href="/completed/add?username={{user.username}}" class="add">Add Film</a>
 </body>
 </html>
