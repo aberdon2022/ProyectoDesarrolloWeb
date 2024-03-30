@@ -3,6 +3,7 @@ package org.dwsproject.proyectodesarrolloweb.Service;
 import org.dwsproject.proyectodesarrolloweb.Classes.Trailer;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.dwsproject.proyectodesarrolloweb.Exceptions.TrailerDeletionException;
+import org.dwsproject.proyectodesarrolloweb.Exceptions.TrailerNotFoundException;
 import org.dwsproject.proyectodesarrolloweb.Exceptions.TrailerUploadException;
 import org.dwsproject.proyectodesarrolloweb.Repositories.TrailerRepository;
 import org.springframework.core.io.Resource;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Optional;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -90,19 +92,28 @@ public class TrailerService {
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "video/mp4").body(file); // Use the correct MIME-type for your video files
     }
 
-    public void deleteTrailer(String folder, User user, Long trailerId) throws IOException {
-        // Check if user is admin
-    if (user==null || !user.getUsername().equals("admin")) {
+    public void deleteTrailer(String folder, User user, Long trailerId) throws IOException, TrailerNotFoundException {
+    // Check if user is admin
+    if (user == null || !user.getUsername().equals("admin")) {
         throw new TrailerDeletionException("User Unauthorized. Please login as admin.");
+    }
+
+    // Attempt to find the trailer in the database
+    Optional<Trailer> trailer = trailerRepository.findById(trailerId);
+    if (!trailer.isPresent()) {
+        throw new TrailerNotFoundException("Trailer with ID: " + trailerId + " does not exist.");
     }
 
     // Delete a trailer from the folder
     Path trailerFile = createFilePath(trailerId);
-    Files.deleteIfExists(trailerFile);
+    boolean isDeleted = Files.deleteIfExists(trailerFile);
+    if (!isDeleted) {
+        throw new IOException("Failed to delete trailer file for ID: " + trailerId);
+    }
 
     // Delete the trailer record from the database
     trailerRepository.deleteById(trailerId);
-    }
+}
 
     public List<Trailer> getAllTrailers() {
         return trailerRepository.findAll();

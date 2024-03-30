@@ -87,8 +87,5 @@ public class TrailerController {
         return "Trailers";
     }
 
-    @GetMapping("/uploads/{id}")
-    public ResponseEntity<Object> serveTrailer(@PathVariable Long id) throws MalformedURLException {
-        return trailerService.createResponseFromTrailer("uploads", id);
-    }
+  
 }
