@@ -114,6 +114,12 @@ public class FilmService {
                 .and(FilmSpecification.isOwnedByUser(user)));
     }
 
+    public List<Film> findCompletedFilmsByTitle(User user, String title){
+        return filmRepository.findAll(Specification.where(FilmSpecification.isCompleted())
+                .and(FilmSpecification.hasThisTitle(title))
+                .and(FilmSpecification.isOwnedByUser(user)));
+    }
+
     public List<Film> sortFilms (User user, Integer minRating, Integer maxRating, String sort, String order, Film.FilmStatus status) {
         Sort sortOrder = Sort.by(sort);
 

@@ -101,3 +101,19 @@ form button[type=submit] {
 form button[type=submit]:hover {
     background-color: #5D5D5D;
 }
+.notFound {
+    text-align: right;
+    color: #ddd;
+    animation: fadeOut 4s forwards;
+    margin-top: 20px;
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+        visibility: hidden;
+    }
+}

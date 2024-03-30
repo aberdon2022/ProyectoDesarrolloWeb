@@ -96,7 +96,7 @@ public class FilmController {
     }
 
     @GetMapping("/completed")//show the completed list
-    public String viewCompleted(Model model, @RequestParam String username, @RequestParam (required = false) Integer minRating, @RequestParam (required = false) Integer maxRating, @RequestParam (required = false) String sort, @RequestParam (required = false) String order, @RequestParam (required = false, defaultValue = "false") Boolean applySort) {
+    public String viewCompleted(Model model, @RequestParam String username, @RequestParam (required = false) Integer minRating, @RequestParam (required = false) Integer maxRating, @RequestParam (required = false) String sort, @RequestParam (required = false) String order, @RequestParam (required = false, defaultValue = "false") Boolean applySort, @RequestParam (required = false) String title) {
         User loggedInUser = userSession.getUser();
 
         if (loggedInUser == null || !loggedInUser.getUsername().equals(username)) {
@@ -119,6 +119,13 @@ public class FilmController {
 
         if (applySort && sort != null && order != null) {
             completedFilms = filmService.sortFilms(user, minRating, maxRating, sort, order, Film.FilmStatus.COMPLETED);
+        }
+        if(title != null && !title.isEmpty()){
+            completedFilms = filmService.findCompletedFilmsByTitle(user, title);
+            if (completedFilms.isEmpty()) {
+                model.addAttribute("filmNotFound", true);
+                return "ViewCompletedList";
+            }
         }
 
         model.addAttribute("completed", completedFilms);

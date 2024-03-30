@@ -10,6 +10,7 @@ public class Post {
     private String title;
 
     @Lob
+    @Column(columnDefinition="MEDIUMBLOB")
     private String text;
 
     @ManyToOne

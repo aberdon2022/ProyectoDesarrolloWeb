@@ -229,3 +229,35 @@ form label{
   background-color: #2E4F9B;
   border-color: #ddd;
 }
+#searchForm{
+  float: right;
+  margin-top: -10px;
+}
+#searchForm input {
+  display: inline-flex;
+  background-color: #ddd;
+  border: none;
+  color: #000E54;
+  padding: 3px;
+  border-radius: 2px;
+}
+
+#searchForm input:focus{
+  outline: none;
+}
+#searchForm input:active{
+  outline: none;
+}
+#searchForm button{
+  background-color: #7C7C7C;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  padding: 3px 5px;
+  border-radius: 2px;
+  transition: background-color 0.2s;
+  font-size: 15px;
+}
+#searchForm button:hover {
+  background-color: #5D5D5D;
+}
