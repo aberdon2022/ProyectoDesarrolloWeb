@@ -1,14 +1,10 @@
 package org.dwsproject.proyectodesarrolloweb.Controllers;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import org.dwsproject.proyectodesarrolloweb.Classes.Film;
 import org.dwsproject.proyectodesarrolloweb.Classes.Friendship;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
-import org.dwsproject.proyectodesarrolloweb.Classes.Views;
-import org.dwsproject.proyectodesarrolloweb.Repositories.FilmRepository;
 import org.dwsproject.proyectodesarrolloweb.Repositories.UserRepository;
-import org.dwsproject.proyectodesarrolloweb.service.UserService;
-import org.dwsproject.proyectodesarrolloweb.service.UserSession;
+import org.dwsproject.proyectodesarrolloweb.Service.UserService;
+import org.dwsproject.proyectodesarrolloweb.Service.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -33,8 +28,6 @@ public class ApiUserController {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private FilmRepository filmRepository;
 
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestParam String username, @RequestParam String password) {

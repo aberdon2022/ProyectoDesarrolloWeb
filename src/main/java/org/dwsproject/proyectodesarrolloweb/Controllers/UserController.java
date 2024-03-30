@@ -1,7 +1,7 @@
 package org.dwsproject.proyectodesarrolloweb.Controllers;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
-import org.dwsproject.proyectodesarrolloweb.service.UserService;
-import org.dwsproject.proyectodesarrolloweb.service.UserSession;
+import org.dwsproject.proyectodesarrolloweb.Service.UserService;
+import org.dwsproject.proyectodesarrolloweb.Service.UserSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

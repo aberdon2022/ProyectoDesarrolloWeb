@@ -1,16 +1,14 @@
 package org.dwsproject.proyectodesarrolloweb.Controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.dwsproject.proyectodesarrolloweb.Classes.Film;
-import org.dwsproject.proyectodesarrolloweb.Classes.User;
-import org.dwsproject.proyectodesarrolloweb.service.FilmService;
-import org.dwsproject.proyectodesarrolloweb.service.UserService;
+import org.dwsproject.proyectodesarrolloweb.Service.FilmService;
+import org.dwsproject.proyectodesarrolloweb.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController

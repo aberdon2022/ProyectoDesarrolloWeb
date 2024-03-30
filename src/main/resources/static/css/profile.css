@@ -1,0 +1,107 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 15px;
+    padding: 0;
+    background-color: black;
+    color: #ddd;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('../images/series-netflix.webp') center/cover;
+    opacity: 0.4; 
+    z-index: -1; 
+}
+h1 {
+    text-align: center;
+    padding: 1.7rem;
+    background-image: url('../images/cinta2.jpg');
+    background-size: contain;
+    width: 100%;
+    height: 30px;
+    color: black;
+    margin: 0 0 2rem 0;
+    border-radius: 10px;
+    font-family: 'Roboto', sans-serif;
+    opacity: 0.6;
+    margin-left: -15px;
+}
+h2{
+    color: #ddd;
+    font-family: 'Roboto', sans-serif;
+}
+
+.item {
+    text-align: center; 
+    display: inline-block; 
+    margin: 0 10px;
+}
+
+.item img {
+    width: 150px; 
+    display: block; 
+   
+    margin: 70px 110px 20px;
+    transition: transform 0.3s;
+    filter: brightness(0) invert(1);
+}
+.item img:hover {
+    transform: scale(1.1); 
+}
+
+
+.item a {
+    display: block; 
+    font-size: 20px;
+    color: #ddd;
+    text-decoration: none !important;
+    font-family: 'Roboto', sans-serif;
+}
+
+a.logout{
+    font-weight: bold;
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #ED361D;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    float: right;
+    transition: background-color 0.3s; 
+}
+
+a.logout:hover {
+    background-color: #BD300D; 
+}
+a.friends {
+    font-weight: bold;
+    display: inline-block;
+    padding: 10px 10px;
+    background-color: #4FCB7C;
+    color: #fff;
+    text-decoration: none;
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
+    margin-bottom: 15px;
+    float: left;
+}
+.friendsImg img {
+    position: relative;
+    display: inline-block;
+    width: 20px;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    margin-top: 0px;
+    padding: 9px 5px;
+    background-color: #4FCB7C;
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
+}
