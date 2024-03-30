@@ -77,7 +77,7 @@ public class FilmController {
     }
 
     @GetMapping("/pending")//Show the pending list
-    public String viewPending(Model model, @RequestParam String username, @RequestParam (required = false) String sort, @RequestParam (required = false) String order) {
+    public String viewPending(Model model, @RequestParam String username, @RequestParam (required = false) String sort, @RequestParam (required = false) String order, @RequestParam (required = false) String title) {
         User loggedInUser = userSession.getUser();
 
         if (loggedInUser == null || !loggedInUser.getUsername().equals(username)) {
@@ -91,6 +91,16 @@ public class FilmController {
 
         if (sort != null && order != null) {
             pendingFilms = filmService.sortFilms(user, null, null, sort, order, Film.FilmStatus.PENDING);
+        }
+
+        if(title != null && !title.isEmpty()){
+            pendingFilms = filmService.findPendingFilmsByTitle(user, title);
+            if (pendingFilms.isEmpty()) {
+                pendingFilms = userService.getPendingFilms(user.getId());
+                model.addAttribute("filmNotFound", true);
+                model.addAttribute("pending", pendingFilms);
+                return "ViewPendingList";
+            }
         }
 
         model.addAttribute("pending", pendingFilms);

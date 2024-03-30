@@ -205,3 +205,80 @@ form select {
 form label{
     color: #ddd;
 }
+.custom-checkbox {
+    display: inline-block;
+    cursor: pointer;
+    position: relative;
+    padding-right: 30px;
+    line-height: 25px;
+  }
+  
+  .custom-checkbox input[type="checkbox"] {
+    opacity: 0;
+    position: absolute;
+  }
+  
+  .custom-checkbox .checkbox-indicator {
+    position: absolute;
+    margin-top: 5px;
+    right: 4px;
+    height: 12px;
+    width: 12px;
+    background-color: #ddd;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .custom-checkbox input:checked + .checkbox-indicator {
+    background-color: #2E4F9B;
+    border-color: #ddd;
+  }
+  #searchForm{
+    float: right;
+    margin-top: -10px;
+  }
+  #searchForm input {
+    display: inline-flex;
+    background-color: #ddd;
+    border: none;
+    color: #000E54;
+    padding: 3px;
+    border-radius: 2px;
+  }
+  
+  #searchForm input:focus{
+    outline: none;
+  }
+  #searchForm input:active{
+    outline: none;
+  }
+  #searchForm button{
+    background-color: #7C7C7C;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    padding: 3px 5px;
+    border-radius: 2px;
+    transition: background-color 0.2s;
+    font-size: 15px;
+  }
+  #searchForm button:hover {
+    background-color: #5D5D5D;
+  }
+  .notFound {
+    display: inline-block;
+    float: right;
+    color: #ddd;
+    animation: fadeOut 4s forwards;
+    margin-top: -7px;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}

@@ -25,12 +25,20 @@
     <input type="submit" value="Filter">
 </form>
 <br>
+<form id="searchForm" action="/pending" method="get">
+    <input type="hidden" name="username" value="{{user.username}}">
+    <input type="text" id="title" name="title">
+    <button type="submit">Buscar</button>
+</form>
+{{#filmNotFound}}
+    <p class="notFound">Film not found</p>
+{{/filmNotFound}}
+<br>
 <div id="film-list">
     {{#pending}}
         <div>
             <h2>Title: {{title}}</h2>
             <p>Year: {{year}}</p>
-            <p>Plot: {{plot}}</p>
             <img src="/imageFile/{{imageId}}" class="imagen">
             <div>
                 <a href="/pending/{{filmId}}/delete?username={{user.username}}" class="delete">

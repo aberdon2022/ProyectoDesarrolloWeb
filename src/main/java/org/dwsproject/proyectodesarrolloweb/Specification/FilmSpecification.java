@@ -9,6 +9,10 @@ public class FilmSpecification {
         return (film, query, cb) -> cb.equal(film.get("status"), "COMPLETED");
     }
 
+    public static Specification<Film> isPending() {
+        return (film, query, cb) -> cb.equal(film.get("status"), "PENDING");
+    }
+
     public static Specification<Film> hasRatingBetween(int minRating, int maxRating) {
         return (film, query, cb) -> cb.between(film.get("rating"), minRating, maxRating);
     }
