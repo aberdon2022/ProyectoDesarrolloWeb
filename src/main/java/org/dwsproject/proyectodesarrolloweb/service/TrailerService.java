@@ -100,7 +100,7 @@ public class TrailerService {
 
     // Attempt to find the trailer in the database
     Optional<Trailer> trailer = trailerRepository.findById(trailerId);
-    if (!trailer.isPresent()) {
+    if (trailer.isEmpty()) {
         throw new TrailerNotFoundException("Trailer with ID: " + trailerId + " does not exist.");
     }
 
@@ -118,4 +118,13 @@ public class TrailerService {
     public List<Trailer> getAllTrailers() {
         return trailerRepository.findAll();
     }
+
+    public Trailer searchById (Long id) throws TrailerNotFoundException {
+        Optional<Trailer> trailer = trailerRepository.findById(id);
+        if (trailer.isEmpty()) {
+            throw new TrailerNotFoundException("Trailer with ID: " + id + " does not exist.");
+        }
+        return trailer.get();
+    }
+
 }

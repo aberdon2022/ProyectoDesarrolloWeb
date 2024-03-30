@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.List;
 
@@ -43,18 +44,20 @@ public class ApiTrailerController {
         try {
             trailerService.deleteTrailer("upload", userService.findUserByUsername(username), trailerId);
             return new ResponseEntity<>(HttpStatus.OK);
-        } 
+        }
         catch (TrailerNotFoundException e) {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-        }catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        
+  }
+  @GetMapping("/uploads/{id}")
+    public ResponseEntity<Object> searchById(@PathVariable Long id){
+        try {
+            Trailer trailer = trailerService.searchById(id);
+            return new ResponseEntity<>(trailer,HttpStatus.OK);
+        } catch (TrailerNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
-      @GetMapping("/uploads/{id}")
-    public ResponseEntity<Object> serveTrailer(@PathVariable Long id) throws MalformedURLException {
-        return trailerService.createResponseFromTrailer("uploads", id);
-    }
-    
 }
