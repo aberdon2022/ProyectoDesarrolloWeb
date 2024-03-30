@@ -77,7 +77,7 @@ public class TrailerController {
 
     @GetMapping("/index")
     public String showTrailers(Model model) {
-        List<Trailer> trailers = trailerRepository.findAll();
+        List<Trailer> trailers = trailerService.getAllTrailers();
         User user = userSession.getUser();
         if (userSession.getUser() != null && userSession.getUser().getUsername().equals("admin")) {
             model.addAttribute("isAdmin", true);
