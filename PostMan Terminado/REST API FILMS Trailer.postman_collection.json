@@ -1,0 +1,131 @@
+{
+	"info": {
+		"_postman_id": "c9e703ad-0380-41aa-96ce-ee16d70bf00d",
+		"name": "REST API Trailer",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33315616"
+	},
+	"item": [
+		{
+			"name": "/api/index",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/index",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"index"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/upload",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/itsve/Downloads/VENOM -Tráiler Oficial EN ESPAÑOL _ Sony Pictures España.mp4"
+						},
+						{
+							"key": "title",
+							"value": "Venom",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "A failed reporter is bonded to an alien entity, one of many symbiotes who have invaded Earth. But the being takes a liking to Earth and decides to protect it.",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/upload?username=admin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"upload"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "admin"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/index",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/index?trailerId=102&username=admin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"index"
+					],
+					"query": [
+						{
+							"key": "trailerId",
+							"value": "102"
+						},
+						{
+							"key": "username",
+							"value": "admin"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/upload/{id}",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/upload/202",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"upload",
+						"202"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
