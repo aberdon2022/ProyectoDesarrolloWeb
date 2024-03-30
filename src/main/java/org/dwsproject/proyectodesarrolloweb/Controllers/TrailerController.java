@@ -3,10 +3,12 @@ package org.dwsproject.proyectodesarrolloweb.Controllers;
 import org.dwsproject.proyectodesarrolloweb.Classes.Trailer;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.dwsproject.proyectodesarrolloweb.Exceptions.TrailerDeletionException;
+import org.dwsproject.proyectodesarrolloweb.Exceptions.TrailerNotFoundException;
 import org.dwsproject.proyectodesarrolloweb.Repositories.TrailerRepository;
 import org.dwsproject.proyectodesarrolloweb.Service.TrailerService;
 import org.dwsproject.proyectodesarrolloweb.Exceptions.TrailerUploadException;
 import org.dwsproject.proyectodesarrolloweb.Service.UserSession;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -87,5 +89,8 @@ public class TrailerController {
         return "Trailers";
     }
 
-  
+    @GetMapping("/play/{id}")
+    public ResponseEntity<Object> serveTrailer(@PathVariable Long id) throws MalformedURLException {
+        return trailerService.createResponseFromTrailer("uploads",id);
+    }
 }
