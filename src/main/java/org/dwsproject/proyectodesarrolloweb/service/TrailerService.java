@@ -17,6 +17,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -68,6 +69,7 @@ public class TrailerService {
         trailer.transferTo(newFile); // Transfer the trailer to the new path
     }
 
+    //Este metodo lo use para guardar el trailer en los tests
     public void saveExampleTrailer (Trailer trailer, MultipartFile file) throws IOException {// Save the trailer to the database
         Trailer savedTrailer = trailerRepository.save(trailer);
 
@@ -100,6 +102,9 @@ public class TrailerService {
 
     // Delete the trailer record from the database
     trailerRepository.deleteById(trailerId);
+    }
 
+    public List<Trailer> getAllTrailers() {
+        return trailerRepository.findAll();
     }
 }

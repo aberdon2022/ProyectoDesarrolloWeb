@@ -9,6 +9,7 @@ import org.dwsproject.proyectodesarrolloweb.Repositories.FilmRepository;
 import org.dwsproject.proyectodesarrolloweb.Specification.FilmSpecification;
 import org.dwsproject.proyectodesarrolloweb.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,9 @@ import java.util.List;
 
 @Service
 public class FilmService {
+
+    @Value("${omdb.api.key}")
+    private String omdbApiKey;
 
     @Autowired
     private ImageService imageService;
@@ -89,7 +93,6 @@ public class FilmService {
 
     public boolean validateFilm (Film film) {
         RestTemplate restTemplate = new RestTemplate();
-        String omdbApiKey = "aa74510";
         String omdbUrl = "http://www.omdbapi.com/?apikey=" + omdbApiKey + "&t=" + film.getTitle() + "&y=" + film.getYear();
 
         ResponseEntity<String> response = null;
