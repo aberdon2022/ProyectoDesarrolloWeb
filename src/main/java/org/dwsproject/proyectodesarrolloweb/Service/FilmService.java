@@ -110,6 +110,8 @@ public class FilmService {
                 JsonNode root = mapper.readTree(response.getBody());
                 if (root.path("Response").asText().equals("True")) {
                     String title = root.path("Title").asText();
+                    String plot = root.path("Plot").asText();
+                    film.setPlot(plot);
                     int year = root.path("Year").asInt();
                     return title.equals(film.getTitle()) && year == film.getYear();
                 }

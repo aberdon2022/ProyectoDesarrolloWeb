@@ -19,6 +19,17 @@ public class Film {
     @JsonView(Views.Public.class)
     private int rating;
 
+    @JsonView(Views.Public.class)
+    private String plot;
+
+    public String getPlot() {
+        return plot;
+    }
+
+    public void setPlot(String plot) {
+        this.plot = plot;
+    }
+
     @Column (name = "image_id")
     private Long imageId;
 
