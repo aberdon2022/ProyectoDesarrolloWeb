@@ -2,10 +2,10 @@ package org.dwsproject.proyectodesarrolloweb.Controllers;
 
 import org.dwsproject.proyectodesarrolloweb.Classes.Friendship;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
+import org.dwsproject.proyectodesarrolloweb.Exceptions.FriendNotFoundException;
 import org.dwsproject.proyectodesarrolloweb.Repositories.UserRepository;
 import org.dwsproject.proyectodesarrolloweb.Service.UserService;
 import org.dwsproject.proyectodesarrolloweb.Service.UserSession;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,14 +19,17 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/users")
 public class ApiUserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    private UserSession userSession;
+    private final UserSession userSession;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public ApiUserController(UserService userService, UserSession userSession, UserRepository userRepository) {
+        this.userService = userService;
+        this.userSession = userSession;
+        this.userRepository = userRepository;
+    }
 
 
     @PostMapping("/login")
@@ -35,7 +38,7 @@ public class ApiUserController {
 
         if (user != null && userService.checkPassword(user,password)) {
             userSession.setUser(user);
-            return ResponseEntity.ok(user);
+            return new ResponseEntity<>(user, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
@@ -45,7 +48,7 @@ public class ApiUserController {
     public ResponseEntity<User> profile(@PathVariable String username) {
         User user = userService.getUserProfile(username);
         if (user != null) {
-            return ResponseEntity.ok(user);
+            return new ResponseEntity<>(user, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -63,7 +66,7 @@ public class ApiUserController {
                     .sorted(Comparator.comparing(Friendship::getTimestamp))
                     .map(friendship -> friendship.getUser1().equals(user) ? friendship.getUser2().getUsername() : friendship.getUser1().getUsername())
                     .collect(Collectors.toList()));
-            return ResponseEntity.ok(response);
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -80,9 +83,9 @@ public class ApiUserController {
         String result = userService.addFriend(username, friendUsername);
         response.put("message", result);
         if (result.equals("Friend added successfully")) {
-            return ResponseEntity.ok(response);
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } else {
-            return ResponseEntity.badRequest().body(response);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -92,10 +95,12 @@ public class ApiUserController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        String response = userService.deleteFriend(username, friendUsername);
-        if (response.equals("Friend deleted successfully.")) {
+        try {
+            userService.deleteFriend(username, friendUsername);
             return new ResponseEntity<>(HttpStatus.OK);
-        } else {
+        } catch (FriendNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

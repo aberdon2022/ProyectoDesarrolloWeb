@@ -1,62 +1,54 @@
 package org.dwsproject.proyectodesarrolloweb.Controllers;
+
 import org.dwsproject.proyectodesarrolloweb.Classes.Film;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
+import org.dwsproject.proyectodesarrolloweb.Service.FilmService;
 import org.dwsproject.proyectodesarrolloweb.Service.UserService;
 import org.dwsproject.proyectodesarrolloweb.Service.UserSession;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.dwsproject.proyectodesarrolloweb.Service.FilmService;
+
 import java.io.IOException;
 import java.util.List;
 
 @Controller
 public class FilmController {
 
-    @Autowired
-    private FilmService filmService;//use methods of the service FilmService
+    private final FilmService filmService;//use methods of the service FilmService
 
-    @Autowired
-    private UserService userService;//use methods of the service UserService
+    private final UserService userService;//use methods of the service UserService
 
-    @Autowired
-    private UserSession userSession;//use methods of the service UserSession
+    private final UserSession userSession;//use methods of the service UserSession
+
+    public FilmController(FilmService filmService, UserService userService, UserSession userSession) {
+        this.filmService = filmService;
+        this.userService = userService;
+        this.userSession = userSession;
+    }
 
     @PostMapping("/addpeli")//Add a film to the list
     public String createFilm(Film film, @RequestParam("image")MultipartFile imageFile, @RequestParam("listType") String listType, @RequestParam String username) {
         User user = userService.findUserByUsername(username);
 
-        //Check for file type
-        String contentType = imageFile.getContentType();
-        if (contentType != null) {
-            switch (contentType) {
-                case "image/jpeg":
-                case "image/png":
-                case "image/gif":
-                case "image/bmp":
-                    break;
-                default:
-                    return "redirect:/error/400";
-            }
-        }
-
         try {
-            filmService.addFilm(user, film, imageFile, listType);
+            String result = filmService.addFilmWithChecks(user, film, imageFile, listType);
+            // Redirect to the corresponding list
+            if ("pending".equals(result)) {
+                return "redirect:/pending/confirmed?username=" + user.getUsername();
+            } else if ("completed".equals(result)) {
+                return "redirect:/completed/confirmed?username=" + user.getUsername();
+            } else {
+                return "redirect:/";
+            }
         } catch (IllegalArgumentException e) {
             return "redirect:/error/400";
         } catch (IOException e) {
             return "redirect:/error/500";
-        }
-        // Redirect to the corresponding list
-        if ("pending".equals(listType)) {
-            return "redirect:/pending/confirmed?username=" + username;
-        } else if ("completed".equals(listType)) {
-            return "redirect:/completed/confirmed?username=" + username;
-        } else {
-            // If listType is not specified, redirect to home page or some other page as needed
-            return "redirect:/";
         }
     }
 
@@ -161,7 +153,7 @@ public class FilmController {
     }
 
     @GetMapping ("/completed/{filmId}/delete")//Delete a film from the completed list
-    public String deleteFilmC(Model model, @PathVariable long filmId, @RequestParam String username) throws IOException {
+    public String deleteFilmC(Model model, @PathVariable long filmId, @RequestParam String username) {
         User loggedInUser = userSession.getUser();
         if (loggedInUser == null || !loggedInUser.getUsername().equals(username)) {
             return "redirect:/error/403";
@@ -172,7 +164,7 @@ public class FilmController {
         return "deletedCompletedFilm";
     }
     @GetMapping("/pending/{filmId}/delete")//Delete a film from the pending list
-    public String deleteFilmP(Model model, @PathVariable long filmId, @RequestParam String username) throws IOException {
+    public String deleteFilmP(Model model, @PathVariable long filmId, @RequestParam String username) {
         User loggedInUser = userSession.getUser();
 
         if (loggedInUser == null || !loggedInUser.getUsername().equals(username)) {

@@ -3,7 +3,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.dwsproject.proyectodesarrolloweb.Classes.Film;
 import org.dwsproject.proyectodesarrolloweb.Service.FilmService;
 import org.dwsproject.proyectodesarrolloweb.Service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,11 +14,15 @@ import java.util.List;
 @RequestMapping("/api/")
 public class ApiFilmController {
 
-    @Autowired
-    private FilmService filmService;
+    private final FilmService filmService;
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+
+    public ApiFilmController(FilmService filmService, UserService userService) {
+        this.filmService = filmService;
+        this.userService = userService;
+    }
 
     @GetMapping("/films")
     public ResponseEntity<List<Film>> getAllFilms(@RequestParam String username) {

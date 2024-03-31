@@ -1,27 +1,28 @@
 package org.dwsproject.proyectodesarrolloweb.Controllers;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.dwsproject.proyectodesarrolloweb.Classes.Trailer;
 import org.dwsproject.proyectodesarrolloweb.Exceptions.TrailerNotFoundException;
 import org.dwsproject.proyectodesarrolloweb.Service.TrailerService;
 import org.dwsproject.proyectodesarrolloweb.Service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/")
 public class ApiTrailerController {
-    @Autowired
-    private TrailerService trailerService;
 
-    @Autowired
-    private UserService userService;
+    private final TrailerService trailerService;
+
+    private final UserService userService;
+
+    public ApiTrailerController(TrailerService trailerService, UserService userService) {
+        this.trailerService = trailerService;
+        this.userService = userService;
+    }
 
     @PostMapping("/upload")
     public ResponseEntity<Void> uploadTrailer(@RequestParam("file") MultipartFile file, @RequestParam("title") String title, @RequestParam("description") String description, @RequestParam("username") String username) {
@@ -38,15 +39,15 @@ public class ApiTrailerController {
         List<Trailer> trailers = trailerService.getAllTrailers();
         return new ResponseEntity<>(trailers, HttpStatus.OK);
     }
-   
+
   @DeleteMapping("/index")
-    public ResponseEntity<Void> deleteTrailer(@RequestParam long trailerId, @RequestParam String username) {
+    public ResponseEntity<String> deleteTrailer(@RequestParam long trailerId, @RequestParam String username) {
         try {
             trailerService.deleteTrailer("upload", userService.findUserByUsername(username), trailerId);
             return new ResponseEntity<>(HttpStatus.OK);
         }
         catch (TrailerNotFoundException e) {
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

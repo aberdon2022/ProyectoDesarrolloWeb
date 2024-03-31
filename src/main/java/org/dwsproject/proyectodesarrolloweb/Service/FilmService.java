@@ -1,4 +1,5 @@
 package org.dwsproject.proyectodesarrolloweb.Service;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,8 +8,6 @@ import org.dwsproject.proyectodesarrolloweb.Classes.Image;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.dwsproject.proyectodesarrolloweb.Repositories.FilmRepository;
 import org.dwsproject.proyectodesarrolloweb.Specification.FilmSpecification;
-import org.dwsproject.proyectodesarrolloweb.Repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -18,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,20 +28,16 @@ public class FilmService {
     @Value("${omdb.api.key}")
     private String omdbApiKey;
 
-    @Autowired
-    private ImageService imageService;
+    private final ImageService imageService;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final FilmRepository filmRepository;
 
-    @Autowired
-    private FilmRepository filmRepository;
+    private final UserService userService;
 
-    @Autowired
-    private UserService userService;
-
-    public void saveFilm(Film film) {
-        filmRepository.save(film);
+    public FilmService(ImageService imageService, FilmRepository filmRepository, UserService userService) {
+        this.imageService = imageService;
+        this.filmRepository = filmRepository;
+        this.userService = userService;
     }
 
     public void addFilm(User user, Film film, MultipartFile imageFile, String listType) throws IOException {
@@ -95,7 +91,7 @@ public class FilmService {
         RestTemplate restTemplate = new RestTemplate();
         String omdbUrl = "https://www.omdbapi.com/?apikey=" + omdbApiKey + "&t=" + film.getTitle() + "&y=" + film.getYear();
 
-        ResponseEntity<String> response = null;
+        ResponseEntity<String> response;
 
         try {
             response = restTemplate.getForEntity(omdbUrl, String.class);
@@ -150,6 +146,23 @@ public class FilmService {
         }
         List<Film> films = userService.getCompletedFilms(user.getId());
         return ResponseEntity.ok(films);
+    }
+
+    public String addFilmWithChecks (User user, Film film, MultipartFile imageFile, String listType) throws IOException {
+        String contentType = imageFile.getContentType();
+        if (contentType != null) {
+            switch (contentType) {
+                case "image/jpeg":
+                case "image/png":
+                case "image/gif":
+                case "image/bmp":
+                    break;
+                default:
+            throw new IllegalArgumentException("Invalid image file type");
+            }
+        }
+        addFilm(user, film, imageFile, listType);
+        return listType;
     }
 
     public List<Film> findCompletedFilmsByRating(User user, int minRating, int maxRating) {

@@ -10,8 +10,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class ImageService {
-    @Autowired
-    private ImageRepository imageRepository;
+    private final ImageRepository imageRepository;
+
+    public ImageService(ImageRepository imageRepository) {
+        this.imageRepository = imageRepository;
+    }
 
     public Image createImage(MultipartFile imageFile) throws IOException {
         if (imageFile != null && !imageFile.isEmpty()) {

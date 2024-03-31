@@ -21,7 +21,6 @@ public class User {
     private String username;
     private String password;
 
-
     @OneToMany(mappedBy = "user")
     @JsonView(Views.Public.class)
     private final List<Film> pendingFilms = new ArrayList<>();

@@ -1,7 +1,6 @@
 package org.dwsproject.proyectodesarrolloweb.Controllers;
 
 import org.dwsproject.proyectodesarrolloweb.Service.ImageService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.MediaType;
 import org.springframework.core.io.Resource;
@@ -12,8 +11,12 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class ImageController {
 
-    @Autowired
-    private ImageService imageService;
+    private final ImageService imageService;
+
+    public ImageController(ImageService imageService) {
+        this.imageService = imageService;
+    }
+
     @GetMapping("/imageFile/{id}")
     public ResponseEntity<Resource> serveImage(@PathVariable long id) {
         Resource image = imageService.getImageAsResource(id);

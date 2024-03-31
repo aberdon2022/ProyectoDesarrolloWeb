@@ -3,10 +3,10 @@ package org.dwsproject.proyectodesarrolloweb.Service;
 import org.dwsproject.proyectodesarrolloweb.Classes.Film;
 import org.dwsproject.proyectodesarrolloweb.Classes.Friendship;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
+import org.dwsproject.proyectodesarrolloweb.Exceptions.FriendNotFoundException;
 import org.dwsproject.proyectodesarrolloweb.Repositories.FilmRepository;
 import org.dwsproject.proyectodesarrolloweb.Repositories.UserRepository;
 import org.dwsproject.proyectodesarrolloweb.Repositories.FriendshipRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -17,14 +17,18 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private FilmRepository filmRepository;
+    private final FilmRepository filmRepository;
 
-    @Autowired
-    private FriendshipRepository friendshipRepository;
+    private final FriendshipRepository friendshipRepository;
+
+
+    public UserService(UserRepository userRepository, FilmRepository filmRepository, FriendshipRepository friendshipRepository) {
+        this.userRepository = userRepository;
+        this.filmRepository = filmRepository;
+        this.friendshipRepository = friendshipRepository;
+    }
 
     public String registerUser (User user) {
         if (userRepository.findByUsername(user.getUsername()) == null) {//Check if the user already exists
@@ -83,7 +87,7 @@ public class UserService {
         return userRepository.findById(id).orElse(null);
     }
 
-    public String addFriend (String username, String friendUsername) {
+    public String addFriend (String username, String friendUsername) throws FriendNotFoundException{
 
         if (username.equals(friendUsername)) {
             return "You can't add yourself as a friend";
@@ -120,7 +124,7 @@ public class UserService {
 
     }
 
-    public String deleteFriend(String username, String friendUsername) {
+    public String deleteFriend(String username, String friendUsername) throws FriendNotFoundException {
         User user = userRepository.findByUsername(username);
         User friend = userRepository.findByUsername(friendUsername);
 

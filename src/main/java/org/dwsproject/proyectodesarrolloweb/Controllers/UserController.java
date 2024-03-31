@@ -95,8 +95,10 @@ public class UserController {
         redirectAttributes.addFlashAttribute("message", message);
         redirectAttributes.addFlashAttribute("loggedInUser", loggedInUser);
 
+        // Add parameters to the redirect URL
+        redirectAttributes.addAttribute("loggedInUser", loggedInUser);
         // Redirect to the user's friend list
-        return "redirect:/friends/" + loggedInUser  + "?loggedInUser=" + loggedInUser;
+        return "redirect:/friends/" + username;
     }
 
 
@@ -107,7 +109,9 @@ public class UserController {
 
         redirectAttributes.addFlashAttribute("message", message);
 
+        // Add parameters to the redirect URL
+        redirectAttributes.addAttribute("loggedInUser", loggedInUser);
         // Redirect to the user's friend list
-        return "redirect:/friends/" + username + "?loggedInUser=" + loggedInUser;
+        return "redirect:/friends/" + username;
     }
 }

@@ -6,7 +6,7 @@ import org.dwsproject.proyectodesarrolloweb.Service.ImageService;
 import org.dwsproject.proyectodesarrolloweb.Service.PostService;
 import org.dwsproject.proyectodesarrolloweb.Service.UserService;
 import org.dwsproject.proyectodesarrolloweb.Service.UserSession;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,22 +19,25 @@ import java.util.List;
 @RequestMapping("/api/posts")
 public class ApiPostController {
 
-    @Autowired
-    private PostService postService;
+    private final PostService postService;
 
-    @Autowired
-    private UserSession userSession;
+    private final UserSession userSession;
 
-    @Autowired
-    private ImageService imageService;
+    private final ImageService imageService;
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public ApiPostController(PostService postService, UserSession userSession, ImageService imageService, UserService userService) {
+        this.postService = postService;
+        this.userSession = userSession;
+        this.imageService = imageService;
+        this.userService = userService;
+    }
 
     @GetMapping("/allPosts")
     public ResponseEntity<List<Post>> showPosts() {
         List <Post> posts = new ArrayList<>(postService.findAll());
-        return ResponseEntity.ok(posts);
+        return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
     @PostMapping("/newPost")
@@ -42,7 +45,7 @@ public class ApiPostController {
         User user = userService.findUserByUsername(username);
 
         if (user == null) { //If the user does not exist, return 404
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         post.setUser(user);
@@ -53,7 +56,8 @@ public class ApiPostController {
         }
         postService.sanitizeAndSavePost(post);
         userSession.incNumPosts();
-        return ResponseEntity.ok(post);
+
+        return new ResponseEntity<>(post, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
@@ -61,20 +65,20 @@ public class ApiPostController {
         Post post = postService.findById(id);
 
         if (post != null) {
-            return ResponseEntity.ok(post);
+            return new ResponseEntity<>(post, HttpStatus.OK);
         } else {
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePost(@PathVariable long id) throws IOException {
+    public ResponseEntity<Void> deletePost(@PathVariable long id) {
         if (postService.findById(id) == null) { //If the post does not exist, return 404
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         postService.deleteById(id);
         imageService.deleteImage(id);
-        return ResponseEntity.ok().build();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
@@ -82,7 +86,7 @@ public class ApiPostController {
         Post originalPost = postService.findById(id);
 
         if (originalPost == null) { //If the post does not exist, return 404
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         post.setUser(originalPost.getUser());
@@ -94,6 +98,6 @@ public class ApiPostController {
             post.setImageId(savedImage.getId());
         }
         
-        return ResponseEntity.ok(post);
+        return new ResponseEntity<>(post, HttpStatus.OK);
     }
 }

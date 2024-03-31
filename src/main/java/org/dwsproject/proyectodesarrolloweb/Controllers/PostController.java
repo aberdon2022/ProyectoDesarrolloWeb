@@ -1,4 +1,5 @@
 package org.dwsproject.proyectodesarrolloweb.Controllers;
+
 import jakarta.servlet.http.HttpSession;
 import org.dwsproject.proyectodesarrolloweb.Classes.Image;
 import org.dwsproject.proyectodesarrolloweb.Classes.Post;
@@ -7,7 +8,6 @@ import org.dwsproject.proyectodesarrolloweb.Service.ImageService;
 import org.dwsproject.proyectodesarrolloweb.Service.PostService;
 import org.dwsproject.proyectodesarrolloweb.Service.UserService;
 import org.dwsproject.proyectodesarrolloweb.Service.UserSession;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,17 +22,20 @@ import java.util.List;
 @Controller
 public class PostController {
 
-    @Autowired
-    private PostService postService;
+    private final PostService postService;
 
-    @Autowired
-    private UserSession userSession;
+    private final UserSession userSession;
 
-    @Autowired
-    private ImageService imageService;
+    private final ImageService imageService;
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public PostController(PostService postService, UserSession userSession, ImageService imageService, UserService userService) {
+        this.postService = postService;
+        this.userSession = userSession;
+        this.imageService = imageService;
+        this.userService = userService;
+    }
 
     @GetMapping("/forum")//Show the actual posts
     public String showPosts(Model model, HttpSession session, @RequestParam(value = "username", required = false) String username) {
@@ -103,7 +106,7 @@ public class PostController {
     }
 
     @GetMapping("/post/{id}/delete")//Delete a post by its id
-    public String deletePost (Model model, @PathVariable long id) throws IOException {
+    public String deletePost (@PathVariable long id) {
         Post post = postService.findById(id);
         String loggedInUser = userSession.getUser().getUsername();
         boolean isOwner = post.getUser().getUsername().equals(loggedInUser);
@@ -119,7 +122,7 @@ public class PostController {
         }
     }
     @GetMapping("/post/{id}/edit")//Show the form to edit a post by its id
-    public String editPost(Model model, @PathVariable long id) throws IOException {
+    public String editPost(Model model, @PathVariable long id) {
         Post post = postService.findById(id);
         String loggedInUser = userSession.getUser().getUsername();
         boolean isOwner = post.getUser().getUsername().equals(loggedInUser);
