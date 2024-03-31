@@ -91,14 +91,10 @@ a.add:hover {
     background-color: #B42901;
 }
 
-#film-list > div {
-    margin: 10px;
-}
-
 #film-list {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start;
     margin: 0px 2rem 2rem;
 }
 

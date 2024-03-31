@@ -173,12 +173,12 @@ public class FilmController {
     }
     @GetMapping("/pending/{filmId}/delete")//Delete a film from the pending list
     public String deleteFilmP(Model model, @PathVariable long filmId, @RequestParam String username) throws IOException {
-        User user = userService.findUserByUsername(username);
+        User loggedInUser = userSession.getUser();
 
-        if (user == null) {
-            return "redirect:/";
+        if (loggedInUser == null || !loggedInUser.getUsername().equals(username)) {
+            return "redirect:/error/403";
         }
-        
+        User user = userService.findUserByUsername(username);
         filmService.deleteFilm(user, filmId, "pending");
         model.addAttribute("user", user);
         return "deletedPendingFilm";
