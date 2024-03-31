@@ -113,7 +113,7 @@ public class FilmService {
                     String plot = root.path("Plot").asText();
                     film.setPlot(plot);
                     int year = root.path("Year").asInt();
-                    return title.equals(film.getTitle()) && year == film.getYear();
+                    return title.equalsIgnoreCase(film.getTitle()) && year == film.getYear();
                 }
             } catch (JsonProcessingException e ) {
                 e.printStackTrace();
