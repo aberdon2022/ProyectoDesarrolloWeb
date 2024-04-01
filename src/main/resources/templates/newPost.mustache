@@ -33,13 +33,13 @@
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.3.3/purify.min.js"></script>
 <script>
-    var quill = new Quill('#editor', {
+    let quill = new Quill('#editor', {
         theme: 'snow'
     });
 
-    var form = document.getElementById('newPostForm');
+    let form = document.getElementById('newPostForm');
     form.onsubmit = function () {
-        var text = document.querySelector('input[name=text]');
+        let text = document.querySelector('input[name=text]');
         text.value = quill.root.innerHTML;
     };
 </script>

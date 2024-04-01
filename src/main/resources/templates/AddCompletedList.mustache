@@ -45,8 +45,8 @@
     </form>
     <script>
         <!--Captures the value of the selected rating and assigns it to the hidden field before submitting the form -->
-        document.getElementById('filmForm').addEventListener('submit', function (event) {
-                    var selectedRating = document.querySelector('input[name="rating"]:checked');
+        document.getElementById('filmForm').addEventListener('submit', function () {
+                    let selectedRating = document.querySelector('input[name="rating"]:checked');
                             if (selectedRating) {
                                         document.getElementById('rating').value = selectedRating.value;
                                     }

@@ -21,11 +21,11 @@
 </form>
 <script>
     // Check if the URL has 'error=true'
-    var url = window.location.href;
-    var authenticationError = url.includes('error=true');
+    let url = window.location.href;
+    let authenticationError = url.includes('error=true');
 
     if (authenticationError) {
-        var toast = document.getElementById("toast");
+        let toast = document.getElementById("toast");
         toast.style.visibility = "visible";
         setTimeout(function () {
             toast.style.visibility = "hidden";
