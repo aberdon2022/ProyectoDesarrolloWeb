@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -200,5 +201,9 @@ public class FilmService {
         }
 
         return filmRepository.findAll(spec, sortOrder);
+    }
+
+    public List<String> convertRatingToStars(int rating) {
+        return Collections.nCopies(rating, "★");
     }
 }

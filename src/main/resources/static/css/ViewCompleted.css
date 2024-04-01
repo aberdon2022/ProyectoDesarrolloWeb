@@ -95,6 +95,16 @@ a.add:hover {
     justify-content: flex-start;
     margin: 20px 2rem 2rem;
   }
+
+#film-list div.stars {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+#film-list .stars p {
+  margin-right: 10px;
+}
   
   #film-list .film-item {
     background-color: #333;
@@ -134,6 +144,14 @@ a.add:hover {
     font-size: 1rem;
     color: #bbb;
   }
+
+  .fa-star.checked {
+    color: #FFD700;
+  }
+
+    .fa-star {
+        color: #ddd;
+    }
   
   @media (max-width: 768px) {
     #film-list div {

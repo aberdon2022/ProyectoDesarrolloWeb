@@ -3,6 +3,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 public class Film {
     @Id
@@ -21,6 +23,10 @@ public class Film {
 
     @JsonView(Views.Public.class)
     private String plot;
+
+    @Transient
+    @JsonView(Views.Public.class)
+    private List<String> ratingStars;
 
     public String getPlot() {
         return plot;
@@ -41,6 +47,14 @@ public class Film {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @JsonIgnore // Break the infinite recursion
     private User user;
+
+    public void setRatingStars(List<String> ratingStars) {
+        this.ratingStars = ratingStars;
+    }
+
+    public List<String> getRatingStars() {
+        return ratingStars;
+    }
 
     public enum FilmStatus {
         PENDING,

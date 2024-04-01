@@ -134,7 +134,12 @@ public class FilmController {
             }
         }
 
+        for (Film film : completedFilms) {
+            film.setRatingStars(filmService.convertRatingToStars(film.getRating()));
+        }
+
         model.addAttribute("completed", completedFilms);
+
         return "ViewCompletedList";
     }
 
