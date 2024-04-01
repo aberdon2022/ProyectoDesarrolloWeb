@@ -3,7 +3,6 @@ package org.dwsproject.proyectodesarrolloweb.Service;
 import java.io.IOException;
 import org.dwsproject.proyectodesarrolloweb.Classes.Image;
 import org.dwsproject.proyectodesarrolloweb.Repositories.ImageRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

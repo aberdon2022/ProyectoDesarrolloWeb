@@ -1,3 +1,5 @@
+@import url("//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css");
+
 body {
   font-family: 'Roboto', sans-serif;
   margin: 15px;
@@ -62,7 +64,6 @@ h1 {
     border: none;
     font-family: 'Roboto', sans-serif;
   }
-@import url("//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css");
 
 .stars {
   width: 270px;

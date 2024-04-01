@@ -1,13 +1,11 @@
 package org.dwsproject.proyectodesarrolloweb.Classes;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-import org.hibernate.annotations.Cascade;
 
-import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @JsonIdentityInfo( //Break the infinite recursion
         generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")

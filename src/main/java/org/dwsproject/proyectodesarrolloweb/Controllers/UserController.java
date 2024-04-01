@@ -11,11 +11,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class UserController {
 
-    @Autowired
-    private UserService userService;//uses methods of the UserService class
+    private final UserService userService;//uses methods of the UserService class
 
-    @Autowired
-    private UserSession userSession;//uses methods of the UserSession class
+    private final UserSession userSession;//uses methods of the UserSession class
+
+    public UserController(UserService userService, UserSession userSession) {
+        this.userService = userService;
+        this.userSession = userSession;
+    }
 
     @GetMapping("/login")  
     public String login() {
