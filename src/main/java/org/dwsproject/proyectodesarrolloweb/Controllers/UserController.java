@@ -1,4 +1,7 @@
 package org.dwsproject.proyectodesarrolloweb.Controllers;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletResponse;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.dwsproject.proyectodesarrolloweb.Service.UserService;
 import org.dwsproject.proyectodesarrolloweb.Service.UserSession;
@@ -33,12 +36,16 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(Model model, @RequestParam String username, @RequestParam String password) {
+    public String login(Model model, @RequestParam String username, @RequestParam String password, HttpServletResponse response) {
         User user = userService.findUserByUsername(username); //Obtain the user
 
         if (user != null && userService.checkPassword(user,password)) { //If the user exists and the password is correct
             model.addAttribute("user", user);
             userSession.setUser(user);
+            Cookie cookie = new Cookie("token", user.getToken());
+            cookie.setSecure(true);
+            cookie.setHttpOnly(true);
+            response.addCookie(cookie);
             return "redirect:/profile/" + username;
         } else {
             return "redirect:/login?error=true";//If the user does not exist or the password is incorrect return to the login page with an error message

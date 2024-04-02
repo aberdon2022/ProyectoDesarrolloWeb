@@ -1,5 +1,8 @@
 package org.dwsproject.proyectodesarrolloweb.Controllers;
 import org.dwsproject.proyectodesarrolloweb.Exceptions.UnauthorizedAccessException;
+import org.dwsproject.proyectodesarrolloweb.Exceptions.UserAlreadyExistsException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -23,5 +26,10 @@ public class GlobalExceptionHandler { // This class will handle all exceptions
     @ExceptionHandler(UnauthorizedAccessException.class) // This method will handle unauthorized access exceptions
     public String handleUnauthorizedAccessException(UnauthorizedAccessException ex, RedirectAttributes redirectAttributes) {
         return "redirect:/error/401"; // Redirect to your custom error page
+    }
+
+    @ExceptionHandler(UserAlreadyExistsException.class) // This method will handle user already exists exceptions
+    public ResponseEntity<String> handleUserAlreadyExistsException(UserAlreadyExistsException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT); // Return a bad request response with the exception message
     }
 }

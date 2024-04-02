@@ -150,6 +150,10 @@ public class FilmService {
     }
 
     public String addFilmWithChecks (User user, Film film, MultipartFile imageFile, String listType) throws IOException {
+        if (user == null || film == null || imageFile == null || listType == null) {
+            throw new IllegalArgumentException("Invalid parameters");
+        }
+
         String contentType = imageFile.getContentType();
         if (contentType != null) {
             switch (contentType) {
@@ -161,6 +165,8 @@ public class FilmService {
                 default:
             throw new IllegalArgumentException("Invalid image file type");
             }
+        } else {
+            throw new IllegalArgumentException("Content type is null");
         }
         addFilm(user, film, imageFile, listType);
         return listType;
