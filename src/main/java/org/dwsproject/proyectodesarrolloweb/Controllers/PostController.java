@@ -72,6 +72,7 @@ public class PostController {
     @PostMapping("/forum/new")
     public String newPost(Model model, @RequestParam String username, Post post, @RequestParam(value = "imageFile", required = false) MultipartFile imageFile) throws IOException {
         User user = userService.findUserByUsername(username);
+        userSession.validateUser(user.getUsername());
 
         if (user != null) {
             post.setUser(user);
@@ -107,6 +108,7 @@ public class PostController {
 
     @GetMapping("/post/{id}/delete")//Delete a post by its id
     public String deletePost (@PathVariable long id) {
+        userSession.validateUser(userSession.getUser().getUsername());
         Post post = postService.findById(id);
         String loggedInUser = userSession.getUser().getUsername();
         boolean isOwner = post.getUser().getUsername().equals(loggedInUser);
@@ -123,6 +125,7 @@ public class PostController {
     }
     @GetMapping("/post/{id}/edit")//Show the form to edit a post by its id
     public String editPost(Model model, @PathVariable long id) {
+        userSession.validateUser(userSession.getUser().getUsername());
         Post post = postService.findById(id);
         String loggedInUser = userSession.getUser().getUsername();
         boolean isOwner = post.getUser().getUsername().equals(loggedInUser);

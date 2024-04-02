@@ -4,6 +4,7 @@ import org.dwsproject.proyectodesarrolloweb.Classes.Film;
 import org.dwsproject.proyectodesarrolloweb.Classes.Friendship;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.dwsproject.proyectodesarrolloweb.Exceptions.FriendNotFoundException;
+import org.dwsproject.proyectodesarrolloweb.Exceptions.UnauthorizedAccessException;
 import org.dwsproject.proyectodesarrolloweb.Repositories.FilmRepository;
 import org.dwsproject.proyectodesarrolloweb.Repositories.UserRepository;
 import org.dwsproject.proyectodesarrolloweb.Repositories.FriendshipRepository;
@@ -23,11 +24,14 @@ public class UserService {
 
     private final FriendshipRepository friendshipRepository;
 
+    private final UserSession userSession;
 
-    public UserService(UserRepository userRepository, FilmRepository filmRepository, FriendshipRepository friendshipRepository) {
+
+    public UserService(UserRepository userRepository, FilmRepository filmRepository, FriendshipRepository friendshipRepository, UserSession userSession) {
         this.userRepository = userRepository;
         this.filmRepository = filmRepository;
         this.friendshipRepository = friendshipRepository;
+        this.userSession = userSession;
     }
 
     public String registerUser (User user) {

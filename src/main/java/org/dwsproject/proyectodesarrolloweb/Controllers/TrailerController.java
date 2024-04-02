@@ -22,8 +22,8 @@ import java.util.List;
 public class TrailerController {
 
     private final TrailerService trailerService;
-
     private final UserSession userSession;
+
 
     public TrailerController(TrailerService trailerService, UserSession userSession) {
         this.trailerService = trailerService;
@@ -34,6 +34,7 @@ public class TrailerController {
     public String uploadTrailer(@RequestParam("file") MultipartFile file, @RequestParam("title") String title, @RequestParam("description") String description, RedirectAttributes redirectAttributes) {
 
         User user = userSession.getUser();
+        userSession.validateUser(user.getUsername());
 
         try {
             boolean uploadResult = trailerService.uploadTrailer(file, title, description, user);
@@ -54,8 +55,9 @@ public class TrailerController {
     @GetMapping("/delete/{id}")
     public String deleteTrailer(Model model, @PathVariable Long id, RedirectAttributes redirectAttributes) {
         User user = userSession.getUser();
+        userSession.validateUser(user.getUsername());
 
-        if (user == null || !user.getUsername().equals("admin")) {
+        if (!user.getUsername().equals("admin")) {
             return "redirect:/login";
         }
 

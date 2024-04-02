@@ -65,6 +65,7 @@ public class UserController {
 
     @GetMapping("/profile/{username}")
     public String profile(Model model, @PathVariable String username) {
+        userSession.validateUser(username);
         User user = userService.findUserByUsername(username);
 
         if (user != null) {
@@ -78,13 +79,13 @@ public class UserController {
     @GetMapping("/friends/{username}")
     public String friends(Model model, @PathVariable String username) {
         User user = userService.findUserByUsername(username); // Retrieve the user from the database
-        User loggedInUserObj = userSession.getUser(); // Retrieve the logged-in user from the database
+        User loggedInUser = userSession.getUser(); // Retrieve the logged-in user from the database
 
         if (user != null) {
             model.addAttribute("friend", user);// Add the user's data to the model
             model.addAttribute("friends", userService.getFriends(user));// Add the user's friends to the model
-            model.addAttribute("isOwner", user.equals(loggedInUserObj));// Add a boolean to the model that indicates whether the logged-in user is the owner of the profile
-            model.addAttribute("loggedInUser", loggedInUserObj);
+            model.addAttribute("isOwner", user.equals(loggedInUser));// Add a boolean to the model that indicates whether the logged-in user is the owner of the profile
+            model.addAttribute("loggedInUser", loggedInUser);
             return "Friend";
         } else {
             return "redirect:/error/403"; //
