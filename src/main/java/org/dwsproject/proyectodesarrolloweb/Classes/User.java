@@ -19,6 +19,16 @@ public class User {
     private String username;
     private String password;
 
+    @Column(name = "token")
+    private String token;
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
     @OneToMany(mappedBy = "user")
     @JsonView(Views.Public.class)
     private final List<Film> pendingFilms = new ArrayList<>();
@@ -40,6 +50,7 @@ public class User {
     public User(String username, String password) {
         this.username = username;
         this.password = password;
+        this.token = UUID.randomUUID().toString();
     }
 
 
@@ -63,11 +74,11 @@ public class User {
         return friendships;
     }
 
-    public void addFriend (Friendship friendship) {
+    public void addFriend(Friendship friendship) {
         this.friendships.add(friendship);
     }
 
-    public void deleteFriend (Friendship friendship) {
+    public void deleteFriend(Friendship friendship) {
         this.friendships.remove(friendship);
     }
 

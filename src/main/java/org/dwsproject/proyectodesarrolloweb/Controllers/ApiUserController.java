@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -31,12 +32,33 @@ public class ApiUserController {
         this.userRepository = userRepository;
     }
 
+    @PostMapping("/register")
+    public ResponseEntity<User> register(@RequestBody User newUser) {
+        // Make sure the username isn't taken
+        User existingUser = userService.findUserByUsername(newUser.getUsername());
+
+        if (existingUser != null) {
+            try {
+                throw new UserAlreadyExistsException("Username already exists");
+            } catch (UserAlreadyExistsException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        // Set password and token for new user
+        newUser.setPassword(newUser.getPassword()); // you can use a password encoder
+        newUser.setToken(UUID.randomUUID().toString());
+
+        userRepository.save(newUser);
+
+        return new ResponseEntity<>(newUser, HttpStatus.OK);
+    }
 
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestParam String username, @RequestParam String password) {
         User user = userRepository.findByUsername(username);
 
-        if (user != null && userService.checkPassword(user,password)) {
+        if (user != null && userService.checkPassword(user, password)) {
             userSession.setUser(user);
             return new ResponseEntity<>(user, HttpStatus.OK);
         } else {
@@ -56,7 +78,13 @@ public class ApiUserController {
 
 
     @GetMapping("/friends/{username}")
-    public ResponseEntity<Map<String, Object>> friends(@PathVariable String username) {
+    public ResponseEntity<Map<String, Object>> friends(@PathVariable String username, @RequestHeader(value = "Authorization") String token) {
+        User tokenUser = userService.findUserByToken(token);
+
+        if (tokenUser == null || !tokenUser.getUsername().equals(username)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
         User user = userService.findUserByUsername(username);
 
         if (user != null) {

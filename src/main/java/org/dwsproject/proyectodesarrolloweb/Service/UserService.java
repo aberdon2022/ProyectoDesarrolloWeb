@@ -146,5 +146,9 @@ public class UserService {
             return "User or friend not found";
         }
     }
+
+    public User findUserByToken(String token) {
+        return userRepository.findByToken(token);
+    }
 }
 

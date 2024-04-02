@@ -8,6 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.UUID;
+
 @Controller
 public class UserController {
 
@@ -51,6 +53,10 @@ public class UserController {
     @PostMapping("/register")
     public String register(Model model, @RequestParam String username, @RequestParam String password, RedirectAttributes redirectAttributes) {
         User user = new User(username, password); //Create a new user
+
+        String token = UUID.randomUUID().toString();
+        user.setToken(token);
+
         String message = userService.registerUser(user); //Register the user
 
         if (message.equals("User registered successfully")) {
