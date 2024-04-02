@@ -11,8 +11,8 @@
     <a href="/logout" class="logout">Logout</a>
     <h2>Profile</h2>
     <div class="friendsImg">
-        <a href="/friends/{{user.username}}?loggedInUser={{user.username}}" class= "friends">Friends</a>
-        <a href="/friends/{{user.username}}?loggedInUser={{user.username}}">
+        <a href="/friends/{{loggedInUser.username}}?loggedInUser={{loggedInUser.username}}" class= "friends">Friends</a>
+        <a href="/friends/{{loggedInUser.username}}?loggedInUser={{loggedInUser.username}}">
             <img src="/images/friends1.png" alt="Friends">
         </a>
     </div>

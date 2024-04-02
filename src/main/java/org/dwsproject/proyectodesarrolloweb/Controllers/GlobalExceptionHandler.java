@@ -1,4 +1,5 @@
 package org.dwsproject.proyectodesarrolloweb.Controllers;
+import org.dwsproject.proyectodesarrolloweb.Exceptions.FriendException;
 import org.dwsproject.proyectodesarrolloweb.Exceptions.UnauthorizedAccessException;
 import org.dwsproject.proyectodesarrolloweb.Exceptions.UserAlreadyExistsException;
 import org.springframework.http.HttpStatus;
@@ -24,12 +25,17 @@ public class GlobalExceptionHandler { // This class will handle all exceptions
     }
 
     @ExceptionHandler(UnauthorizedAccessException.class) // This method will handle unauthorized access exceptions
-    public String handleUnauthorizedAccessException(UnauthorizedAccessException ex, RedirectAttributes redirectAttributes) {
-        return "redirect:/error/401"; // Redirect to your custom error page
+    public ResponseEntity<String> handleUnauthorizedAccessException(UnauthorizedAccessException ex, RedirectAttributes redirectAttributes) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED); // Redirect to your custom error page
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class) // This method will handle user already exists exceptions
     public ResponseEntity<String> handleUserAlreadyExistsException(UserAlreadyExistsException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT); // Return a bad request response with the exception message
+    }
+
+    @ExceptionHandler(FriendException.class) // This method will handle friend not found exceptions
+    public ResponseEntity<String> handleFriendNotFoundException(FriendException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND); // Return a not found response with the exception message
     }
 }

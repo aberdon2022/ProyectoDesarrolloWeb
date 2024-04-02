@@ -1,11 +1,10 @@
 package org.dwsproject.proyectodesarrolloweb.Controllers;
 import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletResponse;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
+import org.dwsproject.proyectodesarrolloweb.Exceptions.FriendException;
 import org.dwsproject.proyectodesarrolloweb.Service.UserService;
 import org.dwsproject.proyectodesarrolloweb.Service.UserSession;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -80,9 +79,11 @@ public class UserController {
     public String profile(Model model, @PathVariable String username) {
         userSession.validateUser(username);
         User user = userService.findUserByUsername(username);
+        User loggedInUser = userSession.getUser();
 
         if (user != null) {
             model.addAttribute("user", user);
+            model.addAttribute("loggedInUser", loggedInUser);
             return "profile";
         } else {
             return "redirect:/login"; // Redirect if user not found
@@ -90,15 +91,19 @@ public class UserController {
     }
 
     @GetMapping("/friends/{username}")
-    public String friends(Model model, @PathVariable String username) {
+    public String friends(Model model, @PathVariable String username, @RequestParam String loggedInUser) {
         User user = userService.findUserByUsername(username); // Retrieve the user from the database
-        User loggedInUser = userSession.getUser(); // Retrieve the logged-in user from the database
+        User sessionUser = userSession.getUser(); // Retrieve the logged-in user from the database
+
+        if (sessionUser == null || !sessionUser.getUsername().equals(loggedInUser) || !sessionUser.getUsername().equals(username)) {
+            return "redirect:/error/403";
+        }
 
         if (user != null) {
             model.addAttribute("friend", user);// Add the user's data to the model
             model.addAttribute("friends", userService.getFriends(user));// Add the user's friends to the model
-            model.addAttribute("isOwner", user.equals(loggedInUser));// Add a boolean to the model that indicates whether the logged-in user is the owner of the profile
-            model.addAttribute("loggedInUser", loggedInUser);
+            model.addAttribute("isOwner", user.equals(sessionUser));// Add a boolean to the model that indicates whether the logged-in user is the owner of the profile
+            model.addAttribute("loggedInUser", sessionUser);
             return "Friend";
         } else {
             return "redirect:/error/403"; //
@@ -107,9 +112,19 @@ public class UserController {
 
     @PostMapping("/friends/{username}/add")
     public String addFriend(Model model, @PathVariable String username, @RequestParam String friendUsername, @RequestParam String loggedInUser, RedirectAttributes redirectAttributes) {
+        User sessionUser = userSession.getUser();
 
-        String message = userService.addFriend(username, friendUsername);
-        redirectAttributes.addFlashAttribute("message", message);
+        if (sessionUser == null || !sessionUser.getUsername().equals(loggedInUser) || !sessionUser.getUsername().equals(username)) {
+            return "redirect:/error/403";
+        }
+
+        try {
+            String message = userService.addFriend(username, friendUsername);
+            redirectAttributes.addFlashAttribute("message", message);
+        } catch (FriendException e) {
+            redirectAttributes.addFlashAttribute("message", e.getMessage());
+        }
+
         redirectAttributes.addFlashAttribute("loggedInUser", loggedInUser);
 
         // Add parameters to the redirect URL

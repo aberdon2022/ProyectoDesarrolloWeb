@@ -1,6 +1,8 @@
 package org.dwsproject.proyectodesarrolloweb.Controllers;
 
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.dwsproject.proyectodesarrolloweb.Classes.Friendship;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.dwsproject.proyectodesarrolloweb.Exceptions.UnauthorizedAccessException;
@@ -9,6 +11,7 @@ import org.dwsproject.proyectodesarrolloweb.Exceptions.UserNotFoundException;
 import org.dwsproject.proyectodesarrolloweb.Repositories.UserRepository;
 import org.dwsproject.proyectodesarrolloweb.Service.UserService;
 import org.dwsproject.proyectodesarrolloweb.Service.UserSession;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Comparator;
@@ -19,6 +22,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/users")
+@Validated
 public class ApiUserController {
 
     private final UserService userService;
@@ -48,12 +52,14 @@ public class ApiUserController {
     }
 
     @PostMapping("/login")
-    public User login(@RequestParam String username, @RequestParam String password, HttpServletResponse response) throws UnauthorizedAccessException {
+    public User login(@RequestParam String username, @RequestParam String password, @RequestHeader(value = "Authorization") String token, HttpServletResponse response) throws UnauthorizedAccessException {
         User user = userRepository.findByUsername(username);
 
         if (user != null && userService.checkPassword(user, password)) {
+            if (!user.getToken().equals(token)) {
+                throw new UnauthorizedAccessException("Invalid token");
+            }
             userSession.setUser(user);
-            String token = user.getToken();
             response.setHeader("Authorization", token);
             return user;
         } else {
@@ -62,8 +68,14 @@ public class ApiUserController {
     }
 
     @GetMapping("/profile/{username}")
-    public User profile(@PathVariable String username) throws UserNotFoundException {
-        User user = userService.getUserProfile(username);
+    public User profile(@PathVariable String username, @RequestHeader(value = "Authorization") String token) throws UserNotFoundException, UnauthorizedAccessException {
+        User authenticatedUser = userSession.getUser(); // Get the authenticated user
+
+        if (authenticatedUser == null || !authenticatedUser.getUsername().equals(username)) { // If the authenticated user is null or the username is not the same as the authenticated user
+            throw new UnauthorizedAccessException("Access denied");
+        }
+
+        User user = userService.findUserByUsername(username);
         if (user == null) {
             throw new UserNotFoundException("User not found");
         }
@@ -94,7 +106,13 @@ public class ApiUserController {
     }
 
     @PostMapping("/friends/{username}/add")
-    public Map<String, String> addFriend(@PathVariable String username, @NotNull @RequestParam String friendUsername) {
+    public Map<String, String> addFriend(@PathVariable String username, @Valid @NotNull @RequestParam String friendUsername) throws UnauthorizedAccessException {
+        User authenticatedUser = userSession.getUser();
+
+        if (authenticatedUser == null || !authenticatedUser.getUsername().equals(username)) {
+            throw new UnauthorizedAccessException("Access denied");
+        }
+
         String result = userService.addFriend(username, friendUsername);
         Map<String, String> response = new HashMap<>();
         response.put("message", result);
@@ -102,7 +120,13 @@ public class ApiUserController {
     }
 
     @DeleteMapping("/friends/{username}/delete")
-    public void deleteFriend(@PathVariable String username, @NotNull @RequestParam String friendUsername) {
+    public void deleteFriend(@PathVariable String username, @Valid @NotNull @RequestParam String friendUsername) throws UnauthorizedAccessException {
+        User authenticatedUser = userSession.getUser();
+
+        if (authenticatedUser == null || !authenticatedUser.getUsername().equals(username)) {
+            throw new UnauthorizedAccessException("Access denied");
+        }
+
         userService.deleteFriend(username, friendUsername);
     }
 }

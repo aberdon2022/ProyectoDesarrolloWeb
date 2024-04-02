@@ -3,8 +3,7 @@ package org.dwsproject.proyectodesarrolloweb.Service;
 import org.dwsproject.proyectodesarrolloweb.Classes.Film;
 import org.dwsproject.proyectodesarrolloweb.Classes.Friendship;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
-import org.dwsproject.proyectodesarrolloweb.Exceptions.FriendNotFoundException;
-import org.dwsproject.proyectodesarrolloweb.Exceptions.UnauthorizedAccessException;
+import org.dwsproject.proyectodesarrolloweb.Exceptions.FriendException;
 import org.dwsproject.proyectodesarrolloweb.Repositories.FilmRepository;
 import org.dwsproject.proyectodesarrolloweb.Repositories.UserRepository;
 import org.dwsproject.proyectodesarrolloweb.Repositories.FriendshipRepository;
@@ -91,7 +90,7 @@ public class UserService {
         return userRepository.findById(id).orElse(null);
     }
 
-    public String addFriend (String username, String friendUsername) throws FriendNotFoundException{
+    public String addFriend (String username, String friendUsername) throws FriendException {
 
         if (username.equals(friendUsername)) {
             return "You can't add yourself as a friend";
@@ -128,7 +127,7 @@ public class UserService {
 
     }
 
-    public String deleteFriend(String username, String friendUsername) throws FriendNotFoundException {
+    public String deleteFriend(String username, String friendUsername) throws FriendException {
         User user = userRepository.findByUsername(username);
         User friend = userRepository.findByUsername(friendUsername);
 
@@ -140,10 +139,10 @@ public class UserService {
                 friendshipRepository.delete(friendship2);
                 return "Friend deleted successfully";
             } else {
-                return "Friend not found";
+                throw new FriendException("Friend not found");
             }
         } else {
-            return "User or friend not found";
+            throw new FriendException("User or friend not found");
         }
     }
 
