@@ -12,7 +12,6 @@
         <div>
             <p>Friend: {{username}}
                 {{#isOwner}}
-                    <a href="/friends/{{username}}?loggedInUser={{loggedInUser.username}}" class="view">View friend</a>
                     <a href="/friends/{{loggedInUser.username}}/delete?friendUsername={{username}}&loggedInUser={{loggedInUser.username}}" class="delete">Delete friend</a>
                 {{/isOwner}}
             </p>
@@ -32,9 +31,6 @@
     <button type="submit">Add friend</button>
     </form>
     <a href="/profile/{{friend.username}}" class="button">Return to Profile</a>
-{{/isOwner}}
-{{^isOwner}}
-<a href="/friends/{{loggedInUser.username}}?loggedInUser={{loggedInUser.username}}" class="button">Return to My Page</a>
 {{/isOwner}}
 </body>
 </html>

@@ -98,7 +98,7 @@ a.add:hover {
 #film-list {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start;
     margin: 20px 2rem 2rem;
 }
 
