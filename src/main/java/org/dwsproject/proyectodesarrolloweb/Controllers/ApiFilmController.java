@@ -39,7 +39,7 @@ public class ApiFilmController {
         return filmService.getCompletedFilms(username);
     }
 
-    @PostMapping("/addpeli")
+    @PostMapping("/films/addpeli")
     public ResponseEntity<Void> createFilm (@RequestPart("film") String filmJson, @RequestParam("image") MultipartFile imageFile, @RequestParam("listType") String listType, @RequestParam("username") String username) {
         try {
             filmService.addFilm(userService.findUserByUsername(username), new ObjectMapper().readValue(filmJson, Film.class), imageFile, listType);
@@ -51,20 +51,20 @@ public class ApiFilmController {
 
     @DeleteMapping("/films/completed")
     public ResponseEntity<Void> deleteFilmC (@RequestParam long filmId, @RequestParam String username) {
-        try {
-            filmService.deleteFilm(userService.findUserByUsername(username), filmId, "completed");
+        boolean deleted = filmService.deleteFilm(userService.findUserByUsername(username), filmId, "completed");
+        if (deleted) {
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
+        } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     @DeleteMapping("/films/pending")
     public ResponseEntity<Void> deleteFilmP (@RequestParam long filmId, @RequestParam String username) {
-        try {
-            filmService.deleteFilm(userService.findUserByUsername(username), filmId, "pending");
+        boolean deleted = filmService.deleteFilm(userService.findUserByUsername(username), filmId, "pending");
+        if (deleted) {
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
+        } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

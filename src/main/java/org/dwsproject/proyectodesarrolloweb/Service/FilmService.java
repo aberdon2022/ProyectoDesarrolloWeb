@@ -64,7 +64,7 @@ public class FilmService {
         userService.saveUser(user);
     }
 
-    public void deleteFilm(User user, long filmId, String listType) {
+    public boolean deleteFilm(User user, long filmId, String listType) {
         List<Film> films = "pending".equals(listType) ? userService.getPendingFilms(user.getId()) : userService.getCompletedFilms(user.getId());
         Film filmToDelete = null;
 
@@ -83,8 +83,10 @@ public class FilmService {
             userService.saveUser(user);
             filmRepository.delete(filmToDelete); // Delete the film from the repository
             imageService.deleteImage(filmToDelete.getImageId());
+            return true;
         } else {
             System.out.println("Film not found in the list");
+            return false;
         }
     }
 

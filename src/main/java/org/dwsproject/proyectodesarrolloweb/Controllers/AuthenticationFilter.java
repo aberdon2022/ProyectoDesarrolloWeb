@@ -23,24 +23,56 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String authHeader = request.getHeader("Authorization");
+        String token = request.getHeader("Authorization");
 
-        if (authHeader != null) {
-            String token = authHeader;
+        if (token != null) {
             User user = userService.findUserByToken(token);
+            String username = getUsername(request, user);
 
-            if (user != null && user.getToken().equals(token)) {
-                //If the token is valid, the user is authenticated and the request is allowed to continue
-                userSession.setUser(user);
-                request.setAttribute("authenticatedUser", user);
-                filterChain.doFilter(request, response);
+            if (isUserAuthenticated(user, token, username)) {
+                setUserSessionAndContinueFilter(user, request, response, filterChain);
             } else {
-                //If the token is invalid, the user is not authenticated and the request is rejected
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                rejectRequest(response);
             }
         } else {
-            //If the token is not present, the user is not authenticated and the request is rejected
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            rejectRequest(response);
         }
+    }
+
+    private String getUsername(HttpServletRequest request, User user) {
+        String username = request.getParameter("username");
+        if (username == null) {
+            username = getUsernameFromURI(request);
+        }
+        if (username == null && user != null) {
+            username = user.getUsername();
+        }
+        return username;
+    }
+
+    private String getUsernameFromURI(HttpServletRequest request) {
+        String requestURI = request.getRequestURI();
+        String[] parts = requestURI.split("/");
+        for (String part: parts) {
+            User potentialUser = userService.findUserByUsername(part);
+            if (potentialUser != null) {
+                return part;
+            }
+        }
+        return null;
+    }
+
+    private boolean isUserAuthenticated(User user, String token, String username) {
+        return user != null && user.getToken().equals(token) && user.getUsername().equals(username);
+    }
+
+    private void setUserSessionAndContinueFilter(User user, HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
+        userSession.setUser(user);
+        request.setAttribute("authenticatedUser", user);
+        filterChain.doFilter(request, response);
+    }
+
+    private void rejectRequest(HttpServletResponse response) {
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     }
 }

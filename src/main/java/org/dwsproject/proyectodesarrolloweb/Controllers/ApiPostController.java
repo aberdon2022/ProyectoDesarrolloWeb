@@ -72,7 +72,18 @@ public class ApiPostController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePost(@PathVariable long id) {
+    public ResponseEntity<Void> deletePost(@PathVariable long id, @RequestParam String username) {
+        Post post = postService.findById(id);
+        User user = userService.findUserByUsername(username);
+
+        if (post == null || user == null) { //If the post does not exist, return 404
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        if (!post.getUser().getUsername().equals(username)) { //If the user is not the owner of the post, return 403
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
         if (postService.findById(id) == null) { //If the post does not exist, return 404
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -82,11 +93,16 @@ public class ApiPostController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Post> editPost(Post post, @RequestParam(required = false) MultipartFile image, @PathVariable long id) throws IOException {
+    public ResponseEntity<Post> editPost(Post post, @RequestParam(required = false) MultipartFile image, @PathVariable long id, @RequestParam String username) throws IOException {
         Post originalPost = postService.findById(id);
+        User user = userService.findUserByUsername(username);
 
-        if (originalPost == null) { //If the post does not exist, return 404
+        if (originalPost == null || user == null) { //If the post does not exist, return 404
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        if (!originalPost.getUser().getUsername().equals(username)) { //If the user is not the owner of the post, return 403
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         post.setUser(originalPost.getUser());
