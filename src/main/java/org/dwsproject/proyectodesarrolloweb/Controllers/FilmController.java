@@ -123,6 +123,9 @@ public class FilmController {
                 completedFilms = userService.getCompletedFilms(user.getId());
                 model.addAttribute("filmNotFound", true);
                 model.addAttribute("completed", completedFilms);
+                for (Film film : completedFilms) {
+                    film.setRatingStars(filmService.convertRatingToStars(film.getRating()));
+                }
                 return "ViewCompletedList";
             }
         }
