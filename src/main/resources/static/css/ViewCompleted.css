@@ -68,6 +68,7 @@ a.add:hover {
   background-color: #2E4F9B;
 }
 
+
 #film-list div div img{
   position: relative;
   display: inline-block;
@@ -87,6 +88,17 @@ a.add:hover {
 }
 #film-list div div img:hover {
   background-color: #B42901;
+}
+
+#film-list div.stars {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: yellow;
+}
+
+#film-list .stars p {
+  margin-right: 10px;
 }
 
   #film-list {
