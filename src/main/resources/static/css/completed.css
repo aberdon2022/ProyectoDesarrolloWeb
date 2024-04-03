@@ -17,8 +17,8 @@ body::before {
   width: 100%;
   height: 100%;
   background: url('../images/series-netflix.webp') center/cover;
-  opacity: 0.4; /* Cambia la opacidad de la imagen de fondo */
-  z-index: -1; /* Coloca el pseudo-elemento detrás del contenido */
+  opacity: 0.4;
+  z-index: -1;
   filter: blur(5px);
 }
 h1 {
@@ -119,3 +119,20 @@ label.star:before {
   #filmForm input[type="submit"]:hover {
     background-color: #3B558A;
   }
+
+a.Cancel {
+  display: inline-block;
+  padding: 1rem;
+  background-color: #ED361D;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 10px;
+  margin-top: 10px;
+  font-family: 'Roboto', sans-serif;
+  text-align: center;
+  font-size: 12px;
+  transition: background-color 0.1s ease;
+}
+a.Cancel:hover {
+  background-color: #B42901;
+}
