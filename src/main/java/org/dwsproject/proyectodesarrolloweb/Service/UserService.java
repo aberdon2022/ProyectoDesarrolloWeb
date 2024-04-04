@@ -1,5 +1,6 @@
 package org.dwsproject.proyectodesarrolloweb.Service;
 
+import jakarta.servlet.http.Cookie;
 import org.dwsproject.proyectodesarrolloweb.Classes.Film;
 import org.dwsproject.proyectodesarrolloweb.Classes.Friendship;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,12 +35,16 @@ public class UserService {
         this.userSession = userSession;
     }
 
-    public String registerUser (User user) {
+    public User registerUser (String username, String password) {//Register a new user (
+        User user = new User(username, password);
+        generateToken(user);
         if (userRepository.findByUsername(user.getUsername()) == null) {//Check if the user already exists
             userRepository.save(user);//Save the user
-            return "User registered successfully";
+            Cookie cookie = new Cookie("token", user.getToken());
+            cookie.setHttpOnly(true);
+            return user;
         } else {
-            return "User already exists";
+            throw new RuntimeException("User already exists");
         }
     }
 
@@ -55,19 +61,6 @@ public class UserService {
 
     public List<Film> getPendingFilms (Long userId) {
         return filmRepository.findByUserIdAndStatus(userId, Film.FilmStatus.PENDING);
-    }
-
-    public User getUserProfile (String username) {
-        User user = findUserByUsername(username);
-        if (user != null) {
-            // Fetch pending and completed films directly from the database
-            List<Film> pendingFilms = filmRepository.findByUserIdAndStatus(user.getId(), Film.FilmStatus.PENDING);
-            List<Film> completedFilms = filmRepository.findByUserIdAndStatus(user.getId(), Film.FilmStatus.COMPLETED);
-
-            user.setPendingFilms(pendingFilms);
-            user.setCompletedFilms(completedFilms);
-        }
-        return user;
     }
 
     public List<Film> getCompletedFilms (Long userId) {
@@ -148,6 +141,11 @@ public class UserService {
 
     public User findUserByToken(String token) {
         return userRepository.findByToken(token);
+    }
+
+    public void generateToken(User user) {
+        String token = UUID.randomUUID().toString();
+        user.setToken(token);
     }
 }
 

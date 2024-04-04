@@ -10,8 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.UUID;
-
 @Controller
 public class UserController {
 
@@ -42,7 +40,6 @@ public class UserController {
             model.addAttribute("user", user);
             userSession.setUser(user);
             Cookie cookie = new Cookie("token", user.getToken());
-            cookie.setSecure(true);
             cookie.setHttpOnly(true);
             response.addCookie(cookie);
             return "redirect:/profile/" + username;
@@ -57,20 +54,17 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String register(Model model, @RequestParam String username, @RequestParam String password, RedirectAttributes redirectAttributes) {
-        User user = new User(username, password); //Create a new user
-
-        String token = UUID.randomUUID().toString();
-        user.setToken(token);
-
-        String message = userService.registerUser(user); //Register the user
-
-        if (message.equals("User registered successfully")) {
-            model.addAttribute("user", user);
+    public String register(Model model, @RequestParam String username, @RequestParam String password, RedirectAttributes redirectAttributes, HttpServletResponse response) {
+        try {
+            User user = userService.registerUser(username, password);
+            model.addAttribute("user", user);//Add the user to the model
             userSession.setUser(user);
+            Cookie cookie = new Cookie("token", user.getToken());
+            cookie.setHttpOnly(true);
+            response.addCookie(cookie);
             return "redirect:/profile/" + username;
-        } else {
-            redirectAttributes.addFlashAttribute("message", message);
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("message", e.getMessage());
             return "redirect:/register";
         }
     }

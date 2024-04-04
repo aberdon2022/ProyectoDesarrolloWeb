@@ -1,4 +1,5 @@
 package org.dwsproject.proyectodesarrolloweb.Service;
+import jakarta.servlet.http.Cookie;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.dwsproject.proyectodesarrolloweb.Exceptions.UnauthorizedAccessException;
 import org.dwsproject.proyectodesarrolloweb.Repositories.UserRepository;
@@ -15,13 +16,16 @@ import java.util.UUID;
 @SessionScope
 public class UserSession {//information about the actual user
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
     private User user;
     private int numPosts;
+
+    public UserSession(UserRepository userRepository, UserService userService) {
+        this.userRepository = userRepository;
+        this.userService = userService;
+    }
 
     public void setUser(User user) {
         this.user = user;
@@ -48,23 +52,6 @@ public class UserSession {//information about the actual user
             } catch (UnauthorizedAccessException e) {
                 throw new RuntimeException(e);
             }
-        }
-    }
-
-    public boolean validateUserToken(String token) {
-        User user = userRepository.findByToken(token);
-        return user != null;
-    }
-
-    public String loginUser(String username, String password) throws UnauthorizedAccessException {
-        User user = userRepository.findByUsername(username);
-        if(user != null && userService.checkPassword(user,password)) {
-            String token = UUID.randomUUID().toString();
-            user.setToken(token);
-            userRepository.save(user);
-            return token;
-        } else {
-            throw new UnauthorizedAccessException("Username or password is incorrect.");
         }
     }
 }
