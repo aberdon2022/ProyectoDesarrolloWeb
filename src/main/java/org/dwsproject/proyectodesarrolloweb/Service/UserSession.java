@@ -1,16 +1,10 @@
 package org.dwsproject.proyectodesarrolloweb.Service;
-import jakarta.servlet.http.Cookie;
+
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.dwsproject.proyectodesarrolloweb.Exceptions.UnauthorizedAccessException;
 import org.dwsproject.proyectodesarrolloweb.Repositories.UserRepository;
-import org.hibernate.annotations.AttributeAccessor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
-
-import java.util.Base64;
-import java.util.StringTokenizer;
-import java.util.UUID;
 
 @Component
 @SessionScope

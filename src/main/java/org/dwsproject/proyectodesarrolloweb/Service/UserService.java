@@ -25,14 +25,11 @@ public class UserService {
 
     private final FriendshipRepository friendshipRepository;
 
-    private final UserSession userSession;
-
 
     public UserService(UserRepository userRepository, FilmRepository filmRepository, FriendshipRepository friendshipRepository, UserSession userSession) {
         this.userRepository = userRepository;
         this.filmRepository = filmRepository;
         this.friendshipRepository = friendshipRepository;
-        this.userSession = userSession;
     }
 
     public User registerUser (String username, String password) {//Register a new user (
