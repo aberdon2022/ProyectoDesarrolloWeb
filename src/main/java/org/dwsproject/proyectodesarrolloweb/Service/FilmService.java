@@ -12,11 +12,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+import org.apache.tika.Tika;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -156,14 +158,24 @@ public class FilmService {
             throw new IllegalArgumentException("Invalid parameters");
         }
 
-        String contentType = imageFile.getContentType();
-        if (contentType != null) {
-            if (!contentType.equals("image/jpeg") && !contentType.equals("image/png") && !contentType.equals("image/gif") && !contentType.equals("image/bmp")) {
-            throw new IllegalArgumentException("Invalid image file type");
-            }
-        } else {
-            throw new IllegalArgumentException("Content type is null");
+        User existingUser = userService.findUserByUsername(user.getUsername());
+        if (existingUser == null) {
+            throw new IllegalArgumentException("User does not exist");
         }
+
+        if (film.getTitle() == null || film.getYear() == 0 || film.getTitle().isEmpty() || film.getYear() < 1900){
+            throw new IllegalArgumentException("Invalid film title or year");
+        }
+
+        // Verify the image file with Apache Tika
+        Tika tika = new Tika();
+        String type = tika.detect(imageFile.getBytes());
+        MediaType mediaType = MediaType.parseMediaType(type);
+
+        if (!mediaType.equals(MediaType.IMAGE_JPEG) && !mediaType.equals(MediaType.IMAGE_PNG)) {
+            throw new IllegalArgumentException("Invalid image file type");
+        }
+
         addFilm(user, film, imageFile, listType);
         return listType;
     }

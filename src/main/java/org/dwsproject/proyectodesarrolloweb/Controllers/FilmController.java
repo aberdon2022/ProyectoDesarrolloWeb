@@ -71,7 +71,7 @@ public class FilmController {
     }
 
     @GetMapping("/pending")//Show the pending list
-    public String viewPending(Model model, @RequestParam String username, @RequestParam (required = false) String sort, @RequestParam (required = false) String order, @RequestParam (required = false) String title) throws UnauthorizedAccessException {
+    public String viewPending(Model model, @RequestParam String username, @RequestParam (required = false) String sort, @RequestParam (required = false) String order, @RequestParam (required = false) String title) {
         userSession.validateUser(username);
         User user = userService.findUserByUsername(username);
         model.addAttribute("user", user);
