@@ -158,13 +158,7 @@ public class FilmService {
 
         String contentType = imageFile.getContentType();
         if (contentType != null) {
-            switch (contentType) {
-                case "image/jpeg":
-                case "image/png":
-                case "image/gif":
-                case "image/bmp":
-                    break;
-                default:
+            if (!contentType.equals("image/jpeg") && !contentType.equals("image/png") && !contentType.equals("image/gif") && !contentType.equals("image/bmp")) {
             throw new IllegalArgumentException("Invalid image file type");
             }
         } else {
