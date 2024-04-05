@@ -167,15 +167,6 @@ public class FilmService {
             throw new IllegalArgumentException("Invalid film title or year");
         }
 
-        // Verify the image file with Apache Tika
-        Tika tika = new Tika();
-        String type = tika.detect(imageFile.getBytes());
-        MediaType mediaType = MediaType.parseMediaType(type);
-
-        if (!mediaType.equals(MediaType.IMAGE_JPEG) && !mediaType.equals(MediaType.IMAGE_PNG)) {
-            throw new IllegalArgumentException("Invalid image file type");
-        }
-
         addFilm(user, film, imageFile, listType);
         return listType;
     }

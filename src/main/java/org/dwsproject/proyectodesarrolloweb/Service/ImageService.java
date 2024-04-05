@@ -1,9 +1,12 @@
 package org.dwsproject.proyectodesarrolloweb.Service;
 
 import java.io.IOException;
+
+import org.apache.tika.Tika;
 import org.dwsproject.proyectodesarrolloweb.Classes.Image;
 import org.dwsproject.proyectodesarrolloweb.Repositories.ImageRepository;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,7 +19,16 @@ public class ImageService {
     }
 
     public Image createImage(MultipartFile imageFile) throws IOException {
-        if (imageFile != null && !imageFile.isEmpty()) {
+        // Verify the image file with Apache Tika
+        Tika tika = new Tika();
+        String type = tika.detect(imageFile.getBytes());
+        MediaType mediaType = MediaType.parseMediaType(type);
+
+        if (!mediaType.equals(MediaType.IMAGE_JPEG) && !mediaType.equals(MediaType.IMAGE_PNG)) {
+            throw new IllegalArgumentException("Invalid image file type");
+        }
+
+        if (!imageFile.isEmpty()) {
             Image image = new Image();
             image.setData(imageFile.getBytes());
             image.setOriginalImageName(imageFile.getOriginalFilename());
