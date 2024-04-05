@@ -78,9 +78,6 @@ public class ApiUserController {
             throw new UserNotFoundException("User not found");
         }
 
-        List<Film> pending = userService.getPendingFilms(user.getId());
-        List<Film> completed = userService.getCompletedFilms(user.getId());
-
         userService.setUserPendingFilms(user);
         userService.setUserCompletedFilms(user);
 
