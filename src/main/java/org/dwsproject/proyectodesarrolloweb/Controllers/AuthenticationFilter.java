@@ -52,11 +52,12 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 
     private String getUsernameFromURI(HttpServletRequest request) {
         String requestURI = request.getRequestURI();
-        String[] parts = requestURI.split("/");
-        for (String part: parts) {
-            User potentialUser = userService.findUserByUsername(part);
+        int lastSlashIndex = requestURI.lastIndexOf('/');
+        if (lastSlashIndex >= 0) {
+            String username = requestURI.substring(lastSlashIndex + 1);
+            User potentialUser = userService.findUserByUsername(username);
             if (potentialUser != null) {
-                return part;
+                return username;
             }
         }
         return null;

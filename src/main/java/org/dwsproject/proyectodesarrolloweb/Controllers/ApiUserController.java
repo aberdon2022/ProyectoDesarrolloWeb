@@ -3,6 +3,7 @@ package org.dwsproject.proyectodesarrolloweb.Controllers;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import org.dwsproject.proyectodesarrolloweb.Classes.Film;
 import org.dwsproject.proyectodesarrolloweb.Classes.Friendship;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.dwsproject.proyectodesarrolloweb.Exceptions.UnauthorizedAccessException;
@@ -14,10 +15,7 @@ import org.dwsproject.proyectodesarrolloweb.Service.UserSession;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -79,6 +77,12 @@ public class ApiUserController {
         if (user == null) {
             throw new UserNotFoundException("User not found");
         }
+
+        List<Film> pending = userService.getPendingFilms(user.getId());
+        List<Film> completedFilms = userService.getCompletedFilms(user.getId());
+
+        user.setPendingFilms(pending);
+        user.setCompletedFilms(completedFilms);
         return user;
     }
 
