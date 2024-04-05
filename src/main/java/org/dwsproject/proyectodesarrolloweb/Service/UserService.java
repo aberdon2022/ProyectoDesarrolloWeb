@@ -32,6 +32,16 @@ public class UserService {
         this.friendshipRepository = friendshipRepository;
     }
 
+    public void setUserPendingFilms (User user) {
+        List<Film> films = getPendingFilms(user.getId());
+        user.setPendingFilms(films);
+    }
+
+    public void setUserCompletedFilms (User user) {
+        List<Film> films = getCompletedFilms(user.getId());
+        user.setCompletedFilms(films);
+    }
+
     public User registerUser (String username, String password) {//Register a new user (
         User user = new User(username, password);
         generateToken(user);

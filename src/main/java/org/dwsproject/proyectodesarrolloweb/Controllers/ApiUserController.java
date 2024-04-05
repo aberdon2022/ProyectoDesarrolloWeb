@@ -79,10 +79,11 @@ public class ApiUserController {
         }
 
         List<Film> pending = userService.getPendingFilms(user.getId());
-        List<Film> completedFilms = userService.getCompletedFilms(user.getId());
+        List<Film> completed = userService.getCompletedFilms(user.getId());
 
-        user.setPendingFilms(pending);
-        user.setCompletedFilms(completedFilms);
+        userService.setUserPendingFilms(user);
+        userService.setUserCompletedFilms(user);
+
         return user;
     }
 
