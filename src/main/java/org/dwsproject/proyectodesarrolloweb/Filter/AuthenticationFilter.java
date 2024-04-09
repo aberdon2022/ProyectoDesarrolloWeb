@@ -1,4 +1,4 @@
-package org.dwsproject.proyectodesarrolloweb.Controllers;
+package org.dwsproject.proyectodesarrolloweb.Filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

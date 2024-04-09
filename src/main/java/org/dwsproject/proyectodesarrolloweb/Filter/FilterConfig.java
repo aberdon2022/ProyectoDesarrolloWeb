@@ -1,4 +1,4 @@
-package org.dwsproject.proyectodesarrolloweb.Controllers;
+package org.dwsproject.proyectodesarrolloweb.Filter;
 
 import org.dwsproject.proyectodesarrolloweb.Service.UserService;
 import org.dwsproject.proyectodesarrolloweb.Service.UserSession;
