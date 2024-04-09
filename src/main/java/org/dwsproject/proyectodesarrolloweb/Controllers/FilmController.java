@@ -2,7 +2,6 @@ package org.dwsproject.proyectodesarrolloweb.Controllers;
 
 import org.dwsproject.proyectodesarrolloweb.Classes.Film;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
-import org.dwsproject.proyectodesarrolloweb.Exceptions.UnauthorizedAccessException;
 import org.dwsproject.proyectodesarrolloweb.Service.FilmService;
 import org.dwsproject.proyectodesarrolloweb.Service.UserService;
 import org.dwsproject.proyectodesarrolloweb.Service.UserSession;
@@ -35,7 +34,7 @@ public class FilmController {
     @PostMapping("/addpeli")//Add a film to the list
     public String createFilm(Film film, @RequestParam("image")MultipartFile imageFile, @RequestParam("listType") String listType, @RequestParam String username) {
         User user = userService.findUserByUsername(username);
-        userSession.validateUser(username);
+        userSession.validateUser(username); //Validate if the user is the same as the one logged in
 
         try {
             String result = filmService.addFilmWithChecks(user, film, imageFile, listType);
@@ -72,7 +71,7 @@ public class FilmController {
 
     @GetMapping("/pending")//Show the pending list
     public String viewPending(Model model, @RequestParam String username, @RequestParam (required = false) String sort, @RequestParam (required = false) String order, @RequestParam (required = false) String title) {
-        userSession.validateUser(username);
+        userSession.validateUser(username); //Validate if the user is the same as the one logged in
         User user = userService.findUserByUsername(username);
         model.addAttribute("user", user);
 
@@ -114,10 +113,10 @@ public class FilmController {
             completedFilms = userService.getCompletedFilms(user.getId());
         }
 
-        if (applySort && sort != null && order != null) {
+        if (applySort && sort != null && order != null) { // If applySort is true, sort the films by the specified criteria
             completedFilms = filmService.sortFilms(user, minRating, maxRating, sort, order, Film.FilmStatus.COMPLETED);
         }
-        if(title != null && !title.isEmpty()){
+        if(title != null && !title.isEmpty()){ //If title is not null, filter the films by title
             completedFilms = filmService.findCompletedFilmsByTitle(user, title);
             if (completedFilms.isEmpty()) {
                 completedFilms = userService.getCompletedFilms(user.getId());
@@ -131,7 +130,7 @@ public class FilmController {
         }
 
         for (Film film : completedFilms) {
-            film.setRatingStars(filmService.convertRatingToStars(film.getRating()));
+            film.setRatingStars(filmService.convertRatingToStars(film.getRating())); //Convert the rating to stars to show it in the view
         }
 
         model.addAttribute("completed", completedFilms);
@@ -155,7 +154,7 @@ public class FilmController {
 
     @GetMapping ("/completed/{filmId}/delete")//Delete a film from the completed list
     public String deleteFilmC(Model model, @PathVariable long filmId, @RequestParam String username) {
-        userSession.validateUser(username);
+        userSession.validateUser(username); //Validate if the user is the same as the one logged in
         User user = userService.findUserByUsername(username);
         filmService.deleteFilm(user, filmId, "completed");
         model.addAttribute("user", user);
@@ -163,7 +162,7 @@ public class FilmController {
     }
     @GetMapping("/pending/{filmId}/delete")//Delete a film from the pending list
     public String deleteFilmP(Model model, @PathVariable long filmId, @RequestParam String username) {
-        userSession.validateUser(username);
+        userSession.validateUser(username); //Validate if the user is the same as the one logged in
         User user = userService.findUserByUsername(username);
         filmService.deleteFilm(user, filmId, "pending");
         model.addAttribute("user", user);

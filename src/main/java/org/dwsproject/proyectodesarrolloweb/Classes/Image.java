@@ -8,7 +8,7 @@ public class Image {
     private long id;
 
     @Lob
-    @Column(columnDefinition = "MEDIUMBLOB")
+    @Column(columnDefinition = "MEDIUMBLOB") // MEDIUMBLOB because if the image is too big, it wouldn't be able to be stored in the database
     private byte[] data;
 
     @Column(name = "original_image_name")
@@ -28,10 +28,6 @@ public class Image {
 
     public void setData (byte[] data) {
         this.data = data;
-    }
-
-    public String getOriginalImageName() {
-        return originalImageName;
     }
 
     public void setOriginalImageName(String originalImageName) {

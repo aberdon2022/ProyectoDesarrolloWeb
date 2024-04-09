@@ -32,20 +32,15 @@ public class PostService {
         return postRepository.findById(id).orElse(null);
     }
 
-    public void sanitizeAndSavePost(Post post) {//Save a post with an id
-        String sanitizedText = Jsoup.clean(post.getText(), Safelist.basic());
+    public void sanitizeAndSavePost(Post post) {
+        String sanitizedText = Jsoup.clean(post.getText(), Safelist.basic()); // Sanitize the text with Jsoup
         post.setText(sanitizedText);
-        postRepository.save(post);
-    }
 
-    public void savePost(Post post) {
         List<Post> existingPosts = postRepository.findByTitleAndText(post.getTitle(), post.getText());
-        if (existingPosts.isEmpty()) {
+        if (existingPosts.isEmpty()) { // if the post does not exist in the database already, save it
             postRepository.save(post);
         } else {
-            // This post already exists!
-            // Handle accordingly, perhaps throw an exception, or return the existing post
-            throw new RuntimeException("Post with this title and text already exists!");
+            throw new RuntimeException("Post with this title and text already exists");
         }
     }
 

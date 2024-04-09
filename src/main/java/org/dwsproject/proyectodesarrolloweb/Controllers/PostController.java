@@ -72,9 +72,9 @@ public class PostController {
     @PostMapping("/forum/new")
     public String newPost(Model model, @RequestParam String username, Post post, @RequestParam(value = "imageFile", required = false) MultipartFile imageFile) throws IOException {
         User user = userService.findUserByUsername(username);
-        userSession.validateUser(user.getUsername());
 
         if (user != null) {
+            userSession.validateUser(user.getUsername());
             post.setUser(user);
 
             if (imageFile != null && !imageFile.isEmpty()) {
@@ -95,11 +95,11 @@ public class PostController {
 
     @GetMapping("/post/{id}")//Show a post by its id
     public String showPost(Model model, @PathVariable long id) {
-        //Obtain the post by its id
         Post post = postService.findById(id);
         String loggedInUser = userSession.getUser().getUsername();
         boolean isOwner = post.getUser().getUsername().equals(loggedInUser);
         boolean imageExists = post.getImageId() != null;
+
         model.addAttribute("post", post);
         model.addAttribute("isOwner", isOwner);
         model.addAttribute("imageExists", imageExists);
@@ -112,6 +112,7 @@ public class PostController {
         Post post = postService.findById(id);
         String loggedInUser = userSession.getUser().getUsername();
         boolean isOwner = post.getUser().getUsername().equals(loggedInUser);
+
         if (isOwner) {
             Long ImageId = post.getImageId();
             postService.deleteById(id);
@@ -146,8 +147,8 @@ public class PostController {
         if (imageFile != null && !imageFile.isEmpty()) { // If a new image file is provided, save the new image
             Image newImage = imageService.createImage(imageFile);
             Image savedImage = imageService.saveImage(newImage);
-            post.setImageId(savedImage.getId()); // Set the image id in the post to the id of the new image
-        } else { // If a new image file is not provided, keep the existing image id
+            post.setImageId(savedImage.getId());
+        } else { // If a new image file is not provided, keep the existing image
             Post existingPost = postService.findById(post.getId());
             post.setImageId(existingPost.getImageId());
         }

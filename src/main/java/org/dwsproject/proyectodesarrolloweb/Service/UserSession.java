@@ -37,7 +37,7 @@ public class UserSession {//information about the actual user
         this.numPosts++;
     }
 
-    public void validateUser(String username) {
+    public void validateUser(String username) { //check if the user is the same as the logged in user
         User user = userRepository.findByUsername(username);
         User loggedInUser = this.getUser();
         if (user == null || !user.equals(loggedInUser)) {

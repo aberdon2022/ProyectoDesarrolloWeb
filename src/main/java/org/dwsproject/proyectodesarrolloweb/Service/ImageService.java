@@ -19,8 +19,8 @@ public class ImageService {
     }
 
     public Image createImage(MultipartFile imageFile) throws IOException {
-        // Verify the image file with Apache Tika
-        Tika tika = new Tika();
+
+        Tika tika = new Tika(); //Verify the image file with Apache Tika
         String type = tika.detect(imageFile.getBytes());
         MediaType mediaType = MediaType.parseMediaType(type);
 
@@ -28,7 +28,7 @@ public class ImageService {
             throw new IllegalArgumentException("Invalid image file type");
         }
 
-        if (!imageFile.isEmpty()) {
+        if (!imageFile.isEmpty()) { //If the image file is not empty, create a new Image object
             Image image = new Image();
             image.setData(imageFile.getBytes());
             image.setOriginalImageName(imageFile.getOriginalFilename());
@@ -49,10 +49,10 @@ public class ImageService {
         return imageRepository.findById(id).orElse(null);
     }
 
-    public ByteArrayResource getImageAsResource(long id) {
+    public ByteArrayResource getImageAsResource(long id) { //This method returns the image as a ByteArrayResource
         Image image = getImage(id);
         if (image != null) {
-            return new ByteArrayResource(image.getData());
+            return new ByteArrayResource(image.getData()); //Return the image data as a byte array resource
         } else {
             return null;
         }

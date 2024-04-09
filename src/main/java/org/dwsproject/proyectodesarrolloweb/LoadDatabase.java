@@ -53,7 +53,7 @@ public class LoadDatabase implements CommandLineRunner {
                     .filter(existingPost -> existingPost.getUser().getUsername().equals(post.getUser().getUsername()))
                     .findFirst()
                     .orElseGet(() -> {
-                        postService.savePost(post);
+                        postService.sanitizeAndSavePost(post);
                         return post;
                     });
         }

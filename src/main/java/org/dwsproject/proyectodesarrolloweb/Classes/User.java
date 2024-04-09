@@ -74,14 +74,6 @@ public class User {
         return friendships;
     }
 
-    public void addFriend(Friendship friendship) {
-        this.friendships.add(friendship);
-    }
-
-    public void deleteFriend(Friendship friendship) {
-        this.friendships.remove(friendship);
-    }
-
     public void setUsername(String username) {
         this.username = username;
     }
@@ -91,14 +83,14 @@ public class User {
     }
 
     public void setPendingFilms(List<Film> pendingFilms) {
-        this.pendingFilms.clear();
+        this.pendingFilms.clear(); //Clear the list before adding the new elements
         if (pendingFilms != null) {
             this.pendingFilms.addAll(pendingFilms);
         }
     }
 
     public void setCompletedFilms(List<Film> completedFilms) {
-        this.completedFilms.clear();
+        this.completedFilms.clear(); //Clear the list before adding the new elements
         if (completedFilms != null) {
             this.completedFilms.addAll(completedFilms);
         }
@@ -106,7 +98,7 @@ public class User {
 
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(Object obj) { //Override the equals method to compare the objects by username
         if (this == obj) {
             return true;
         }

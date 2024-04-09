@@ -38,24 +38,12 @@ public class Trailer {
         this.id = id;
     }
 
-    public String getFilePath() {
-        return filePath;
-    }
-
     public void setFilePath(String filePath) {
         this.filePath = filePath;
     }
 
-    public String getOriginalFileName() {
-        return originalFileName;
-    }
-
     public void setOriginalFileName(String originalFileName) {
         this.originalFileName = originalFileName;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     public void setDescription(String description) {

@@ -12,13 +12,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
-import org.apache.tika.Tika;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -106,22 +104,22 @@ public class FilmService {
         }
 
         if (response.getStatusCode() == HttpStatus.OK) {
-            ObjectMapper mapper = new ObjectMapper();
+            ObjectMapper mapper = new ObjectMapper(); //Parse the JSON response
             try {
-                JsonNode root = mapper.readTree(response.getBody());
-                if (root.path("Response").asText().equals("True")) {
-                    String title = root.path("Title").asText();
-                    String plot = root.path("Plot").asText();
-                    film.setPlot(plot);
-                    int year = root.path("Year").asInt();
-                    return title.equalsIgnoreCase(film.getTitle()) && year == film.getYear();
+                JsonNode root = mapper.readTree(response.getBody()); //Read the JSON response
+                if (root.path("Response").asText().equals("True")) { //Check if the response is valid
+                    String title = root.path("Title").asText(); //Get the title from the JSON response
+                    String plot = root.path("Plot").asText(); //Get the plot from the JSON response
+                    film.setPlot(plot); //Set the plot obtained from the JSON response to the film object
+                    int year = root.path("Year").asInt(); //Get the year from the JSON response
+                    return title.equalsIgnoreCase(film.getTitle()) && year == film.getYear(); //Check if the title and year match the film object
                 }
-            } catch (JsonProcessingException e ) {
+            } catch (JsonProcessingException e ) { //Catch the exception if the JSON response cannot be parsed
                 e.printStackTrace();
                 return false;
             }
         }
-        return false;
+        return false; //Return false if the response is not valid
     }
 
     public ResponseEntity<List<Film>> getAllFilms(String username) {
@@ -209,6 +207,6 @@ public class FilmService {
     }
 
     public List<String> convertRatingToStars(int rating) {
-        return Collections.nCopies(rating, "★");
+        return Collections.nCopies(rating, "★"); //Return a list of stars with the length of the rating
     }
 }

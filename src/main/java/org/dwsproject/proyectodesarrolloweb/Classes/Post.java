@@ -10,7 +10,7 @@ public class Post {
     private String title;
 
     @Lob
-    @Column(columnDefinition="MEDIUMBLOB")
+    @Column(columnDefinition="MEDIUMBLOB") // MEDIUMBLOB because the text can be too long
     private String text;
 
     @ManyToOne

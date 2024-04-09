@@ -61,9 +61,9 @@ public class UserService {
 
     public List<User> getFriends (User user) {
         return user.getFriends().stream()
-                .sorted(Comparator.comparing(Friendship::getTimestamp))
-                .map(friendship -> friendship.getUser1().equals(user) ? friendship.getUser2() : friendship.getUser1())
-                .collect(Collectors.toList());
+                .sorted(Comparator.comparing(Friendship::getTimestamp)) // Sort the friends by the date they were added
+                .map(friendship -> friendship.getUser1().equals(user) ? friendship.getUser2() : friendship.getUser1()) // Get the friend that is not the logged-in user
+                .collect(Collectors.toList()); // Convert the stream to a list
     }
 
     public List<Film> getPendingFilms (Long userId) {
@@ -150,7 +150,7 @@ public class UserService {
         return userRepository.findByToken(token);
     }
 
-    public void generateToken(User user) {
+    public void generateToken(User user) { // Generate a random token for the user
         String token = UUID.randomUUID().toString();
         user.setToken(token);
     }

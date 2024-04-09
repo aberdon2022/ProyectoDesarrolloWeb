@@ -9,7 +9,7 @@ import java.util.List;
 public class Film {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @JsonView(Views.Public.class)
+    @JsonView(Views.Public.class) // This field is visible in the public view of the API
     private long filmId;
 
     @JsonView(Views.Public.class)
@@ -24,13 +24,9 @@ public class Film {
     @JsonView(Views.Public.class)
     private String plot;
 
-    @Transient
+    @Transient // This field is not stored in the database
     @JsonView(Views.Public.class)
     private List<String> ratingStars;
-
-    public String getPlot() {
-        return plot;
-    }
 
     public void setPlot(String plot) {
         this.plot = plot;
@@ -52,24 +48,14 @@ public class Film {
         this.ratingStars = ratingStars;
     }
 
-    public List<String> getRatingStars() {
-        return ratingStars;
-    }
-
     public enum FilmStatus {
         PENDING,
         COMPLETED
     }
 
-    public FilmStatus getStatus() {
-        return status;
-    }
-
     public void setStatus(FilmStatus status) {
         this.status = status;
     }
-
-
 
     public Film() {
     }
@@ -82,10 +68,6 @@ public class Film {
 
     public long getFilmId() {
         return filmId;
-    }
-
-    public void setFilmId(long id) {
-        this.filmId = id;
     }
 
     public User getUser() {
@@ -108,16 +90,8 @@ public class Film {
         return year;
     }
 
-    public void setYear(int year) {
-        this.year = year;
-    }
-
     public int getRating() {
         return rating;
-    }
-
-    public void setRating(int rating) {
-        this.rating = rating;
     }
 
     public long getImageId() {

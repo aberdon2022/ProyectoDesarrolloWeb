@@ -20,9 +20,9 @@ public class FilterConfig {
     @Bean
     public FilterRegistrationBean<AuthenticationFilter> authenticationFilter() {
         //This method creates a new filter registration bean for the authentication filter
-        FilterRegistrationBean<AuthenticationFilter> registrationBean = new FilterRegistrationBean<>();
-        registrationBean.setFilter(new AuthenticationFilter(userService, userSession));
-        registrationBean.addUrlPatterns("/api/*");
+        FilterRegistrationBean<AuthenticationFilter> registrationBean = new FilterRegistrationBean<>(); //Creates a new filter registration bean
+        registrationBean.setFilter(new AuthenticationFilter(userService, userSession)); //Sets the filter to the authentication filter
+        registrationBean.addUrlPatterns("/api/*"); //The filter will be applied to all the urls that start with /api/
         return registrationBean;
     }
 }

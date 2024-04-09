@@ -25,14 +25,14 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = request.getHeader("Authorization");
 
-        if (token != null) {
+        if (token != null) { // If token is not null, then the user is authenticated
             User user = userService.findUserByToken(token);
             String username = getUsername(request, user);
 
-            if (isUserAuthenticated(user, token, username)) {
+            if (isUserAuthenticated(user, token, username)) { // If the user is authenticated, set the user session and continue
                 setUserSessionAndContinueFilter(user, request, response, filterChain);
             } else {
-                rejectRequest(response);
+                rejectRequest(response); // If the user is not authenticated, reject the request
             }
         } else {
             rejectRequest(response);
@@ -52,11 +52,11 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 
     private String getUsernameFromURI(HttpServletRequest request) {
         String requestURI = request.getRequestURI();
-        int lastSlashIndex = requestURI.lastIndexOf('/');
-        if (lastSlashIndex >= 0) {
-            String username = requestURI.substring(lastSlashIndex + 1);
-            User potentialUser = userService.findUserByUsername(username);
-            if (potentialUser != null) {
+        int lastSlashIndex = requestURI.lastIndexOf('/'); // Get the last slash index
+        if (lastSlashIndex >= 0) { // If the last slash index is greater than or equal to 0
+            String username = requestURI.substring(lastSlashIndex + 1); // Get the substring from the last slash index + 1
+            User potentialUser = userService.findUserByUsername(username); // Find if the user exists
+            if (potentialUser != null) { // If the user exists return the username
                 return username;
             }
         }
@@ -69,7 +69,6 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 
     private void setUserSessionAndContinueFilter(User user, HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
         userSession.setUser(user);
-        request.setAttribute("authenticatedUser", user);
         filterChain.doFilter(request, response);
     }
 
