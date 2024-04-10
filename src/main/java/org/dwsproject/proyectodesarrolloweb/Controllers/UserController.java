@@ -10,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.net.Authenticator;
+
 @Controller
 public class UserController {
 
@@ -100,7 +102,7 @@ public class UserController {
             model.addAttribute("loggedInUser", sessionUser);
             return "Friend";
         } else {
-            return "redirect:/error/403"; //
+            return "redirect:/error/403";
         }
     }
 
