@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: cyan;
+    background-color: #E7EEEE;
     margin: 0;
     padding: 0;
     text-align: center;
@@ -14,9 +14,22 @@ body {
 
 h1 {
     color: #dc3545;
-
 }
 
 p {
     color: #6c757d;
+}
+
+a {
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #ED361D;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    transition: background-color 0.3s;
+}
+a:hover {
+    background-color: #BD300D;
 }

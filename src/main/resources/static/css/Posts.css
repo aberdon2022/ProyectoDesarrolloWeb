@@ -51,7 +51,7 @@ a.delete {
     margin-bottom: 15px;
     margin-top: 40px;
     float: right;
-    margin-right: 230px;
+    margin-right: 100px;
     transition: background-color 0.1s ease;
 }
 a.delete:hover {
