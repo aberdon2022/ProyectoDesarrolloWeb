@@ -55,7 +55,14 @@ public class TrailerService {
         MessageDigest md = MessageDigest.getInstance("MD5"); // Create a new MessageDigest object with the MD5 algorithm
         md.update(file.getBytes()); // Update the digest with the trailer file bytes
         byte[] digest = md.digest(); // Calculate the MD5 hash of the bytes in the trailer file
-        String hash = Base64.getEncoder().encodeToString(digest); // Encode the hash as a Base64 string
+
+        StringBuilder sb = new StringBuilder(); // Create a new StringBuilder object
+
+        for (byte b : digest) { // Iterate over the bytes in the digest
+            sb.append(String.format("%02x", b)); // Append the byte to the StringBuilder object
+        }
+
+        String hash = sb.toString(); // Hex representation of the MD5 hash to a string
 
         Trailer existingTrailer = trailerRepository.findByHash(hash);
         if (existingTrailer != null) {
