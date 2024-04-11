@@ -29,15 +29,26 @@ class ProyectoDesarrolloWebApplicationTests {
             MessageDigest md = MessageDigest.getInstance("MD5");
             md.update(mockMultipartFile.getBytes()); // Update the MessageDigest object with the bytes of the file
             byte[] digest = md.digest(); // Generate the hash value
-            String hash = Base64.getEncoder().encodeToString(digest); // Encode the hash value to a Base64 string
-
-            Trailer trailer = new Trailer("","LateNightwiththeDevilTrailer.mp4","A trailer for the movie Late Night with the Devil","Late Night with the Devil");
-            trailer.setHash(hash);
+            Trailer trailer = getTrailer(digest);
 
             trailerService.saveExampleTrailer(trailer, mockMultipartFile);
         } catch (IOException | NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static Trailer getTrailer(byte[] digest) {
+        StringBuilder sb = new StringBuilder(); // Create a new StringBuilder object
+
+        for (byte b : digest) { // Iterate over the bytes in the digest
+            sb.append(String.format("%02x", b)); // Append the byte to the StringBuilder object
+        }
+
+        String hash = sb.toString(); // Hex representation of the MD5 hash to a string
+
+        Trailer trailer = new Trailer("","LateNightwiththeDevilTrailer.mp4","A trailer for the movie Late Night with the Devil","Late Night with the Devil");
+        trailer.setHash(hash);
+        return trailer;
     }
 
 }
