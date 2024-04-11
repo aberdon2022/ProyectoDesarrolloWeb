@@ -53,23 +53,27 @@ public class FilmService {
             throw new IllegalArgumentException("The film does not exist or could be not validated");
         }
 
-        if ("pending".equals(listType)) {
+        if ("PENDING".equals(listType)) {
             film.setStatus(Film.FilmStatus.PENDING);
             userService.getPendingFilms(user.getId());
-        } else {
+
+        } else if ("COMPLETED".equals(listType)) {
             film.setStatus(Film.FilmStatus.COMPLETED);
             userService.getCompletedFilms(user.getId());
+
+        } else {
+            throw new IllegalArgumentException("Invalid list type");
         }
         filmRepository.save(film);
         userService.saveUser(user);
     }
 
     public void addFilmPending(User user, Film film, MultipartFile imageFile) throws IOException {
-        addFilmWithChecks(user, film, imageFile, "pending");
+        addFilmWithChecks(user, film, imageFile, Film.FilmStatus.PENDING);
     }
 
     public void addFilmCompleted(User user, Film film, MultipartFile imageFile) throws IOException {
-        addFilmWithChecks(user, film, imageFile, "completed");
+        addFilmWithChecks(user, film, imageFile, Film.FilmStatus.COMPLETED);
     }
 
     public boolean deleteFilm(User user, long filmId, String listType) {
@@ -159,8 +163,8 @@ public class FilmService {
         return ResponseEntity.ok(films);
     }
 
-    public String addFilmWithChecks (User user, Film film, MultipartFile imageFile, String listType) throws IOException {
-        if (user == null || film == null || imageFile == null || listType == null) {
+    public void addFilmWithChecks (User user, Film film, MultipartFile imageFile, Film.FilmStatus status) throws IOException {
+        if (user == null || film == null || imageFile == null || status == null) {
             throw new IllegalArgumentException("Invalid parameters");
         }
 
@@ -173,9 +177,7 @@ public class FilmService {
         if (film.getTitle() == null || film.getTitle().isEmpty() || film.getYear() < 1900){
             throw new IllegalArgumentException("Invalid film title or year");
         }
-
-        addFilm(user, film, imageFile, listType);
-        return listType;
+        addFilm(user, film, imageFile, status.name());
     }
 
     public List<Film> findCompletedFilmsByRating(User user, int minRating, int maxRating) {

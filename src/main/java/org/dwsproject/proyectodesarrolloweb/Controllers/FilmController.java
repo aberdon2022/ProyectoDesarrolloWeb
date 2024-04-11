@@ -55,7 +55,7 @@ public class FilmController {
 
         System.out.println("Film object in controller: " + film.toString());
         try {
-            filmService.addFilmPending(user, film, imageFile);
+            filmService.addFilmCompleted(user, film, imageFile);
             return "redirect:/completed/confirmed?username=" + user.getUsername();
         } catch (IllegalArgumentException e) {
             return "redirect:/error/400";
