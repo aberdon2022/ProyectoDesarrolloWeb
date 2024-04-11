@@ -160,8 +160,9 @@ public class FilmService {
         if (existingUser == null) {
             throw new IllegalArgumentException("User does not exist");
         }
+        System.out.println("Film object before validation: " + film);
 
-        if (film.getTitle() == null || film.getYear() == 0 || film.getTitle().isEmpty() || film.getYear() < 1900){
+        if (film.getTitle() == null || film.getTitle().isEmpty() || film.getYear() < 1900){
             throw new IllegalArgumentException("Invalid film title or year");
         }
 

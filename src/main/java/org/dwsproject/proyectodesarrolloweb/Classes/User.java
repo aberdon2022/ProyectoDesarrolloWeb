@@ -78,6 +78,22 @@ public class User {
         this.username = username;
     }
 
+    public List<Film> getPendingFilms() {
+        return pendingFilms;
+    }
+
+    public List<Film> getCompletedFilms() {
+        return completedFilms;
+    }
+
+    public Set<Friendship> getFriendships() {
+        return friendships;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }

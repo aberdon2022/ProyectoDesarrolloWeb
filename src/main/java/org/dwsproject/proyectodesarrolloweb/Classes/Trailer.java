@@ -8,6 +8,14 @@ public class Trailer {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
     @Column(name = "file_path")
     private String filePath;
 

@@ -74,6 +74,34 @@ public class Film {
         return user;
     }
 
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public void setFilmId(long filmId) {
+        this.filmId = filmId;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+
+    public String getPlot() {
+        return plot;
+    }
+
+    public List<String> getRatingStars() {
+        return ratingStars;
+    }
+
+    public void setImageId(Long imageId) {
+        this.imageId = imageId;
+    }
+
+    public FilmStatus getStatus() {
+        return status;
+    }
+
     public void setUser(User user) {
         this.user = user;
     }
@@ -100,5 +128,20 @@ public class Film {
 
     public void setImageId (long imageId) {
         this.imageId = imageId;
+    }
+
+    @Override
+    public String toString() {
+        return "Film{" +
+                "filmId=" + filmId +
+                ", title='" + title + '\'' +
+                ", year=" + year +
+                ", rating=" + rating +
+                ", plot='" + plot + '\'' +
+                ", ratingStars=" + ratingStars +
+                ", imageId=" + imageId +
+                ", status=" + status +
+                ", user=" + user +
+                '}';
     }
 }

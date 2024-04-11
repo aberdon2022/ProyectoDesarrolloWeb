@@ -36,6 +36,8 @@ public class FilmController {
         User user = userService.findUserByUsername(username);
         userSession.validateUser(username); //Validate if the user is the same as the one logged in
 
+        System.out.println("Film object in controller: " + film.toString());
+
         try {
             String result = filmService.addFilmWithChecks(user, film, imageFile, listType);
             // Redirect to the corresponding list
@@ -47,6 +49,7 @@ public class FilmController {
                 return "redirect:/";
             }
         } catch (IllegalArgumentException e) {
+            e.printStackTrace();
             return "redirect:/error/400";
         } catch (IOException e) {
             return "redirect:/error/500";
