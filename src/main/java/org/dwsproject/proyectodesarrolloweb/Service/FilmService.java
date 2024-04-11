@@ -177,7 +177,24 @@ public class FilmService {
         if (film.getTitle() == null || film.getTitle().isEmpty() || film.getYear() < 1900){
             throw new IllegalArgumentException("Invalid film title or year");
         }
+
+        if (isDuplicated(user, film)) {
+            throw new IllegalArgumentException("Film already exists");
+        }
         addFilm(user, film, imageFile, status.name());
+    }
+
+    public boolean isDuplicated (User user, Film film) {
+        List<Film> existingFilms = new ArrayList<>();
+        existingFilms.addAll(userService.getPendingFilms(user.getId()));
+        existingFilms.addAll(userService.getCompletedFilms(user.getId()));
+
+        for (Film f: existingFilms) {
+            if (f.getTitle().equalsIgnoreCase(film.getTitle()) && f.getYear() == film.getYear()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public List<Film> findCompletedFilmsByRating(User user, int minRating, int maxRating) {

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.util.List;
@@ -32,7 +33,7 @@ public class FilmController {
     }
 
     @PostMapping("/addpeli/pending")//Add a film to the list
-    public String createPendingFilm(Film film, @RequestParam("image")MultipartFile imageFile, @RequestParam String username) {
+    public String createPendingFilm(Film film, @RequestParam("image")MultipartFile imageFile, @RequestParam String username, RedirectAttributes redirectAttributes) {
         User user = userService.findUserByUsername(username);
         userSession.validateUser(username); //Validate if the user is the same as the one logged in
 
@@ -42,14 +43,15 @@ public class FilmController {
             filmService.addFilmPending(user, film, imageFile);
             return "redirect:/pending/confirmed?username=" + user.getUsername();
         } catch (IllegalArgumentException e) {
-            return "redirect:/error/400";
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/pending/add?username=" + user.getUsername();
         } catch (IOException e) {
             return "redirect:/error/500";
         }
     }
 
     @PostMapping("/addpeli/completed")//Add a film to the list
-    public String createCompletedFilm(Film film, @RequestParam("image")MultipartFile imageFile, @RequestParam String username) {
+    public String createCompletedFilm(Film film, @RequestParam("image")MultipartFile imageFile, @RequestParam String username, RedirectAttributes redirectAttributes) {
         User user = userService.findUserByUsername(username);
         userSession.validateUser(username); //Validate if the user is the same as the one logged in
 
@@ -58,7 +60,8 @@ public class FilmController {
             filmService.addFilmCompleted(user, film, imageFile);
             return "redirect:/completed/confirmed?username=" + user.getUsername();
         } catch (IllegalArgumentException e) {
-            return "redirect:/error/400";
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/completed/add?username=" + user.getUsername();
         } catch (IOException e) {
             return "redirect:/error/500";
         }
