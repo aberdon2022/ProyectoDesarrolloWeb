@@ -7,28 +7,23 @@ import org.dwsproject.proyectodesarrolloweb.Exceptions.TrailerDeletionException;
 import org.dwsproject.proyectodesarrolloweb.Exceptions.TrailerNotFoundException;
 import org.dwsproject.proyectodesarrolloweb.Exceptions.TrailerUploadException;
 import org.dwsproject.proyectodesarrolloweb.Repositories.TrailerRepository;
-import org.springframework.boot.autoconfigure.jackson.JacksonProperties;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.MimeType;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.xml.datatype.DatatypeConstants;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
-import java.util.Optional;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class TrailerService {
