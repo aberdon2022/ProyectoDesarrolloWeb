@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 @Controller
@@ -48,6 +49,8 @@ public class TrailerController {
             redirectAttributes.addFlashAttribute("message", e.getMessage());
         } catch (IOException e) {
             throw new RuntimeException("Could not store file " + file.getOriginalFilename(), e);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
         }
         return "redirect:/trailer/index";
     }

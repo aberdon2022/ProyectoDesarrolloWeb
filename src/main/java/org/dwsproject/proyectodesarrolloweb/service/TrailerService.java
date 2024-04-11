@@ -7,6 +7,7 @@ import org.dwsproject.proyectodesarrolloweb.Exceptions.TrailerDeletionException;
 import org.dwsproject.proyectodesarrolloweb.Exceptions.TrailerNotFoundException;
 import org.dwsproject.proyectodesarrolloweb.Exceptions.TrailerUploadException;
 import org.dwsproject.proyectodesarrolloweb.Repositories.TrailerRepository;
+import org.springframework.boot.autoconfigure.jackson.JacksonProperties;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -16,6 +17,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.MimeType;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.xml.datatype.DatatypeConstants;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.Optional;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -35,7 +40,7 @@ public class TrailerService {
         this.trailerRepository = trailerRepository;
     }
 
-    public boolean uploadTrailer(MultipartFile file, String title, String description, User user) throws IOException, TrailerUploadException {
+    public boolean uploadTrailer(MultipartFile file, String title, String description, User user) throws IOException, TrailerUploadException, NoSuchAlgorithmException {
 
         if (user == null || !user.getUsername().equals("admin")) {
             throw new TrailerUploadException("User Unauthorized. Please login as admin.");
@@ -52,10 +57,22 @@ public class TrailerService {
             throw new TrailerUploadException("Invalid trailer file type. Please upload a valid MP4 file.");
         }
 
+        MessageDigest md = MessageDigest.getInstance("MD5"); // Create a new MessageDigest object with the MD5 algorithm
+        md.update(file.getBytes()); // Update the digest with the trailer file bytes
+        byte[] digest = md.digest(); // Calculate the MD5 hash of the bytes in the trailer file
+        String hash = Base64.getEncoder().encodeToString(digest); // Encode the hash as a Base64 string
+
+        Trailer existingTrailer = trailerRepository.findByHash(hash);
+        if (existingTrailer != null) {
+            throw new TrailerUploadException("Trailer already exists.");
+        }
+
+
         Trailer trailer = new Trailer();
         trailer.setOriginalFileName(file.getOriginalFilename());
         trailer.setTitle(title);
         trailer.setDescription(description);
+        trailer.setHash(hash);
         Trailer savedTrailer = trailerRepository.save(trailer);  // assuming the save method returns the saved entity
         String filePath = "src/main/resources/static/uploads/" + file.getOriginalFilename();
         savedTrailer.setFilePath(filePath);
@@ -94,6 +111,10 @@ public class TrailerService {
         Trailer trailer = trailerRepository.findById(trailerId).orElseThrow(() -> new TrailerNotFoundException("Trailer with ID: " + trailerId + " does not exist."));
 
         Path trailerPath = createFilePath(trailer.getOriginalFileName());
+
+        if (!Files.exists(trailerPath)) {
+            throw new TrailerNotFoundException("Trailer with ID: " + trailerId + " does not exist.");
+        }
 
         Resource file = new UrlResource(trailerPath.toUri()); // Create a resource from the trailer path
 

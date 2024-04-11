@@ -16,6 +16,9 @@ public class Trailer {
         return description;
     }
 
+    @Column(name = "hash")
+    private String hash;
+
     @Column(name = "file_path")
     private String filePath;
 
@@ -40,6 +43,14 @@ public class Trailer {
 
     public Long getId() {
         return id;
+    }
+
+    public String getHash() {
+        return hash;
+    }
+
+    public void setHash(String hash) {
+        this.hash = hash;
     }
 
     public void setId(Long id) {
