@@ -10,7 +10,7 @@
 </head>
 <body>
     <h1>Add film</h1>
-    <form id="filmForm" action="/addpeli" method="post" enctype="multipart/form-data">
+    <form id="filmForm" action="/addpeli/completed" method="post" enctype="multipart/form-data">
         <label for="title">Title:</label>
         <br>
         <input type="text" id="title" name="title" required>
@@ -40,7 +40,6 @@
         <!-- Hidden field to store the rating -->
         <input type="hidden" name="username" value="{{user.username}}">
         <input type="hidden" id="rating" name="rating">
-        <input type="hidden" name="listType" value="completed">
         <input type="submit" value="Submit">
         <a href="/completed?username={{user.username}}" class="Cancel">Cancel</a>
     </form>

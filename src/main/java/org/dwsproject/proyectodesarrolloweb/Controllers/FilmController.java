@@ -31,25 +31,33 @@ public class FilmController {
         this.userSession = userSession;
     }
 
-    @PostMapping("/addpeli")//Add a film to the list
-    public String createFilm(Film film, @RequestParam("image")MultipartFile imageFile, @RequestParam("listType") String listType, @RequestParam String username) {
+    @PostMapping("/addpeli/pending")//Add a film to the list
+    public String createPendingFilm(Film film, @RequestParam("image")MultipartFile imageFile, @RequestParam String username) {
         User user = userService.findUserByUsername(username);
         userSession.validateUser(username); //Validate if the user is the same as the one logged in
 
         System.out.println("Film object in controller: " + film.toString());
 
         try {
-            String result = filmService.addFilmWithChecks(user, film, imageFile, listType);
-            // Redirect to the corresponding list
-            if ("pending".equals(result)) {
-                return "redirect:/pending/confirmed?username=" + user.getUsername();
-            } else if ("completed".equals(result)) {
-                return "redirect:/completed/confirmed?username=" + user.getUsername();
-            } else {
-                return "redirect:/";
-            }
+            filmService.addFilmPending(user, film, imageFile);
+            return "redirect:/pending/confirmed?username=" + user.getUsername();
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+            return "redirect:/error/400";
+        } catch (IOException e) {
+            return "redirect:/error/500";
+        }
+    }
+
+    @PostMapping("/addpeli/completed")//Add a film to the list
+    public String createCompletedFilm(Film film, @RequestParam("image")MultipartFile imageFile, @RequestParam String username) {
+        User user = userService.findUserByUsername(username);
+        userSession.validateUser(username); //Validate if the user is the same as the one logged in
+
+        System.out.println("Film object in controller: " + film.toString());
+        try {
+            filmService.addFilmPending(user, film, imageFile);
+            return "redirect:/completed/confirmed?username=" + user.getUsername();
+        } catch (IllegalArgumentException e) {
             return "redirect:/error/400";
         } catch (IOException e) {
             return "redirect:/error/500";

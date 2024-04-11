@@ -39,10 +39,20 @@ public class ApiFilmController {
         return filmService.getCompletedFilms(username);
     }
 
-    @PostMapping("/films/addpeli")
-    public ResponseEntity<Void> createFilm (@RequestPart("film") String filmJson, @RequestParam("image") MultipartFile imageFile, @RequestParam("listType") String listType, @RequestParam("username") String username) {
+    @PostMapping("/films/addpeli/pending")
+    public ResponseEntity<Void> createPendingFilm (@RequestPart("film") String filmJson, @RequestParam("image") MultipartFile imageFile, @RequestParam("username") String username) {
         try {
-            filmService.addFilm(userService.findUserByUsername(username), new ObjectMapper().readValue(filmJson, Film.class), imageFile, listType);
+            filmService.addFilmPending(userService.findUserByUsername(username), new ObjectMapper().readValue(filmJson, Film.class), imageFile);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/films/addpeli/completed")
+    public ResponseEntity<Void> createCompletedFilm (@RequestPart("film") String filmJson, @RequestParam("image") MultipartFile imageFile, @RequestParam("username") String username) {
+        try {
+            filmService.addFilmCompleted(userService.findUserByUsername(username), new ObjectMapper().readValue(filmJson, Film.class), imageFile);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

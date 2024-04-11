@@ -64,6 +64,14 @@ public class FilmService {
         userService.saveUser(user);
     }
 
+    public void addFilmPending(User user, Film film, MultipartFile imageFile) throws IOException {
+        addFilmWithChecks(user, film, imageFile, "pending");
+    }
+
+    public void addFilmCompleted(User user, Film film, MultipartFile imageFile) throws IOException {
+        addFilmWithChecks(user, film, imageFile, "completed");
+    }
+
     public boolean deleteFilm(User user, long filmId, String listType) {
         List<Film> films = "pending".equals(listType) ? userService.getPendingFilms(user.getId()) : userService.getCompletedFilms(user.getId());
         Film filmToDelete = null;
