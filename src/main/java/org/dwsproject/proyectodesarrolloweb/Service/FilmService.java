@@ -215,7 +215,7 @@ public class FilmService {
                 .and(FilmSpecification.isOwnedByUser(user)));
     }
 
-    public List<Film> sortFilms (User user, Integer minRating, Integer maxRating, String sort, String order, Film.FilmStatus status) {
+    public List<Film> sortFilms (User user, Integer minRating, Integer maxRating, Integer minYear, Integer maxYear, String sort, String order, Film.FilmStatus status) {
         Sort sortOrder = Sort.by(sort);
 
         if ("desc".equals(order)) {
@@ -229,6 +229,10 @@ public class FilmService {
 
         if (minRating != null && maxRating != null) {
             spec = spec.and(FilmSpecification.hasRatingBetween(minRating, maxRating));
+        }
+
+        if (minYear != null && maxYear != null) {
+            spec = spec.and(FilmSpecification.hasYearBetween(minYear, maxYear));
         }
 
         return filmRepository.findAll(spec, sortOrder);

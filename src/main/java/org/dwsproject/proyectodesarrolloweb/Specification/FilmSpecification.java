@@ -28,4 +28,8 @@ public class FilmSpecification {
     public static Specification<Film> hasStatus(Film.FilmStatus status) {
         return (film, query, cb) -> cb.equal(film.get("status"), status);
     }
+
+    public static Specification<Film> hasYearBetween(int minYear, int maxYear) {
+        return (film, query, cb) -> cb.between(film.get("year"), minYear, maxYear);
+    }
 }

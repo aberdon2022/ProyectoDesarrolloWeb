@@ -84,7 +84,7 @@ public class FilmController {
     }
 
     @GetMapping("/pending")//Show the pending list
-    public String viewPending(Model model, @RequestParam String username, @RequestParam (required = false) String sort, @RequestParam (required = false) String order, @RequestParam (required = false) String title) {
+    public String viewPending(Model model, @RequestParam String username, @RequestParam (required = false) String sort, @RequestParam (required = false) String order, @RequestParam (required = false) String title, @RequestParam (required = false) Integer minYear, @RequestParam (required = false) Integer maxYear) {
         userSession.validateUser(username); //Validate if the user is the same as the one logged in
         User user = userService.findUserByUsername(username);
         model.addAttribute("user", user);
@@ -92,7 +92,7 @@ public class FilmController {
         List<Film> pendingFilms = userService.getPendingFilms(user.getId());
 
         if (sort != null && order != null) {
-            pendingFilms = filmService.sortFilms(user, null, null, sort, order, Film.FilmStatus.PENDING);
+            pendingFilms = filmService.sortFilms(user,null, null, minYear, maxYear, sort, order, Film.FilmStatus.PENDING);
         }
 
         if(title != null && !title.isEmpty()){
@@ -110,7 +110,7 @@ public class FilmController {
     }
 
     @GetMapping("/completed")//show the completed list
-    public String viewCompleted(Model model, @RequestParam String username, @RequestParam (required = false) Integer minRating, @RequestParam (required = false) Integer maxRating, @RequestParam (required = false) String sort, @RequestParam (required = false) String order, @RequestParam (required = false, defaultValue = "false") Boolean applySort, @RequestParam (required = false) String title) {
+    public String viewCompleted(Model model, @RequestParam String username, @RequestParam (required = false) Integer minRating, @RequestParam (required = false) Integer maxRating, @RequestParam (required = false) String sort, @RequestParam (required = false) String order, @RequestParam (required = false, defaultValue = "false") Boolean applySort, @RequestParam (required = false) String title, @RequestParam (required = false) Integer minYear, @RequestParam (required = false) Integer maxYear) {
         userSession.validateUser(username);
 
         User user = userService.findUserByUsername(username);
@@ -128,7 +128,7 @@ public class FilmController {
         }
 
         if (applySort && sort != null && order != null) { // If applySort is true, sort the films by the specified criteria
-            completedFilms = filmService.sortFilms(user, minRating, maxRating, sort, order, Film.FilmStatus.COMPLETED);
+            completedFilms = filmService.sortFilms(user, minRating, maxRating, minYear, maxYear, sort, order, Film.FilmStatus.COMPLETED);
         }
         if(title != null && !title.isEmpty()){ //If title is not null, filter the films by title
             completedFilms = filmService.findCompletedFilmsByTitle(user, title);
