@@ -40,8 +40,9 @@ public class TrailerController {
         try {
             boolean uploadResult = trailerService.uploadTrailer(file, title, description, user);
 
-            if(uploadResult) {
-                redirectAttributes.addFlashAttribute("message", "You successfully uploaded " + file.getOriginalFilename() + "!");
+            if (uploadResult) {
+                String sanitizedFileName = trailerService.sanitizeFileName(file.getOriginalFilename());
+                redirectAttributes.addFlashAttribute("message", "You successfully uploaded " + sanitizedFileName + "!");
             } else {
                 throw new RuntimeException("Unknown error occurred whilst storing file " + file.getOriginalFilename());
             }

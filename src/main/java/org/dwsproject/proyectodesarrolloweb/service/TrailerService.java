@@ -21,9 +21,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class TrailerService {
@@ -35,6 +36,16 @@ public class TrailerService {
         this.trailerRepository = trailerRepository;
     }
 
+    public String sanitizeFileName(String originalFileName) {
+
+        int lastIndexOf = originalFileName.lastIndexOf("."); // Get the last index of the file extension
+        String fileName = originalFileName.substring(0, lastIndexOf); // Get the file name without the extension
+        String extension = originalFileName.substring(lastIndexOf); // Get the file extension
+
+        String sanitizedFileName = fileName.replaceAll("[^a-zA-Z0-9-]|\\.", "");
+        return sanitizedFileName + extension; // Return the sanitized file name with the extension
+    }
+
     public boolean uploadTrailer(MultipartFile file, String title, String description, User user) throws IOException, TrailerUploadException, NoSuchAlgorithmException {
 
         if (user == null || !user.getUsername().equals("admin")) {
@@ -44,6 +55,14 @@ public class TrailerService {
         if (title.isEmpty() || description.isEmpty() || file.isEmpty()) {
             throw new TrailerUploadException("The title, description, or file cannot be empty.");
         }
+
+        String originalFileName = file.getOriginalFilename();
+
+        if (originalFileName == null) {
+            throw new TrailerUploadException("Invalid trailer file name. Please upload a valid MP4 file.");
+        }
+
+        String sanitizedFileName = sanitizeFileName(originalFileName);
 
         Tika tika = new Tika();
         String type = tika.detect(file.getBytes());
@@ -71,12 +90,12 @@ public class TrailerService {
 
 
         Trailer trailer = new Trailer();
-        trailer.setOriginalFileName(file.getOriginalFilename());
+        trailer.setOriginalFileName(originalFileName);
         trailer.setTitle(title);
         trailer.setDescription(description);
         trailer.setHash(hash);
         Trailer savedTrailer = trailerRepository.save(trailer);  // assuming the save method returns the saved entity
-        String filePath = "src/main/resources/static/uploads/" + file.getOriginalFilename();
+        String filePath = "src/main/resources/static/uploads/" + sanitizedFileName;
         savedTrailer.setFilePath(filePath);
         trailerRepository.save(savedTrailer);
         saveTrailer("uploads", file);
