@@ -3,6 +3,9 @@ package org.dwsproject.proyectodesarrolloweb.Service;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.dwsproject.proyectodesarrolloweb.Exceptions.UnauthorizedAccessException;
 import org.dwsproject.proyectodesarrolloweb.Repositories.UserRepository;
+import org.springframework.boot.actuate.endpoint.SecurityContext;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
@@ -26,7 +29,17 @@ public class UserSession {//information about the actual user
     }
 
     public User getUser() {
-        return user;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return null;
+        }
+
+        if (authentication.getPrincipal() instanceof User) {
+            return (User) authentication.getPrincipal();
+        } else {
+            return userRepository.findByUsername(authentication.getName());
+        }
     }
 
     public int getNumPosts() {//number of posts that the user has made
@@ -37,15 +50,12 @@ public class UserSession {//information about the actual user
         this.numPosts++;
     }
 
-    public void validateUser(String username) { //check if the user is the same as the logged in user
-        User user = userRepository.findByUsername(username);
-        User loggedInUser = this.getUser();
-        if (user == null || !user.equals(loggedInUser)) {
-            try {
-                throw new UnauthorizedAccessException("Unauthorized access");
-            } catch (UnauthorizedAccessException e) {
-                throw new RuntimeException(e);
-            }
+    public void validateUser(String username) throws UnauthorizedAccessException { //check if the user is the same as the logged in user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String loggedUsername = authentication.getName();
+
+        if (!loggedUsername.equals(username)) {
+            throw new UnauthorizedAccessException("You are not authorized to access this page");
         }
     }
 }

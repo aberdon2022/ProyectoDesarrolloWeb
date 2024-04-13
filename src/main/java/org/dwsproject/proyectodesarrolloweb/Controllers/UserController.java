@@ -4,6 +4,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.dwsproject.proyectodesarrolloweb.Exceptions.FriendException;
+import org.dwsproject.proyectodesarrolloweb.Exceptions.UnauthorizedAccessException;
 import org.dwsproject.proyectodesarrolloweb.Service.UserService;
 import org.dwsproject.proyectodesarrolloweb.Service.UserSession;
 import org.springframework.stereotype.Controller;
@@ -75,9 +76,15 @@ public class UserController {
 
     @GetMapping("/profile/{username}")
     public String profile(Model model, @PathVariable String username) {
-        userSession.validateUser(username);
+
         User user = userService.findUserByUsername(username);
         User loggedInUser = userSession.getUser();
+
+        try {
+            userSession.validateUser(username);
+        } catch (UnauthorizedAccessException e) {
+            throw new RuntimeException(e);
+        }
 
         if (user != null) {
             model.addAttribute("user", user);

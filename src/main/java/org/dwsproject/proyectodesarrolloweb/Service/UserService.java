@@ -3,11 +3,14 @@ package org.dwsproject.proyectodesarrolloweb.Service;
 import jakarta.servlet.http.Cookie;
 import org.dwsproject.proyectodesarrolloweb.Classes.Film;
 import org.dwsproject.proyectodesarrolloweb.Classes.Friendship;
+import org.dwsproject.proyectodesarrolloweb.Classes.Role;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.dwsproject.proyectodesarrolloweb.Exceptions.FriendException;
 import org.dwsproject.proyectodesarrolloweb.Repositories.FilmRepository;
 import org.dwsproject.proyectodesarrolloweb.Repositories.FriendshipRepository;
+import org.dwsproject.proyectodesarrolloweb.Repositories.RoleRepository;
 import org.dwsproject.proyectodesarrolloweb.Repositories.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -25,11 +28,16 @@ public class UserService {
 
     private final FriendshipRepository friendshipRepository;
 
+    private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
-    public UserService(UserRepository userRepository, FilmRepository filmRepository, FriendshipRepository friendshipRepository, UserSession userSession) {
+    public UserService(UserRepository userRepository, FilmRepository filmRepository, FriendshipRepository friendshipRepository, UserSession userSession, PasswordEncoder passwordEncoder,
+                       RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.filmRepository = filmRepository;
         this.friendshipRepository = friendshipRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.roleRepository = roleRepository;
     }
 
     public void setUserPendingFilms (User user) {
@@ -46,9 +54,16 @@ public class UserService {
         User user = new User(username, password);
         generateToken(user);
         if (userRepository.findByUsername(user.getUsername()) == null) {//Check if the user already exists
-            userRepository.save(user);//Save the user
+            Role role = roleRepository.findByName("USER");
+            if (role == null) {
+                role = new Role();
+                role.setName("USER");
+                roleRepository.save(role);
+            }
+            user.getRoles().add(role);
             Cookie cookie = new Cookie("token", user.getToken());
             cookie.setHttpOnly(true);
+            saveUser(user);//Save the user
             return user;
         } else {
             throw new RuntimeException("User already exists");
@@ -56,6 +71,7 @@ public class UserService {
     }
 
     public void saveUser (User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
 
@@ -77,7 +93,7 @@ public class UserService {
     public boolean checkPassword (User user, String password) {//Check if the password is correct
         User dbUser = userRepository.findByUsername(user.getUsername());
         if (dbUser != null) {
-            return user.getPassword().equals(password);
+            return passwordEncoder.matches(password, dbUser.getPassword());
         } else {
             return false;
         }

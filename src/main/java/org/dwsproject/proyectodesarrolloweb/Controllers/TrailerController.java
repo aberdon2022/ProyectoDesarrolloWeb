@@ -4,6 +4,7 @@ import org.dwsproject.proyectodesarrolloweb.Classes.Trailer;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.dwsproject.proyectodesarrolloweb.Exceptions.TrailerDeletionException;
 import org.dwsproject.proyectodesarrolloweb.Exceptions.TrailerUploadException;
+import org.dwsproject.proyectodesarrolloweb.Exceptions.UnauthorizedAccessException;
 import org.dwsproject.proyectodesarrolloweb.Service.TrailerService;
 import org.dwsproject.proyectodesarrolloweb.Service.UserSession;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +36,11 @@ public class TrailerController {
     public String uploadTrailer(@RequestParam("file") MultipartFile file, @RequestParam("title") String title, @RequestParam("description") String description, RedirectAttributes redirectAttributes) {
 
         User user = userSession.getUser();
-        userSession.validateUser(user.getUsername());
+        try {
+            userSession.validateUser(user.getUsername());
+        } catch (UnauthorizedAccessException e) {
+            throw new RuntimeException(e);
+        }
 
         try {
             boolean uploadResult = trailerService.uploadTrailer(file, title, description, user);
@@ -59,7 +64,11 @@ public class TrailerController {
     @GetMapping("/delete/{id}")
     public String deleteTrailer(Model model, @PathVariable Long id, RedirectAttributes redirectAttributes) {
         User user = userSession.getUser();
-        userSession.validateUser(user.getUsername());
+        try {
+            userSession.validateUser(user.getUsername());
+        } catch (UnauthorizedAccessException e) {
+            throw new RuntimeException(e);
+        }
 
         if (!user.getUsername().equals("admin")) {
             return "redirect:/login";

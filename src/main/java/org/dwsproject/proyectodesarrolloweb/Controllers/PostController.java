@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import org.dwsproject.proyectodesarrolloweb.Classes.Image;
 import org.dwsproject.proyectodesarrolloweb.Classes.Post;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
+import org.dwsproject.proyectodesarrolloweb.Exceptions.UnauthorizedAccessException;
 import org.dwsproject.proyectodesarrolloweb.Service.ImageService;
 import org.dwsproject.proyectodesarrolloweb.Service.PostService;
 import org.dwsproject.proyectodesarrolloweb.Service.UserService;
@@ -74,7 +75,11 @@ public class PostController {
         User user = userService.findUserByUsername(username);
 
         if (user != null) {
-            userSession.validateUser(user.getUsername());
+            try {
+                userSession.validateUser(user.getUsername());
+            } catch (UnauthorizedAccessException e) {
+                throw new RuntimeException(e);
+            }
             post.setUser(user);
 
             if (imageFile != null && !imageFile.isEmpty()) {
@@ -108,7 +113,11 @@ public class PostController {
 
     @GetMapping("/post/{id}/delete")//Delete a post by its id
     public String deletePost (@PathVariable long id) {
-        userSession.validateUser(userSession.getUser().getUsername());
+        try {
+            userSession.validateUser(userSession.getUser().getUsername());
+        } catch (UnauthorizedAccessException e) {
+            throw new RuntimeException(e);
+        }
         Post post = postService.findById(id);
         String loggedInUser = userSession.getUser().getUsername();
         boolean isOwner = post.getUser().getUsername().equals(loggedInUser);
@@ -126,7 +135,11 @@ public class PostController {
     }
     @GetMapping("/post/{id}/edit")//Show the form to edit a post by its id
     public String editPost(Model model, @PathVariable long id) {
-        userSession.validateUser(userSession.getUser().getUsername());
+        try {
+            userSession.validateUser(userSession.getUser().getUsername());
+        } catch (UnauthorizedAccessException e) {
+            throw new RuntimeException(e);
+        }
         Post post = postService.findById(id);
         String loggedInUser = userSession.getUser().getUsername();
         boolean isOwner = post.getUser().getUsername().equals(loggedInUser);

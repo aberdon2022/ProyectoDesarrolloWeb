@@ -22,13 +22,6 @@ public class User {
     @Column(name = "token")
     private String token;
 
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
     @OneToMany(mappedBy = "user")
     @JsonView(Views.Public.class)
     private final List<Film> pendingFilms = new ArrayList<>();
@@ -42,6 +35,14 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private final List<Post> posts = new ArrayList<>();
+
+    @ManyToMany(cascade = CascadeType.MERGE)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private List<Role> roles = new ArrayList<>();
 
 
     public User() {
@@ -98,6 +99,14 @@ public class User {
         this.password = password;
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
     public void setPendingFilms(List<Film> pendingFilms) {
         this.pendingFilms.clear(); //Clear the list before adding the new elements
         if (pendingFilms != null) {
@@ -112,7 +121,6 @@ public class User {
         }
     }
 
-
     @Override
     public boolean equals(Object obj) { //Override the equals method to compare the objects by username
         if (this == obj) {
@@ -123,5 +131,13 @@ public class User {
         }
         User user = (User) obj;
         return Objects.equals(username, user.username);
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 }

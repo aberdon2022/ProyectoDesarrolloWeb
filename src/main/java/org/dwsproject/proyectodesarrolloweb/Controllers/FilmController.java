@@ -2,6 +2,7 @@ package org.dwsproject.proyectodesarrolloweb.Controllers;
 
 import org.dwsproject.proyectodesarrolloweb.Classes.Film;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
+import org.dwsproject.proyectodesarrolloweb.Exceptions.UnauthorizedAccessException;
 import org.dwsproject.proyectodesarrolloweb.Service.FilmService;
 import org.dwsproject.proyectodesarrolloweb.Service.UserService;
 import org.dwsproject.proyectodesarrolloweb.Service.UserSession;
@@ -35,7 +36,11 @@ public class FilmController {
     @PostMapping("/addpeli/pending")//Add a film to the list
     public String createPendingFilm(Film film, @RequestParam("image")MultipartFile imageFile, @RequestParam String username, RedirectAttributes redirectAttributes) {
         User user = userService.findUserByUsername(username);
-        userSession.validateUser(username); //Validate if the user is the same as the one logged in
+        try {
+            userSession.validateUser(username); //Validate if the user is the same as the one logged in
+        } catch (UnauthorizedAccessException e) {
+            throw new RuntimeException(e);
+        }
 
         System.out.println("Film object in controller: " + film.toString());
 
@@ -53,7 +58,11 @@ public class FilmController {
     @PostMapping("/addpeli/completed")//Add a film to the list
     public String createCompletedFilm(Film film, @RequestParam("image")MultipartFile imageFile, @RequestParam String username, RedirectAttributes redirectAttributes) {
         User user = userService.findUserByUsername(username);
-        userSession.validateUser(username); //Validate if the user is the same as the one logged in
+        try {
+            userSession.validateUser(username); //Validate if the user is the same as the one logged in
+        } catch (UnauthorizedAccessException e) {
+            throw new RuntimeException(e);
+        }
 
         System.out.println("Film object in controller: " + film.toString());
         try {
@@ -85,7 +94,11 @@ public class FilmController {
 
     @GetMapping("/pending")//Show the pending list
     public String viewPending(Model model, @RequestParam String username, @RequestParam (required = false) String sort, @RequestParam (required = false) String order, @RequestParam (required = false) String title, @RequestParam (required = false) Integer minYear, @RequestParam (required = false) Integer maxYear) {
-        userSession.validateUser(username); //Validate if the user is the same as the one logged in
+        try {
+            userSession.validateUser(username); //Validate if the user is the same as the one logged in
+        } catch (UnauthorizedAccessException e) {
+            throw new RuntimeException(e);
+        }
         User user = userService.findUserByUsername(username);
         model.addAttribute("user", user);
 
@@ -111,7 +124,11 @@ public class FilmController {
 
     @GetMapping("/completed")//show the completed list
     public String viewCompleted(Model model, @RequestParam String username, @RequestParam (required = false) Integer minRating, @RequestParam (required = false) Integer maxRating, @RequestParam (required = false) String sort, @RequestParam (required = false) String order, @RequestParam (required = false, defaultValue = "false") Boolean applySort, @RequestParam (required = false) String title, @RequestParam (required = false) Integer minYear, @RequestParam (required = false) Integer maxYear) {
-        userSession.validateUser(username);
+        try {
+            userSession.validateUser(username);
+        } catch (UnauthorizedAccessException e) {
+            throw new RuntimeException(e);
+        }
 
         User user = userService.findUserByUsername(username);
         model.addAttribute("user", user);
@@ -168,7 +185,11 @@ public class FilmController {
 
     @GetMapping ("/completed/{filmId}/delete")//Delete a film from the completed list
     public String deleteFilmC(Model model, @PathVariable long filmId, @RequestParam String username) {
-        userSession.validateUser(username); //Validate if the user is the same as the one logged in
+        try {
+            userSession.validateUser(username); //Validate if the user is the same as the one logged in
+        } catch (UnauthorizedAccessException e) {
+            throw new RuntimeException(e);
+        }
         User user = userService.findUserByUsername(username);
         filmService.deleteFilm(user, filmId, "completed");
         model.addAttribute("user", user);
@@ -176,7 +197,11 @@ public class FilmController {
     }
     @GetMapping("/pending/{filmId}/delete")//Delete a film from the pending list
     public String deleteFilmP(Model model, @PathVariable long filmId, @RequestParam String username) {
-        userSession.validateUser(username); //Validate if the user is the same as the one logged in
+        try {
+            userSession.validateUser(username); //Validate if the user is the same as the one logged in
+        } catch (UnauthorizedAccessException e) {
+            throw new RuntimeException(e);
+        }
         User user = userService.findUserByUsername(username);
         filmService.deleteFilm(user, filmId, "pending");
         model.addAttribute("user", user);
