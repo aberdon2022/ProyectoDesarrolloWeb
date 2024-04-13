@@ -1,12 +1,18 @@
 package org.dwsproject.proyectodesarrolloweb.Controllers;
 
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.dwsproject.proyectodesarrolloweb.Exceptions.FriendException;
 import org.dwsproject.proyectodesarrolloweb.Exceptions.UnauthorizedAccessException;
 import org.dwsproject.proyectodesarrolloweb.Service.UserService;
 import org.dwsproject.proyectodesarrolloweb.Service.UserSession;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +20,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Controller
 public class UserController {
@@ -35,6 +43,16 @@ public class UserController {
     @GetMapping("/logout")
     public String logout() {
         return "logout";
+    }
+
+    @PostMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        SecurityContextHolder.getContext().setAuthentication(null);
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        return "redirect:/login";
     }
 
     @PostMapping("/login")
@@ -59,14 +77,19 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String register(Model model, @RequestParam String username, @RequestParam String password, RedirectAttributes redirectAttributes, HttpServletResponse response) {
+    public String register(Model model, @RequestParam String username, @RequestParam String password, RedirectAttributes redirectAttributes, HttpServletRequest request, HttpServletResponse response) {
         try {
             User user = userService.registerUser(username, password);
             model.addAttribute("user", user);//Add the user to the model
+
             userSession.setUser(user);
             Cookie cookie = new Cookie("token", user.getToken());
             cookie.setHttpOnly(true);
             response.addCookie(cookie);
+
+            CsrfToken csrfToken = (CsrfToken) request.getAttribute("_csrf");
+            redirectAttributes.addFlashAttribute("_csrf", csrfToken);
+
             return "redirect:/profile/" + username;
         } catch (RuntimeException e) {
             redirectAttributes.addFlashAttribute("message", e.getMessage());
@@ -136,6 +159,42 @@ public class UserController {
         redirectAttributes.addAttribute("loggedInUser", loggedInUser); // Add parameters to the redirect URL
 
         return "redirect:/friends/" + username; // Redirect to the user's friend list
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/{username}/users")
+    public String listAllUsers(Model model, @PathVariable String username) {
+        User user = userService.findUserByUsername(username);
+
+        // Session validation
+
+        if (user != null) {
+            List<User> users = userService.findAllUsers(); // assuming you have a method to get all users
+            model.addAttribute("users", users);
+            model.addAttribute("loggedInUser", user);
+            return "users"; // return the view name
+        } else {
+            return "redirect:/login";
+        }
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping("/admin/delete/{username}")
+    public String deleteUser(Model model, @PathVariable String username, RedirectAttributes redirectAttributes, HttpServletRequest request) {
+        User user = userService.findUserByUsername(username);
+
+        if (user != null) {
+            userService.deleteUser(user.getUsername());
+            SecurityContextHolder.getContext().setAuthentication(null);
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                session.invalidate();
+            }
+            redirectAttributes.addFlashAttribute("message", "User deleted successfully");
+            return "redirect:/profile/" + username + "/users";
+        } else {
+            return "redirect:/login";
+        }
     }
 
 

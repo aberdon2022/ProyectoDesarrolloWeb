@@ -58,6 +58,7 @@ public class LoadDatabase implements CommandLineRunner {
             User existingUser = userRepository.findByUsername(user.getUsername());
             if (existingUser == null) {
                 if (user.getUsername().equals("admin")) {
+                    user.getRoles().add(userRole);
                     user.getRoles().add(adminRole);
                 } else {
                     user.getRoles().add(userRole);

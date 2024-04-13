@@ -1,16 +1,16 @@
 package org.dwsproject.proyectodesarrolloweb.Service;
 
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpSession;
 import org.dwsproject.proyectodesarrolloweb.Classes.Film;
 import org.dwsproject.proyectodesarrolloweb.Classes.Friendship;
 import org.dwsproject.proyectodesarrolloweb.Classes.Role;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.dwsproject.proyectodesarrolloweb.Exceptions.FriendException;
-import org.dwsproject.proyectodesarrolloweb.Repositories.FilmRepository;
-import org.dwsproject.proyectodesarrolloweb.Repositories.FriendshipRepository;
-import org.dwsproject.proyectodesarrolloweb.Repositories.RoleRepository;
-import org.dwsproject.proyectodesarrolloweb.Repositories.UserRepository;
+import org.dwsproject.proyectodesarrolloweb.Repositories.*;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -30,14 +30,17 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
+    private final PostRepository postRepository;
 
     public UserService(UserRepository userRepository, FilmRepository filmRepository, FriendshipRepository friendshipRepository, UserSession userSession, PasswordEncoder passwordEncoder,
-                       RoleRepository roleRepository) {
+                       RoleRepository roleRepository,
+                       PostRepository postRepository) {
         this.userRepository = userRepository;
         this.filmRepository = filmRepository;
         this.friendshipRepository = friendshipRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
+        this.postRepository = postRepository;
     }
 
     public void setUserPendingFilms (User user) {
@@ -169,6 +172,24 @@ public class UserService {
     public void generateToken(User user) { // Generate a random token for the user
         String token = UUID.randomUUID().toString();
         user.setToken(token);
+    }
+
+    public List<User> findAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public void deleteUser(String username) {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new RuntimeException("User not found");
+        }
+
+        postRepository.deleteAll(user.getPosts());
+        filmRepository.deleteAll(user.getPendingFilms());
+        filmRepository.deleteAll(user.getCompletedFilms());
+        friendshipRepository.deleteAll(user.getFriends());
+
+        userRepository.delete(user);
     }
 }
 
