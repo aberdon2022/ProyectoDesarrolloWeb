@@ -27,8 +27,11 @@
         <p id="message">{{message}}</p>
     {{/message}}
     <form action="/friends/{{friend.username}}/add?loggedInUser={{username}}" method="post">
-    <input type="text" name="friendUsername" placeholder="Enter username">
-    <button type="submit">Add friend</button>
+        <label>
+            <input type="text" name="friendUsername" placeholder="Enter username">
+        </label>
+        <button type="submit">Add friend</button>
+        <input type="hidden" name="_csrf" value="{{_csrf.token}}">
     </form>
     <a href="/profile/{{friend.username}}" class="button">Return to Profile</a>
 {{/isOwner}}
