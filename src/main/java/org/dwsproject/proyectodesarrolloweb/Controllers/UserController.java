@@ -10,6 +10,7 @@ import org.dwsproject.proyectodesarrolloweb.Exceptions.UnauthorizedAccessExcepti
 import org.dwsproject.proyectodesarrolloweb.Service.UserService;
 import org.dwsproject.proyectodesarrolloweb.Service.UserSession;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
@@ -185,9 +186,9 @@ public class UserController {
     @PostMapping("/admin/delete/{username}")
     public String deleteUser(Model model, @PathVariable String username, RedirectAttributes redirectAttributes) {
 
-        try {
-            userSession.validateUser(username);
-        } catch (UnauthorizedAccessException e) {
+        User loggedInUser = userSession.getUser();
+
+        if (loggedInUser == null || !loggedInUser.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
             return "redirect:/error/403";
         }
 
@@ -196,7 +197,7 @@ public class UserController {
         if (user != null) {
             userService.deleteUser(user.getUsername());
             redirectAttributes.addFlashAttribute("message", "User deleted successfully");
-            return "redirect:/admin/" + user.getUsername() + "/users";
+            return "redirect:/admin/" + loggedInUser.getUsername() + "/users";
         } else {
             return "redirect:/login";
         }
