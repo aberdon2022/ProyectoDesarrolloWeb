@@ -1,5 +1,7 @@
 package org.dwsproject.proyectodesarrolloweb.Controllers;
 
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,6 +10,22 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class CustomErrorController implements ErrorController {
+
+    @GetMapping("/error")
+    public String handleError(HttpServletRequest request) {
+        Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
+
+        if (status != null) {
+            int statusCode = Integer.parseInt(status.toString());
+
+            return "redirect:/error/" + statusCode;
+        }
+        return "redirect:/error/500";
+    }
+
+
+
+
     @GetMapping("/error/{errorCode}")
     public String handleCustomError(@PathVariable int errorCode, Model model) {
         String errorMessage = switch (errorCode) {

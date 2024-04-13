@@ -2,21 +2,19 @@
 <html lang="en">
 <head>
     <title>Admin - All Users</title>
-    <!-- Add your CSS links here -->
+    <link rel="stylesheet" href=/css/UserList.css>
 </head>
 <body>
 <h1>Welcome, {{loggedInUser.username}}</h1>
-<h2>All Users</h2>
-<ul>
+<h2>List of All Users</h2>
     {{#users}}
-        <li>
-            Username: {{username}}
+        <div class="user">
+            <p>Username: {{username}}</p>
             <form action="/admin/delete/{{username}}" method="post">
                 <input type="hidden" name="_csrf" value="{{_csrf.token}}">
-                <input type="submit" value="Delete">
+                <button type="submit" value="Delete">Delete</button>
             </form>
-        </li>
+        </div>
     {{/users}}
-</ul>
 </body>
 </html>

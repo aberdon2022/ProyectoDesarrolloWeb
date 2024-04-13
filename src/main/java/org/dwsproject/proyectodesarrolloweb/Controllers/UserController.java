@@ -9,7 +9,6 @@ import org.dwsproject.proyectodesarrolloweb.Exceptions.FriendException;
 import org.dwsproject.proyectodesarrolloweb.Exceptions.UnauthorizedAccessException;
 import org.dwsproject.proyectodesarrolloweb.Service.UserService;
 import org.dwsproject.proyectodesarrolloweb.Service.UserSession;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.csrf.CsrfToken;
@@ -162,11 +161,15 @@ public class UserController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/{username}/users")
+    @GetMapping("/admin/{username}/users")
     public String listAllUsers(Model model, @PathVariable String username) {
-        User user = userService.findUserByUsername(username);
 
-        // Session validation
+        try {
+            userSession.validateUser(username);
+        } catch (UnauthorizedAccessException e) {
+            return "redirect:/error/403";
+        }
+        User user = userService.findUserByUsername(username);
 
         if (user != null) {
             List<User> users = userService.findAllUsers(); // assuming you have a method to get all users
@@ -180,18 +183,20 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/admin/delete/{username}")
-    public String deleteUser(Model model, @PathVariable String username, RedirectAttributes redirectAttributes, HttpServletRequest request) {
+    public String deleteUser(Model model, @PathVariable String username, RedirectAttributes redirectAttributes) {
+
+        try {
+            userSession.validateUser(username);
+        } catch (UnauthorizedAccessException e) {
+            return "redirect:/error/403";
+        }
+
         User user = userService.findUserByUsername(username);
 
         if (user != null) {
             userService.deleteUser(user.getUsername());
-            SecurityContextHolder.getContext().setAuthentication(null);
-            HttpSession session = request.getSession(false);
-            if (session != null) {
-                session.invalidate();
-            }
             redirectAttributes.addFlashAttribute("message", "User deleted successfully");
-            return "redirect:/profile/" + username + "/users";
+            return "redirect:/admin/" + user.getUsername() + "/users";
         } else {
             return "redirect:/login";
         }
