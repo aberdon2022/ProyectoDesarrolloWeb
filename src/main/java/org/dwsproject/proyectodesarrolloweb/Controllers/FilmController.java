@@ -1,11 +1,13 @@
 package org.dwsproject.proyectodesarrolloweb.Controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.dwsproject.proyectodesarrolloweb.Classes.Film;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.dwsproject.proyectodesarrolloweb.Exceptions.UnauthorizedAccessException;
 import org.dwsproject.proyectodesarrolloweb.Service.FilmService;
 import org.dwsproject.proyectodesarrolloweb.Service.UserService;
 import org.dwsproject.proyectodesarrolloweb.Service.UserSession;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -93,7 +95,13 @@ public class FilmController {
     }
 
     @GetMapping("/pending")//Show the pending list
-    public String viewPending(Model model, @RequestParam String username, @RequestParam (required = false) String sort, @RequestParam (required = false) String order, @RequestParam (required = false) String title, @RequestParam (required = false) Integer minYear, @RequestParam (required = false) Integer maxYear) {
+    public String viewPending(Model model, @RequestParam String username, @RequestParam (required = false) String sort, @RequestParam (required = false) String order, @RequestParam (required = false) String title, @RequestParam (required = false) Integer minYear, @RequestParam (required = false) Integer maxYear, HttpServletRequest request) {
+
+        CsrfToken csrfToken = (CsrfToken) request.getAttribute("_csrf");
+        if (csrfToken != null) {
+            model.addAttribute("_csrf", csrfToken.getToken());
+        }
+
         try {
             userSession.validateUser(username); //Validate if the user is the same as the one logged in
         } catch (UnauthorizedAccessException e) {
@@ -123,7 +131,13 @@ public class FilmController {
     }
 
     @GetMapping("/completed")//show the completed list
-    public String viewCompleted(Model model, @RequestParam String username, @RequestParam (required = false) Integer minRating, @RequestParam (required = false) Integer maxRating, @RequestParam (required = false) String sort, @RequestParam (required = false) String order, @RequestParam (required = false, defaultValue = "false") Boolean applySort, @RequestParam (required = false) String title, @RequestParam (required = false) Integer minYear, @RequestParam (required = false) Integer maxYear) {
+    public String viewCompleted(Model model, @RequestParam String username, @RequestParam (required = false) Integer minRating, @RequestParam (required = false) Integer maxRating, @RequestParam (required = false) String sort, @RequestParam (required = false) String order, @RequestParam (required = false, defaultValue = "false") Boolean applySort, @RequestParam (required = false) String title, @RequestParam (required = false) Integer minYear, @RequestParam (required = false) Integer maxYear, HttpServletRequest request) {
+
+        CsrfToken csrfToken = (CsrfToken) request.getAttribute("_csrf");
+        if (csrfToken != null) {
+            model.addAttribute("_csrf", csrfToken.getToken());
+        }
+
         try {
             userSession.validateUser(username);
         } catch (UnauthorizedAccessException e) {

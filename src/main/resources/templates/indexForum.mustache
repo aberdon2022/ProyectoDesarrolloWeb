@@ -21,6 +21,7 @@
 <form action="/forum" method="get">
     <input type="text" name="username" placeholder="Search by username...">
     <button type="submit">Search</button>
+    <input type="hidden" name="_csrf" value="{{_csrf.token}}">
 </form>
 <br>
 {{#userNotFound}}

@@ -26,6 +26,7 @@
             <input type="file" id="file" name="file">
 
             <input type="submit" value="Upload">
+            <input type="hidden" name="_csrf" value="{{_csrf.token}}">
         </form>
     {{/isAdmin}}
 

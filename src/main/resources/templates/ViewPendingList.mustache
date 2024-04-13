@@ -23,6 +23,7 @@
         <option value="desc">Descending</option>
     </select>
     <input type="submit" value="Filter">
+    <input type="hidden" name="_csrf" value="{{_csrf.token}}">
 </form>
 
 <br>
@@ -30,6 +31,7 @@
     <input type="hidden" name="username" value="{{user.username}}">
     <input type="text" id="title" name="title">
     <button type="submit">Search</button>
+    <input type="hidden" name="_csrf" value="{{_csrf.token}}">
 </form>
 {{#filmNotFound}}
     <p class="notFound">Film not found</p>

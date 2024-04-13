@@ -1,5 +1,6 @@
 package org.dwsproject.proyectodesarrolloweb.Controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.dwsproject.proyectodesarrolloweb.Classes.Image;
 import org.dwsproject.proyectodesarrolloweb.Classes.Post;
@@ -9,6 +10,7 @@ import org.dwsproject.proyectodesarrolloweb.Service.ImageService;
 import org.dwsproject.proyectodesarrolloweb.Service.PostService;
 import org.dwsproject.proyectodesarrolloweb.Service.UserService;
 import org.dwsproject.proyectodesarrolloweb.Service.UserSession;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,7 +41,13 @@ public class PostController {
     }
 
     @GetMapping("/forum")//Show the actual posts
-    public String showPosts(Model model, HttpSession session, @RequestParam(value = "username", required = false) String username) {
+    public String showPosts(Model model, HttpSession session, @RequestParam(value = "username", required = false) String username, HttpServletRequest request) {
+
+        CsrfToken csrfToken = (CsrfToken) request.getAttribute("_csrf");
+
+        if (csrfToken != null) {
+            model.addAttribute("_csrf", csrfToken);
+        }
 
         List<Post> posts;
         if (username != null && !username.isEmpty()) {
@@ -134,12 +142,18 @@ public class PostController {
         }
     }
     @GetMapping("/post/{id}/edit")//Show the form to edit a post by its id
-    public String editPost(Model model, @PathVariable long id) {
+    public String editPost(Model model, @PathVariable long id, HttpServletRequest request) {
         try {
             userSession.validateUser(userSession.getUser().getUsername());
         } catch (UnauthorizedAccessException e) {
             throw new RuntimeException(e);
         }
+
+        CsrfToken csrfToken = (CsrfToken) request.getAttribute("_csrf");
+        if (csrfToken != null) {
+            model.addAttribute("_csrf", csrfToken);
+        }
+
         Post post = postService.findById(id);
         String loggedInUser = userSession.getUser().getUsername();
         boolean isOwner = post.getUser().getUsername().equals(loggedInUser);

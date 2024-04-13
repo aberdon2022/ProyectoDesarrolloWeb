@@ -46,6 +46,7 @@
         <input type="hidden" name="username" value="{{user.username}}">
         <input type="hidden" id="rating" name="rating">
         <input type="submit" value="Submit">
+        <input type="hidden" name="_csrf" value="{{_csrf.token}}">
         <a href="/completed?username={{user.username}}" class="Cancel">Cancel</a>
     </form>
     <script>
