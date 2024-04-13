@@ -11,6 +11,7 @@ import org.dwsproject.proyectodesarrolloweb.Exceptions.UserNotFoundException;
 import org.dwsproject.proyectodesarrolloweb.Repositories.UserRepository;
 import org.dwsproject.proyectodesarrolloweb.Service.UserService;
 import org.dwsproject.proyectodesarrolloweb.Service.UserSession;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,11 +29,13 @@ public class ApiUserController {
     private final UserService userService;
     private final UserSession userSession;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public ApiUserController(UserService userService, UserSession userSession, UserRepository userRepository) {
+    public ApiUserController(UserService userService, UserSession userSession, UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.userSession = userSession;
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/register")
@@ -43,7 +46,7 @@ public class ApiUserController {
             throw new UserAlreadyExistsException("Username already exists");
         }
 
-        newUser.setPassword(newUser.getPassword());
+        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
         newUser.setToken(UUID.randomUUID().toString());
 
         userRepository.save(newUser);
