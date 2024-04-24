@@ -47,31 +47,15 @@ public class ApiUserController {
         }
 
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
-        newUser.setToken(UUID.randomUUID().toString());
 
         userRepository.save(newUser);
 
         return newUser;
     }
 
-    @PostMapping("/login")
-    public User login(@RequestParam String username, @RequestParam String password, @RequestHeader(value = "Authorization") String token, HttpServletResponse response) throws UnauthorizedAccessException {
-        User user = userRepository.findByUsername(username);
-
-        if (user != null && userService.checkPassword(user, password)) {
-            if (!user.getToken().equals(token)) {
-                throw new UnauthorizedAccessException("Invalid token");
-            }
-            userSession.setUser(user);
-            response.setHeader("Authorization", token);
-            return user;
-        } else {
-            throw new UnauthorizedAccessException("Invalid username or password");
-        }
-    }
 
     @GetMapping("/profile/{username}")
-    public User profile(@PathVariable String username, @RequestHeader(value = "Authorization") String token) throws UserNotFoundException, UnauthorizedAccessException {
+    public User profile(@PathVariable String username) throws UserNotFoundException, UnauthorizedAccessException {
         User authenticatedUser = userSession.getUser(); // Get the authenticated user
 
         if (authenticatedUser == null || !authenticatedUser.getUsername().equals(username)) { // If the authenticated user is null or the username is not the same as the authenticated user
@@ -90,11 +74,11 @@ public class ApiUserController {
     }
 
     @GetMapping("/friends/{username}")
-    public Map<String, Object> friends(@PathVariable String username, @RequestHeader(value = "Authorization") String token) throws UnauthorizedAccessException, UserNotFoundException {
-        User tokenUser = userService.findUserByToken(token);
+    public Map<String, Object> friends(@PathVariable String username) throws UnauthorizedAccessException, UserNotFoundException {
+        User authenticatedUser = userSession.getUser();
 
-        if (tokenUser == null || !tokenUser.getUsername().equals(username)) {
-            throw new UnauthorizedAccessException("Invalid token");
+        if (authenticatedUser == null || !authenticatedUser.getUsername().equals(username)) {
+            throw new UnauthorizedAccessException("Access denied");
         }
 
         User user = userService.findUserByUsername(username);

@@ -55,7 +55,6 @@ public class UserService {
 
     public User registerUser (String username, String password) {//Register a new user (
         User user = new User(username, password);
-        generateToken(user);
         if (userRepository.findByUsername(user.getUsername()) == null) {//Check if the user already exists
             Role role = roleRepository.findByName("USER");
             if (role == null) {
@@ -64,8 +63,6 @@ public class UserService {
                 roleRepository.save(role);
             }
             user.getRoles().add(role);
-            Cookie cookie = new Cookie("token", user.getToken());
-            cookie.setHttpOnly(true);
             saveUser(user);//Save the user
             return user;
         } else {
@@ -163,15 +160,6 @@ public class UserService {
         } else {
             throw new FriendException("User or friend not found");
         }
-    }
-
-    public User findUserByToken(String token) {
-        return userRepository.findByToken(token);
-    }
-
-    public void generateToken(User user) { // Generate a random token for the user
-        String token = UUID.randomUUID().toString();
-        user.setToken(token);
     }
 
     public List<User> findAllUsers() {

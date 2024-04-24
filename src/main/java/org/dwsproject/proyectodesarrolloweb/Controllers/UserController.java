@@ -62,9 +62,6 @@ public class UserController {
         if (user != null && userService.checkPassword(user,password)) { //If the user exists and the password is correct
             model.addAttribute("user", user);
             userSession.setUser(user);
-            Cookie cookie = new Cookie("token", user.getToken());
-            cookie.setHttpOnly(true);
-            response.addCookie(cookie);
             return "redirect:/profile/" + username;
         } else {
             return "redirect:/login?error=true";//If the user does not exist or the password is incorrect return to the login page with an error message
@@ -83,9 +80,6 @@ public class UserController {
             model.addAttribute("user", user);//Add the user to the model
 
             userSession.setUser(user);
-            Cookie cookie = new Cookie("token", user.getToken());
-            cookie.setHttpOnly(true);
-            response.addCookie(cookie);
 
             CsrfToken csrfToken = (CsrfToken) request.getAttribute("_csrf");
             redirectAttributes.addFlashAttribute("_csrf", csrfToken);

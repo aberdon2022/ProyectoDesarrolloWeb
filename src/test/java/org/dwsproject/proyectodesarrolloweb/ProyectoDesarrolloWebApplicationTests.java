@@ -23,8 +23,10 @@ class ProyectoDesarrolloWebApplicationTests {
     @Test
     void contextLoads() {
         try {
-            File file = new ClassPathResource("LateNightwiththeDevilTrailer.mp4").getFile();
-            MockMultipartFile mockMultipartFile = new MockMultipartFile("file", file.getName(), "video/mp4", file.toURI().toURL().openStream());
+            File file = new ClassPathResource("/static/CHALLENGERSFinalTrailer1080p.mp4").getFile();
+            String sanitizedFileName = trailerService.sanitizeFileName(file.getName());
+
+            MockMultipartFile mockMultipartFile = new MockMultipartFile("file", sanitizedFileName, "video/mp4", file.toURI().toURL().openStream());
 
             MessageDigest md = MessageDigest.getInstance("MD5");
             md.update(mockMultipartFile.getBytes()); // Update the MessageDigest object with the bytes of the file
@@ -32,7 +34,7 @@ class ProyectoDesarrolloWebApplicationTests {
             Trailer trailer = getTrailer(digest);
 
             trailerService.saveExampleTrailer(trailer, mockMultipartFile);
-        } catch (IOException | NoSuchAlgorithmException e) {
+        } catch (IOException | NoSuchAlgorithmException | IllegalArgumentException e) {
             throw new RuntimeException(e);
         }
     }
@@ -46,7 +48,7 @@ class ProyectoDesarrolloWebApplicationTests {
 
         String hash = sb.toString(); // Hex representation of the MD5 hash to a string
 
-        Trailer trailer = new Trailer("","LateNightwiththeDevilTrailer.mp4","A trailer for the movie Late Night with the Devil","Late Night with the Devil");
+        Trailer trailer = new Trailer("","CHALLENGERSFinalTrailer1080p.mp4","A trailer for the movie CHALLENGERSFinalTrailer1080p","CHALLENGERSFinalTrailer1080p");
         trailer.setHash(hash);
         return trailer;
     }

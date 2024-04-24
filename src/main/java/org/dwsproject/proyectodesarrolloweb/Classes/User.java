@@ -22,9 +22,6 @@ public class User {
     private String username;
     private String password;
 
-    @Column(name = "token")
-    private String token;
-
     @OneToMany(mappedBy = "user")
     @JsonView(Views.Public.class)
     private final List<Film> pendingFilms = new ArrayList<>();
@@ -54,7 +51,6 @@ public class User {
     public User(String username, String password) {
         this.username = username;
         this.password = password;
-        this.token = UUID.randomUUID().toString();
     }
 
 
@@ -100,14 +96,6 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
     }
 
     public void setPendingFilms(List<Film> pendingFilms) {
