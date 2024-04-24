@@ -1,4 +1,4 @@
-package org.dwsproject.proyectodesarrolloweb.Filter;
+/*package org.dwsproject.proyectodesarrolloweb.Filter;
 
 import org.dwsproject.proyectodesarrolloweb.Service.UserService;
 import org.dwsproject.proyectodesarrolloweb.Service.UserSession;
@@ -26,3 +26,5 @@ public class FilterConfig {
         return registrationBean;
     }
 }
+
+ */
