@@ -1,6 +1,7 @@
 package org.dwsproject.proyectodesarrolloweb.Classes;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
@@ -66,6 +67,7 @@ public class User {
         return username;
     }
 
+    @JsonIgnore
     public String getPassword() {
         return password;
     }
@@ -124,6 +126,7 @@ public class User {
         return Objects.equals(username, user.username);
     }
 
+    @JsonIgnore
     public List<Role> getRoles() {
         return roles;
     }
