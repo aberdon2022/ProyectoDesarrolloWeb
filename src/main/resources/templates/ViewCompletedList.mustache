@@ -39,13 +39,13 @@
         <span class="checkbox-indicator"></span> Apply Sort
     </label>
     <input type="submit" value="Filter">
-    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+    <input type="hidden" name="_csrf" value="{{_csrf.token}}">
 </form>
 <br>
 <form id="searchForm" action="/completed" method="get">
     <input type="hidden" name="username" value="{{user.username}}">
     <input type="text" id="title" name="title">
-    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+    <input type="hidden" name="_csrf" value="{{_csrf.token}}">
     <button type="submit">Search</button>
 </form>
 {{#filmNotFound}}
