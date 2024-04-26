@@ -217,7 +217,7 @@ CREATE TABLE `trailer` (
 
 LOCK TABLES `trailer` WRITE;
 /*!40000 ALTER TABLE `trailer` DISABLE KEYS */;
-INSERT INTO `trailer` VALUES (2252,'A trailer for the movie Late Night with the Devil','/static/uploads/trailer-2252.mp4','LateNightwiththeDevilTrailer.mp4','Late Night with the Devil');
+INSERT INTO `trailer` VALUES (2252,'A trailer for the movie Late Night with the Devil','/static/uploads/trailer-2252.mp4','LateNightwiththe...&%$DevilTrailer.mp4','Late Night with the Devil');
 /*!40000 ALTER TABLE `trailer` ENABLE KEYS */;
 UNLOCK TABLES;
 

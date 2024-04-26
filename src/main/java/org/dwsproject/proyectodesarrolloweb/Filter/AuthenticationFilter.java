@@ -1,4 +1,4 @@
-package org.dwsproject.proyectodesarrolloweb.Filter;
+/*package org.dwsproject.proyectodesarrolloweb.Filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -76,3 +76,4 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     }
 }
+ */

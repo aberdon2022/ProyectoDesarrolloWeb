@@ -38,12 +38,21 @@ public class TrailerService {
 
     public String sanitizeFileName(String originalFileName) {
 
+        if (originalFileName == null || originalFileName.isEmpty()) {
+            throw new IllegalArgumentException("El nombre del archivo no puede estar vacío.");
+        }
+
         int lastIndexOf = originalFileName.lastIndexOf("."); // Get the last index of the file extension
         String fileName = originalFileName.substring(0, lastIndexOf); // Get the file name without the extension
-        String extension = originalFileName.substring(lastIndexOf); // Get the file extension
+        String extension = originalFileName.substring(lastIndexOf+1); // Get the file extension
 
-        String sanitizedFileName = fileName.replaceAll("[^a-zA-Z0-9-]|\\.", "");
-        return sanitizedFileName + extension; // Return the sanitized file name with the extension
+        if (fileName.matches(".*[^a-zA-Z0-9-].*")) {
+            throw new IllegalArgumentException("El nombre del archivo contiene caracteres inválidos.");
+        }
+        if (extension.matches(".*[^a-zA-Z0-9-].*")) {
+            throw new IllegalArgumentException("El nombre del archivo contiene caracteres inválidos.");
+        }
+        return originalFileName;
     }
 
     public boolean uploadTrailer(MultipartFile file, String title, String description, User user) throws IOException, TrailerUploadException, NoSuchAlgorithmException {
@@ -67,7 +76,7 @@ public class TrailerService {
         Tika tika = new Tika();
         String type = tika.detect(file.getBytes());
 
-        if (!type.equals("video/mp4")) {
+        if (!type.equals("video/mp4") && !type.equals("video/quicktime")) {
             throw new TrailerUploadException("Invalid trailer file type. Please upload a valid MP4 file.");
         }
 
