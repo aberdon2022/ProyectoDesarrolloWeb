@@ -65,7 +65,6 @@ public class FilmService {
             throw new IllegalArgumentException("Invalid list type");
         }
         filmRepository.save(film);
-        userService.saveUser(user);
     }
 
     public void addFilmPending(User user, Film film, MultipartFile imageFile) throws IOException {
@@ -92,7 +91,6 @@ public class FilmService {
             } else {
                 userService.getCompletedFilms(user.getId()).remove(filmToDelete);
             }
-            userService.saveUser(user);
             filmRepository.delete(filmToDelete); // Delete the film from the repository
             imageService.deleteImage(filmToDelete.getImageId());
             return true;

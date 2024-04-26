@@ -13,7 +13,7 @@
 <h1>Completed Films</h1>
 
 <a href="/profile/{{user.username}}" class="button">Return to Profile</a>
-<form action="/completed" method="get">
+<form action="/completed" method="post">
     <input type="hidden" name="username" value="{{user.username}}">
     <label for="minYear">Minimum Year:</label>
     <input type="number" id="minYear" name="minYear" min="1900">
@@ -42,7 +42,7 @@
     <input type="hidden" name="_csrf" value="{{_csrf.token}}">
 </form>
 <br>
-<form id="searchForm" action="/completed" method="get">
+<form id="searchForm" action="/completed" method="post">
     <input type="hidden" name="username" value="{{user.username}}">
     <input type="text" id="title" name="title">
     <input type="hidden" name="_csrf" value="{{_csrf.token}}">

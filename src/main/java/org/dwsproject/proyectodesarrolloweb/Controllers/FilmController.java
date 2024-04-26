@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.List;
 
 @Controller
@@ -130,9 +131,8 @@ public class FilmController {
         return "ViewPendingList";
     }
 
-    @GetMapping("/completed")//show the completed list
-    public String viewCompleted(Model model, @RequestParam String username, @RequestParam (required = false) Integer minRating, @RequestParam (required = false) Integer maxRating, @RequestParam (required = false) String sort, @RequestParam (required = false) String order, @RequestParam (required = false, defaultValue = "false") Boolean applySort, @RequestParam (required = false) String title, @RequestParam (required = false) Integer minYear, @RequestParam (required = false) Integer maxYear, HttpServletRequest request) {
-
+    @GetMapping("/completed")
+    public String showCompleted(Model model, @RequestParam String username, HttpServletRequest request) {
         CsrfToken csrfToken = (CsrfToken) request.getAttribute("_csrf");
         if (csrfToken != null) {
             model.addAttribute("_csrf", csrfToken.getToken());
@@ -147,36 +147,39 @@ public class FilmController {
         User user = userService.findUserByUsername(username);
         model.addAttribute("user", user);
 
-        List<Film> completedFilms = null;
-        try {
-            if (minRating != null && maxRating != null && minYear != null && maxYear != null) { //If minRating and maxRating are specified, filter the films by rating
-                completedFilms = filmService.findCompletedFilmsByRatingAndYear(user, minRating, maxRating, minYear, maxYear);
-            } else if (minRating == null && maxRating == null && minYear == null && maxYear == null) { //If minRating and maxRating are specified, filter the films by rating
-                completedFilms = userService.getCompletedFilms(user.getId());
-            } else if (minRating == null && maxRating == null) { // MinRating is not null, maxRating is null
-                completedFilms = filmService.findCompletedFilmsByYear(user, minYear, maxYear);
-            } else if (minYear == null && maxYear == null) { // MinRating is not null, maxRating is null
-                completedFilms = filmService.findCompletedFilmsByRating(user, minRating, maxRating);
-            }
-        } catch (Exception e){
-            e.printStackTrace();
+        List<Film> completedFilms = userService.getCompletedFilms(user.getId());
+        for (Film film : completedFilms) {
+            film.setRatingStars(filmService.convertRatingToStars(film.getRating()));
         }
 
-        if(title != null && !title.isEmpty()){ //If title is not null, filter the films by title
+        model.addAttribute("completed", completedFilms);
+
+        return "ViewCompletedList";
+    }
+
+    @PostMapping("/completed")
+    public String handleCompleted(Model model, @RequestParam String username, @RequestParam (required = false) Integer minRating, @RequestParam (required = false) Integer maxRating, @RequestParam (required = false) String sort, @RequestParam (required = false) String order, @RequestParam (required = false, defaultValue = "false") Boolean applySort, @RequestParam (required = false) String title, @RequestParam (required = false) Integer minYear, @RequestParam (required = false) Integer maxYear) {
+        User user = userService.findUserByUsername(username);
+        model.addAttribute("user", user);
+
+        // Treat blank fields as the lowest or highest possible values
+        int minYearValue = (minYear != null) ? minYear : 0;
+        int maxYearValue = (maxYear != null) ? maxYear : Calendar.getInstance().get(Calendar.YEAR);
+        int minRatingValue = (minRating != null) ? minRating : 0;
+        int maxRatingValue = (maxRating != null) ? maxRating : 5;
+
+        List<Film> completedFilms = filmService.findCompletedFilmsByRatingAndYear(user, minRatingValue, maxRatingValue, minYearValue, maxYearValue);
+
+        if(title != null && !title.isEmpty()){
             completedFilms = filmService.findCompletedFilmsByTitle(user, title);
             if (completedFilms.isEmpty()) {
                 completedFilms = userService.getCompletedFilms(user.getId());
                 model.addAttribute("filmNotFound", true);
-                model.addAttribute("completed", completedFilms);
-                for (Film film : completedFilms) {
-                    film.setRatingStars(filmService.convertRatingToStars(film.getRating()));
-                }
-                return "ViewCompletedList";
             }
         }
 
         for (Film film : completedFilms) {
-            film.setRatingStars(filmService.convertRatingToStars(film.getRating())); //Convert the rating to stars to show it in the view
+            film.setRatingStars(filmService.convertRatingToStars(film.getRating()));
         }
 
         model.addAttribute("completed", completedFilms);
