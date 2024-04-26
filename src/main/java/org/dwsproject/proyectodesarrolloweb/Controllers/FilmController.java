@@ -147,20 +147,21 @@ public class FilmController {
         User user = userService.findUserByUsername(username);
         model.addAttribute("user", user);
 
-        List<Film> completedFilms;
-        if (minRating != null && maxRating != null) { //If minRating and maxRating are specified, filter the films by rating
-            completedFilms = filmService.findCompletedFilmsByRating (user,minRating, maxRating);
-        } else if (minRating != null) { // MinRating is not null, maxRating is null
-            completedFilms = filmService.findCompletedFilmsByRating (user, minRating, 5);
-        } else if (maxRating != null) { // MaxRating is not null, minRating is null
-            completedFilms = filmService.findCompletedFilmsByRating (user, 0, maxRating);
-        } else {
-            completedFilms = userService.getCompletedFilms(user.getId());
+        List<Film> completedFilms = null;
+        try {
+            if (minRating != null && maxRating != null && minYear != null && maxYear != null) { //If minRating and maxRating are specified, filter the films by rating
+                completedFilms = filmService.findCompletedFilmsByRatingAndYear(user, minRating, maxRating, minYear, maxYear);
+            } else if (minRating == null && maxRating == null && minYear == null && maxYear == null) { //If minRating and maxRating are specified, filter the films by rating
+                completedFilms = userService.getCompletedFilms(user.getId());
+            } else if (minRating == null && maxRating == null) { // MinRating is not null, maxRating is null
+                completedFilms = filmService.findCompletedFilmsByYear(user, minYear, maxYear);
+            } else if (minYear == null && maxYear == null) { // MinRating is not null, maxRating is null
+                completedFilms = filmService.findCompletedFilmsByRating(user, minRating, maxRating);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
         }
 
-        if (applySort && sort != null && order != null) { // If applySort is true, sort the films by the specified criteria
-            completedFilms = filmService.sortFilms(user, minRating, maxRating, minYear, maxYear, sort, order, Film.FilmStatus.COMPLETED);
-        }
         if(title != null && !title.isEmpty()){ //If title is not null, filter the films by title
             completedFilms = filmService.findCompletedFilmsByTitle(user, title);
             if (completedFilms.isEmpty()) {

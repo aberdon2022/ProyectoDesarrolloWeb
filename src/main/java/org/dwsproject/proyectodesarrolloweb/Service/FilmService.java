@@ -203,6 +203,18 @@ public class FilmService {
                 .and(FilmSpecification.isOwnedByUser(user)));
     }
 
+    public List<Film> findCompletedFilmsByYear(User user, int minRating, int maxRating) {
+        return filmRepository.findAll(Specification.where(FilmSpecification.isCompleted())
+                .and(FilmSpecification.hasYearBetween(minRating, maxRating))
+                .and(FilmSpecification.isOwnedByUser(user)));
+    }
+    public List<Film> findCompletedFilmsByRatingAndYear(User user, int minRating, int maxRating, int minYear, int maxYear) {
+        return filmRepository.findAll(Specification.where(FilmSpecification.isCompleted())
+                .and(FilmSpecification.hasYearBetween(minYear, maxYear))
+                .and(FilmSpecification.hasRatingBetween(minRating, maxRating))
+                .and(FilmSpecification.isOwnedByUser(user)));
+    }
+
     public List<Film> findCompletedFilmsByTitle(User user, String title){
         return filmRepository.findAll(Specification.where(FilmSpecification.isCompleted())
                 .and(FilmSpecification.hasThisTitle(title))
