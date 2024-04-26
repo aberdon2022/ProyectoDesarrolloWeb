@@ -69,14 +69,12 @@ public class WebSecurityConfig {
 
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        // PRIVATE ENDPOINTS
+                        .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/**").hasAuthority("USER")
                         .requestMatchers(HttpMethod.POST, "/api/**").hasAuthority("USER")
                         .requestMatchers(HttpMethod.PUT, "/api/**").hasAuthority("USER")
                         .requestMatchers(HttpMethod.DELETE, "/api/**").hasAuthority("USER")
-                        // PUBLIC ENDPOINTS
-                        .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
-                        .anyRequest().permitAll()
+                        .anyRequest().authenticated()
                 );
 
         // Disable Form login Authentication

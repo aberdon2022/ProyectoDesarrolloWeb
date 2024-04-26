@@ -1,6 +1,7 @@
 package org.dwsproject.proyectodesarrolloweb.Classes;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
@@ -21,9 +22,6 @@ public class User {
     private long id;
     private String username;
     private String password;
-
-    @Column(name = "token")
-    private String token;
 
     @OneToMany(mappedBy = "user")
     @JsonView(Views.Public.class)
@@ -54,7 +52,6 @@ public class User {
     public User(String username, String password) {
         this.username = username;
         this.password = password;
-        this.token = UUID.randomUUID().toString();
     }
 
 
@@ -70,6 +67,7 @@ public class User {
         return username;
     }
 
+    @JsonIgnore
     public String getPassword() {
         return password;
     }
@@ -102,14 +100,6 @@ public class User {
         this.password = password;
     }
 
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
     public void setPendingFilms(List<Film> pendingFilms) {
         this.pendingFilms.clear(); //Clear the list before adding the new elements
         if (pendingFilms != null) {
@@ -136,6 +126,7 @@ public class User {
         return Objects.equals(username, user.username);
     }
 
+    @JsonIgnore
     public List<Role> getRoles() {
         return roles;
     }
