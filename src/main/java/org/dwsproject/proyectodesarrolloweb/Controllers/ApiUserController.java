@@ -1,6 +1,5 @@
 package org.dwsproject.proyectodesarrolloweb.Controllers;
 
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.dwsproject.proyectodesarrolloweb.Classes.Friendship;
@@ -9,8 +8,11 @@ import org.dwsproject.proyectodesarrolloweb.Exceptions.UnauthorizedAccessExcepti
 import org.dwsproject.proyectodesarrolloweb.Exceptions.UserAlreadyExistsException;
 import org.dwsproject.proyectodesarrolloweb.Exceptions.UserNotFoundException;
 import org.dwsproject.proyectodesarrolloweb.Repositories.UserRepository;
+import org.dwsproject.proyectodesarrolloweb.Security.jwt.UserLoginService;
 import org.dwsproject.proyectodesarrolloweb.Service.UserService;
 import org.dwsproject.proyectodesarrolloweb.Service.UserSession;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -30,12 +31,14 @@ public class ApiUserController {
     private final UserSession userSession;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserLoginService userLoginService;
 
-    public ApiUserController(UserService userService, UserSession userSession, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public ApiUserController(UserService userService, UserSession userSession, UserRepository userRepository, PasswordEncoder passwordEncoder, UserLoginService userLoginService) {
         this.userService = userService;
         this.userSession = userSession;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.userLoginService = userLoginService;
     }
 
     @PostMapping("/register")
@@ -55,29 +58,33 @@ public class ApiUserController {
 
 
     @GetMapping("/profile/{username}")
-    public User profile(@PathVariable String username) throws UserNotFoundException, UnauthorizedAccessException {
-        User authenticatedUser = userSession.getUser(); // Get the authenticated user
-
-        if (authenticatedUser == null || !authenticatedUser.getUsername().equals(username)) { // If the authenticated user is null or the username is not the same as the authenticated user
-            throw new UnauthorizedAccessException("Access denied");
-        }
-
+    public ResponseEntity<User> profile(@PathVariable String username) throws UserNotFoundException, UnauthorizedAccessException {
         User user = userService.findUserByUsername(username);
         if (user == null) {
             throw new UserNotFoundException("User not found");
+        }
+        //get username from token
+        String usernameFromToken =userLoginService.getUserName() ;
+        //if username is null response with unauthorized
+        if(usernameFromToken == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        // verify if username from token is the request username
+        if (!username.equals(usernameFromToken) && !userService.isAdmin(userSession.getUser())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
 
         userService.setUserPendingFilms(user);
         userService.setUserCompletedFilms(user);
 
-        return user;
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @GetMapping("/friends/{username}")
     public Map<String, Object> friends(@PathVariable String username) throws UnauthorizedAccessException, UserNotFoundException {
         User authenticatedUser = userSession.getUser();
 
-        if (authenticatedUser == null || !authenticatedUser.getUsername().equals(username)) {
+        if ((authenticatedUser == null || !authenticatedUser.getUsername().equals(username)) && !userService.isAdmin(authenticatedUser)) {
             throw new UnauthorizedAccessException("Access denied");
         }
 

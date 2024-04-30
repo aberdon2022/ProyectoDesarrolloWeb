@@ -1,22 +1,18 @@
 package org.dwsproject.proyectodesarrolloweb.Service;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpSession;
 import org.dwsproject.proyectodesarrolloweb.Classes.Film;
 import org.dwsproject.proyectodesarrolloweb.Classes.Friendship;
 import org.dwsproject.proyectodesarrolloweb.Classes.Role;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.dwsproject.proyectodesarrolloweb.Exceptions.FriendException;
 import org.dwsproject.proyectodesarrolloweb.Repositories.*;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,7 +30,7 @@ public class UserService {
 
     public UserService(UserRepository userRepository, FilmRepository filmRepository, FriendshipRepository friendshipRepository, UserSession userSession, PasswordEncoder passwordEncoder,
                        RoleRepository roleRepository,
-                       PostRepository postRepository) {
+                       PostRepository postRepository, UserDetailsServiceImpl userDetailsService) {
         this.userRepository = userRepository;
         this.filmRepository = filmRepository;
         this.friendshipRepository = friendshipRepository;
@@ -178,6 +174,15 @@ public class UserService {
         friendshipRepository.deleteAll(user.getFriends());
 
         userRepository.delete(user);
+    }
+    public boolean isAdmin(User user){
+        List<Role> roles = user.getRoles();
+        for(Role r: roles){
+            if(r.getName().equals("ADMIN")) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 

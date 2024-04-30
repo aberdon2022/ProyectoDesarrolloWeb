@@ -2,6 +2,7 @@ package org.dwsproject.proyectodesarrolloweb.Controllers;
 import org.dwsproject.proyectodesarrolloweb.Classes.Image;
 import org.dwsproject.proyectodesarrolloweb.Classes.Post;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
+import org.dwsproject.proyectodesarrolloweb.Security.jwt.UserLoginService;
 import org.dwsproject.proyectodesarrolloweb.Service.ImageService;
 import org.dwsproject.proyectodesarrolloweb.Service.PostService;
 import org.dwsproject.proyectodesarrolloweb.Service.UserService;
@@ -26,12 +27,14 @@ public class ApiPostController {
     private final ImageService imageService;
 
     private final UserService userService;
+    private final UserLoginService userLoginService;
 
-    public ApiPostController(PostService postService, UserSession userSession, ImageService imageService, UserService userService) {
+    public ApiPostController(PostService postService, UserSession userSession, ImageService imageService, UserService userService, UserLoginService userLoginService) {
         this.postService = postService;
         this.userSession = userSession;
         this.imageService = imageService;
         this.userService = userService;
+        this.userLoginService = userLoginService;
     }
 
     @GetMapping("/allPosts")
@@ -46,6 +49,16 @@ public class ApiPostController {
 
         if (user == null) { //If the user does not exist, return 404
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        //get username from token
+        String usernameFromToken =userLoginService.getUserName() ;
+        //if username is null response with unauthorized
+        if(usernameFromToken == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        // verify if username from token is the request username
+        if (!username.equals(usernameFromToken)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
 
         post.setUser(user);
@@ -62,6 +75,7 @@ public class ApiPostController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Post> showPost(@PathVariable long id) {
+
         Post post = postService.findById(id);
 
         if (post != null) {

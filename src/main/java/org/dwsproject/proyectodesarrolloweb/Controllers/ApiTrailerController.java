@@ -1,10 +1,12 @@
 package org.dwsproject.proyectodesarrolloweb.Controllers;
 import org.dwsproject.proyectodesarrolloweb.Classes.Trailer;
 import org.dwsproject.proyectodesarrolloweb.Exceptions.TrailerNotFoundException;
+import org.dwsproject.proyectodesarrolloweb.Security.jwt.UserLoginService;
 import org.dwsproject.proyectodesarrolloweb.Service.TrailerService;
 import org.dwsproject.proyectodesarrolloweb.Service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,11 +21,12 @@ public class ApiTrailerController {
 
     private final UserService userService;
 
-    public ApiTrailerController(TrailerService trailerService, UserService userService) {
+    public ApiTrailerController(TrailerService trailerService, UserService userService, UserLoginService userLoginService) {
         this.trailerService = trailerService;
         this.userService = userService;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/upload")
     public ResponseEntity<Void> uploadTrailer(@RequestParam("file") MultipartFile file, @RequestParam("title") String title, @RequestParam("description") String description, @RequestParam("username") String username) {
         try {
@@ -40,7 +43,8 @@ public class ApiTrailerController {
         return new ResponseEntity<>(trailers, HttpStatus.OK);
     }
 
-  @DeleteMapping("/index")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @DeleteMapping("/index")
     public ResponseEntity<String> deleteTrailer(@RequestParam long trailerId, @RequestParam String username) {
         try {
             trailerService.deleteTrailer("upload", userService.findUserByUsername(username), trailerId);
