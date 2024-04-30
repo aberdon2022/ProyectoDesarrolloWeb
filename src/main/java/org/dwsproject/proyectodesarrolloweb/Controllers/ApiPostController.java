@@ -87,6 +87,16 @@ public class ApiPostController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePost(@PathVariable long id, @RequestParam String username) {
+        //get username from token
+        String usernameFromToken =userLoginService.getUserName() ;
+        //if username is null response with unauthorized
+        if(usernameFromToken == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        // verify if username from token is the request username
+        if (!username.equals(usernameFromToken) && !userService.isAdmin(userSession.getUser())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        }
         Post post = postService.findById(id);
         User user = userService.findUserByUsername(username);
 
@@ -108,6 +118,16 @@ public class ApiPostController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Post> editPost(Post post, @RequestParam(required = false) MultipartFile image, @PathVariable long id, @RequestParam String username) throws IOException {
+        //get username from token
+        String usernameFromToken =userLoginService.getUserName() ;
+        //if username is null response with unauthorized
+        if(usernameFromToken == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        // verify if username from token is the request username
+        if (!username.equals(usernameFromToken) && !userService.isAdmin(userSession.getUser())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        }
         Post originalPost = postService.findById(id);
         User user = userService.findUserByUsername(username);
 
