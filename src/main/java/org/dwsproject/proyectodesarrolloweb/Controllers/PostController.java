@@ -167,7 +167,14 @@ public class PostController {
 
     @PostMapping("/post/{id}/edit")//Edit a post by its id
     public String editPost(Model model, Post post, @RequestParam(value = "imageFile", required = false) MultipartFile imageFile) throws IOException {
+
         User loggedInUser = userSession.getUser();
+
+        Post existingPost = postService.findById(post.getId());
+
+        if (!existingPost.getUser().getUsername().equals(loggedInUser.getUsername())) {
+            return "redirect:/error/401";
+        }
 
         post.setUser(loggedInUser);
 
@@ -176,7 +183,6 @@ public class PostController {
             Image savedImage = imageService.saveImage(newImage);
             post.setImageId(savedImage.getId());
         } else { // If a new image file is not provided, keep the existing image
-            Post existingPost = postService.findById(post.getId());
             post.setImageId(existingPost.getImageId());
         }
 

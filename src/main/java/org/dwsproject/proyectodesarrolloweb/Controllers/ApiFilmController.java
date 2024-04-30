@@ -1,6 +1,8 @@
 package org.dwsproject.proyectodesarrolloweb.Controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
 import org.dwsproject.proyectodesarrolloweb.Classes.Film;
+import org.dwsproject.proyectodesarrolloweb.Security.jwt.JwtTokenProvider;
 import org.dwsproject.proyectodesarrolloweb.Service.FilmService;
 import org.dwsproject.proyectodesarrolloweb.Service.UserService;
 import org.springframework.http.HttpStatus;
@@ -18,11 +20,15 @@ public class ApiFilmController {
 
     private final UserService userService;
 
+    private final JwtTokenProvider jwtTokenProvider;
 
-    public ApiFilmController(FilmService filmService, UserService userService) {
+
+    public ApiFilmController(FilmService filmService, UserService userService, JwtTokenProvider jwtTokenProvider) {
         this.filmService = filmService;
         this.userService = userService;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
+
 
     @GetMapping("/films")
     public ResponseEntity<List<Film>> getAllFilms(@RequestParam String username) {
