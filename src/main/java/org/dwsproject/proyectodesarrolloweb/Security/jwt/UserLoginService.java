@@ -75,8 +75,17 @@ public class UserLoginService {
 		return ResponseEntity.ok().headers(responseHeaders).body(loginResponse);
 	}
 
-	public ResponseEntity<AuthResponse> refresh(String encryptedRefreshToken) {
-		
+	public ResponseEntity<AuthResponse> refresh(HttpServletRequest request, String encryptedRefreshToken) {
+
+		Cookie[] cookies = request.getCookies();
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				if (cookie.getName().equals("RefreshToken")) {
+					encryptedRefreshToken = cookie.getValue();
+				}
+			}
+		}
+
 		String refreshToken = SecurityCipher.decrypt(encryptedRefreshToken);
 		
 		Boolean refreshTokenValid = jwtTokenProvider.validateToken(refreshToken);
