@@ -39,7 +39,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private final List<Post> posts = new ArrayList<>();
 
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
