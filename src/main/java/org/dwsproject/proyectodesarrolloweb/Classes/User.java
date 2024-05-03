@@ -22,6 +22,8 @@ public class User {
     private long id;
     private String username;
     private String password;
+    private String bio;
+    private Long profilePicture;
 
     @OneToMany(mappedBy = "user")
     @JsonView(Views.Public.class)
@@ -52,6 +54,8 @@ public class User {
     public User(String username, String password) {
         this.username = username;
         this.password = password;
+        this.bio ="This user has not set a bio yet";
+        this.profilePicture = null;
     }
 
 
@@ -78,6 +82,22 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public Long getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(Long profilePicture) {
+        this.profilePicture = profilePicture;
     }
 
     public List<Film> getPendingFilms() {

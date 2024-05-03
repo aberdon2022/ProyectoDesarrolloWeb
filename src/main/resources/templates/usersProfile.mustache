@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/css/usersProfile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Profile</title>
+</head>
+<body>
+    <h1>Welcome!</h1>
+    <div class="profile-picture-container">
+    {{#user.profilePicture}}
+        <img src="/imageFile/{{user.profilePicture}}" alt="Profile Picture">
+    {{/user.profilePicture}}
+    {{^user.profilePicture}}
+        <img src="\images\default-avatar-profile-icon-of-social-media-user-vector.jpg" alt="Profile Picture">
+    {{/user.profilePicture}}
+</div>
+        <div class="user-info">
+            <p><strong>Username:</strong> {{user.username}}</p>
+            <p><strong>Bio: </strong>{{user.bio}}</p>
+        </div>
+    </div>
+    {{#isOwner}}
+    <a href="/logout" class="logout">Logout</a>
+    <a href="/editProfile/{{loggedInUser.username}}?loggedInUser={{loggedInUser.username}}" class="editProfile">Edit</a>
+    <form action="/editProfile/{{loggedInUser.username}}/delete" method="post">
+    <input type="submit" value="Delete user" class="delete">
+    <input type="hidden" name="_csrf" value="{{_csrf.token}}">
+    {{/isOwner}}
+</form>
+</body>
+</html>

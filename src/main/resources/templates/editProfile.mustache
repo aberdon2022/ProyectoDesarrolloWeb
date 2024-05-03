@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/css/editProfile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Edit profile</title>
+</head>
+<body>
+   <h1>Edit Profile</h1>
+    <form id="editForm" action="/editProfile/{{loggedInUser.username}}" method="post" enctype="multipart/form-data">
+        <div class="profile-picture-container">
+        <label for="profilePicture"><strong>Profile picture: </strong> <br></label>
+            <input type="file" id="profilePicture" name="profilePicture">
+        </div>
+        <br>
+        <div class="user-info">
+            <label for="bio"><strong>Bio: </strong></label>
+            <textarea id="bio" name="bio">{{loggedInUser.bio}}</textarea>
+        </div>
+        <input type="submit" value="Update Profile">
+         <input type="hidden" name="_csrf" value="{{_csrf.token}}">
+    </form>
+
+</body>
+</body>
+</html>

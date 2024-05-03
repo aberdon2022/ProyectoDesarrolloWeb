@@ -8,8 +8,7 @@
 
 <body>
     <h1>Welcome, {{user.username}}!</h1>
-    <a href="/logout" class="logout">Logout</a>
-    <h2>Profile</h2>
+    <a href="/usersProfile/{{loggedInUser.username}}?loggedInUser={{loggedInUser.username}}" class="usersProfile">Profile</a>
     <div class="friendsImg">
         <a href="/friends/{{loggedInUser.username}}?loggedInUser={{loggedInUser.username}}" class= "friends">Friends</a>
         <a href="/friends/{{loggedInUser.username}}?loggedInUser={{loggedInUser.username}}">

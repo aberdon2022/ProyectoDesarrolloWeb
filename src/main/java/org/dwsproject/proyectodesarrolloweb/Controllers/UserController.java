@@ -4,10 +4,13 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+
+import org.dwsproject.proyectodesarrolloweb.Classes.Image;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.dwsproject.proyectodesarrolloweb.Exceptions.FriendException;
 import org.dwsproject.proyectodesarrolloweb.Exceptions.UnauthorizedAccessException;
 import org.dwsproject.proyectodesarrolloweb.Service.UserService;
+import org.dwsproject.proyectodesarrolloweb.Service.ImageService;
 import org.dwsproject.proyectodesarrolloweb.Service.UserSession;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,8 +22,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -30,9 +35,12 @@ public class UserController {
 
     private final UserSession userSession;//uses methods of the UserSession class
 
-    public UserController(UserService userService, UserSession userSession) {
+    private final ImageService imageService;
+
+    public UserController(UserService userService, UserSession userSession, ImageService imageService) {
         this.userService = userService;
         this.userSession = userSession;
+        this.imageService = imageService;
     }
 
     @GetMapping("/login")  
@@ -91,6 +99,110 @@ public class UserController {
         }
     }
 
+    @GetMapping("/usersProfile/{username}")
+
+    public String showUserProfile(@PathVariable String username, Model model) {
+        User user = userService.findUserByUsername(username);
+        User loggedInUser = userSession.getUser();
+
+        try {
+            userSession.validateUser(username);
+        } catch (UnauthorizedAccessException e) {
+            throw new RuntimeException(e);
+        }
+        boolean isOwner = false;
+        if(loggedInUser.getUsername().equals(username)) {
+            isOwner = true;
+        }
+        if (user != null) {
+            model.addAttribute("user", user);
+            model.addAttribute("loggedInUser", loggedInUser);
+            model.addAttribute("isOwner", isOwner);
+            return "usersProfile";
+        } else {
+            return "redirect:/error/405"; // Redirect if user not found
+        }
+    }
+
+    @GetMapping("/editProfile/{username}")
+    public String editUserProfile(@PathVariable String username, Model model) {
+        User user = userService.findUserByUsername(username);
+        User loggedInUser = userSession.getUser();
+
+        try {
+            userSession.validateUser(username);
+        } catch (UnauthorizedAccessException e) {
+            throw new RuntimeException(e);
+        }
+
+        if (user != null) {
+            model.addAttribute("user", user);
+            model.addAttribute("loggedInUser", loggedInUser);
+            return "editProfile";
+        } else {
+            return "redirect:/error/405"; // Redirect if user not found
+        }
+    }
+
+    @PostMapping("/editProfile/{username}")
+    public String editProfile(Model model, @RequestParam String bio, @RequestParam("profilePicture") MultipartFile profilePicture, @PathVariable String username, RedirectAttributes redirectAttributes, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            User user = userService.findUserByUsername(username);
+            if(user != null) {
+                user.setBio(bio);
+
+                // Manejo de la foto de perfil
+                if (!profilePicture.isEmpty()) {
+                    Image image = imageService.createImage(profilePicture);
+                    image = imageService.saveImage(image);
+                    user.setProfilePicture(image.getId());
+                }
+
+                userService.saveUser(user);
+
+                model.addAttribute("user", user);
+                userSession.setUser(user);
+
+                CsrfToken csrfToken = (CsrfToken) request.getAttribute("_csrf");
+                redirectAttributes.addFlashAttribute("_csrf", csrfToken);
+
+                return "redirect:/usersProfile/" + username;
+
+            } else {
+                redirectAttributes.addFlashAttribute("message", "Usuario no encontrado");
+                return "redirect:/editProfile/" + username;
+            }
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("message", e.getMessage());
+            return "redirect:/editProfile/" + username;
+        }
+    }
+
+    @PostMapping("/editProfile/{username}/delete")
+    public String deleteUserAccount(Model model, @PathVariable String username, RedirectAttributes redirectAttributes,  HttpServletRequest request, HttpServletResponse response) {
+        User loggedInUser = userSession.getUser();
+
+        if (loggedInUser == null || !loggedInUser.getUsername().equals(username)) {
+            return "redirect:/error/403";
+        }
+
+        User user = userService.findUserByUsername(username);
+
+        if (user != null) {
+            userService.deleteUser(user.getUsername());
+            redirectAttributes.addFlashAttribute("message", "User deleted successfully");
+
+            CsrfToken csrfToken = (CsrfToken) request.getAttribute("_csrf");
+            redirectAttributes.addFlashAttribute("_csrf", csrfToken);
+
+            return "redirect:/login" ;
+        } else {
+            return "redirect:/error/403";
+        }
+    }
+
+    
+    
     @GetMapping("/profile/{username}")
     public String profile(Model model, @PathVariable String username) {
 
@@ -108,7 +220,7 @@ public class UserController {
             model.addAttribute("loggedInUser", loggedInUser);
             return "profile";
         } else {
-            return "redirect:/login"; // Redirect if user not found
+            return "redirect:/login"; 
         }
     }
 

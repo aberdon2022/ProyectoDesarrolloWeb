@@ -2,14 +2,19 @@ package org.dwsproject.proyectodesarrolloweb.Service;
 
 import org.dwsproject.proyectodesarrolloweb.Classes.Film;
 import org.dwsproject.proyectodesarrolloweb.Classes.Friendship;
+import org.dwsproject.proyectodesarrolloweb.Classes.Image;
 import org.dwsproject.proyectodesarrolloweb.Classes.Role;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.dwsproject.proyectodesarrolloweb.Exceptions.FriendException;
 import org.dwsproject.proyectodesarrolloweb.Repositories.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.dwsproject.proyectodesarrolloweb.Service.ImageService;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
@@ -39,6 +44,8 @@ public class UserService {
         this.postRepository = postRepository;
     }
 
+   
+
     public void setUserPendingFilms (User user) {
         List<Film> films = getPendingFilms(user.getId());
         user.setPendingFilms(films);
@@ -66,8 +73,21 @@ public class UserService {
         }
     }
 
-    public void saveUser (User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+    public void saveUser(User user) {
+        // Encuentra el usuario existente en la base de datos.
+        User existingUser = userRepository.findByUsername(user.getUsername());
+    
+        if (existingUser != null) {
+            // Si la contraseña proporcionada es diferente a la existente, no la cambies.
+            if (!passwordEncoder.matches(user.getPassword(), existingUser.getPassword())) {
+                user.setPassword(existingUser.getPassword());
+            }
+        } else {
+            // Si es un nuevo usuario, codifica la contraseña.
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+    
+        // Guarda el usuario en la base de datos.
         userRepository.save(user);
     }
 
