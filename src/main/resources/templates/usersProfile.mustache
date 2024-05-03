@@ -20,13 +20,21 @@
             <p><strong>Bio: </strong>{{user.bio}}</p>
         </div>
     </div>
+
     {{#isOwner}}
-    <a href="/logout" class="logout">Logout</a>
-    <a href="/editProfile/{{loggedInUser.username}}?loggedInUser={{loggedInUser.username}}" class="editProfile">Edit</a>
-    <form action="/editProfile/{{loggedInUser.username}}/delete" method="post">
-    <input type="submit" value="Delete user" class="delete">
-    <input type="hidden" name="_csrf" value="{{_csrf.token}}">
+    
+    <div class="button-container">
+        <a href="/logout" class="logout">Logout</a>
+        <a href="/editProfile/{{loggedInUser.username}}?loggedInUser={{loggedInUser.username}}" class="editProfile">Edit</a>
+        
+            <form id="deleteUser" action="/editProfile/{{loggedInUser.username}}/delete" method="post">
+                <input type="submit" value="Delete user" class="delete" style="font-family: 'Roboto', sans-serif">
+                <input type="hidden" name="_csrf" value="{{_csrf.token}}">
+            </form>
+
     {{/isOwner}}
-</form>
+
+</div>
+
 </body>
 </html>

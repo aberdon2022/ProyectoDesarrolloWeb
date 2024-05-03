@@ -46,16 +46,16 @@ body::before {
     width: 200px;
     margin-top: 100px;
     margin-left: 300px; 
-    border-radius: 90px;/* Ajusta este valor al tamaño deseado para el div */
-    height: auto; /* Esto mantendrá la proporción de la imagen */
-    overflow: hidden; /* Esto asegurará que nada se desborde del div */
-    display: inline-block; /* Esto permite que el div se coloque junto a otros elementos en línea */
+    border-radius: 90px;
+    height: auto;
+    overflow: hidden;
+    display: inline-block;
     margin-right: 20px;
 }
 
 .profile-picture-container img {
-    width: 100%; /* Esto hará que la imagen llene el div */
-    height: auto; /* Esto mantendrá la proporción de la imagen */
+    width: 100%;
+    height: auto;
 }
 
 .user-info {
@@ -68,54 +68,47 @@ body::before {
     font-size: 1.5em;
 }
 
+/* Estilos para los botones */
+.button-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 50px;
+    margin-top: 30px;
+    margin-left: 695px;
+}
 
-a.editProfile{
+a.editProfile, a.logout, #deleteUser input[type="submit"] {
     font-weight: bold;
-    display: inline-block;
     padding: 10px 20px;
-    background-color: #1b67a9;
     color: #fff;
     text-decoration: none;
     border-radius: 5px;
     margin-bottom: 15px;
-    margin-left: 1200px;
-    transition: background-color 0.3s; 
+    transition: background-color 0.3s;
+}
+
+a.editProfile {
+    background-color: #1b67a9;
 }
 
 a.editProfile:hover {
-    background-color: #1b67a9; 
+    background-color: #14588e;
 }
 
-a.logout{
-    font-weight: bold;
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #ED361D;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-    margin-bottom: 15px;
-    margin-left: 1200px;
-    transition: background-color 0.3s; 
-     /* Alinea el botón de logout a la derecha */
+a.logout {
+    background-color: #079955;
 }
 
 a.logout:hover {
-    background-color: #BD300D; 
+    background-color: #066b46;
 }
-a.delete {
-    display: inline-block;
-    padding: 5px 10px;
+
+#deleteUser input[type="submit"] {
     background-color: #ED361D;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-    margin-bottom: 15px;
-    margin-top: 40px;
-    float: right;
-    margin-right: 100px;
-    transition: background-color 0.1s ease;
 }
-a.delete:hover {
-    background-color: #B42901;
+
+#deleteUser input[type="submit"]:hover {
+    background-color: #ac1906;
 }
+

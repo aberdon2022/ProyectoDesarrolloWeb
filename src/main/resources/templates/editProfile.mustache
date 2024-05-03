@@ -8,19 +8,16 @@
 <body>
    <h1>Edit Profile</h1>
     <form id="editForm" action="/editProfile/{{loggedInUser.username}}" method="post" enctype="multipart/form-data">
-        <div class="profile-picture-container">
-        <label for="profilePicture"><strong>Profile picture: </strong> <br></label>
-            <input type="file" id="profilePicture" name="profilePicture">
+        <div class="form-group">
+            <label for="profilePicture"><strong>Profile picture:</strong></label>
+            <input type="file" id="profilePicture" name="profilePicture" >
         </div>
-        <br>
-        <div class="user-info">
-            <label for="bio"><strong>Bio: </strong></label>
-            <textarea id="bio" name="bio">{{loggedInUser.bio}}</textarea>
+        <div class="form-group">
+            <label for="bio"><strong>Bio:</strong></label>
+            <textarea id="bio" name="bio" rows="2" cols="10">{{loggedInUser.bio}}</textarea>
         </div>
         <input type="submit" value="Update Profile">
-         <input type="hidden" name="_csrf" value="{{_csrf.token}}">
+        <input type="hidden" name="_csrf" value="{{_csrf.token}}">
     </form>
-
-</body>
 </body>
 </html>
