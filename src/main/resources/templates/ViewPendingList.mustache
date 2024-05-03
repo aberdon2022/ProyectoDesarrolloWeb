@@ -10,7 +10,7 @@
 <body>
 <h1>Pending Films</h1>
 <a href="/profile/{{user.username}}" class="button">Return to Profile</a>
-<form action="/pending" method="get">
+<form action="/pending" method="post">
     <input type="hidden" name="username" value="{{user.username}}">
     <label for="sort">Sort by:</label>
     <select id="sort" name="sort">
@@ -27,7 +27,7 @@
 </form>
 
 <br>
-<form id="searchForm" action="/pending" method="get">
+<form id="searchForm" action="/pending" method="post">
     <input type="hidden" name="username" value="{{user.username}}">
     <input type="text" id="title" name="title">
     <button type="submit">Search</button>

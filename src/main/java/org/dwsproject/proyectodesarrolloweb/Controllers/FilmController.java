@@ -96,13 +96,22 @@ public class FilmController {
     }
 
     @GetMapping("/pending")//Show the pending list
-    public String viewPending(Model model, @RequestParam String username, @RequestParam (required = false) String sort, @RequestParam (required = false) String order, @RequestParam (required = false) String title, @RequestParam (required = false) Integer minYear, @RequestParam (required = false) Integer maxYear, HttpServletRequest request) {
-
-        CsrfToken csrfToken = (CsrfToken) request.getAttribute("_csrf");
-        if (csrfToken != null) {
-            model.addAttribute("_csrf", csrfToken.getToken());
+    public String viewPending(Model model, @RequestParam String username) {
+        try {
+            userSession.validateUser(username); //Validate if the user is the same as the one logged in
+        } catch (UnauthorizedAccessException e) {
+            throw new RuntimeException(e);
         }
+        User user = userService.findUserByUsername(username);
+        model.addAttribute("user", user);
 
+        List<Film> pendingFilms = userService.getPendingFilms(user.getId());
+        model.addAttribute("pending", pendingFilms);
+        return "ViewPendingList";
+    }
+
+    @PostMapping("/pending")
+    public String handlePending(Model model, @RequestParam String username, @RequestParam (required = false) String sort, @RequestParam (required = false) String order, @RequestParam (required = false) String title, @RequestParam (required = false) Integer minYear, @RequestParam (required = false) Integer maxYear) {
         try {
             userSession.validateUser(username); //Validate if the user is the same as the one logged in
         } catch (UnauthorizedAccessException e) {

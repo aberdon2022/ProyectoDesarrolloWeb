@@ -9,6 +9,9 @@
 <body>
     <h1>Welcome, {{user.username}}!</h1>
     <a href="/usersProfile/{{loggedInUser.username}}?loggedInUser={{loggedInUser.username}}" class="usersProfile">Profile</a>
+    {{#isAdmin}}
+        <a href="/admin/{{loggedInUser.username}}/users" class="admin">Admin Panel</a>
+    {{/isAdmin}}
     <div class="friendsImg">
         <a href="/friends/{{loggedInUser.username}}?loggedInUser={{loggedInUser.username}}" class= "friends">Friends</a>
         <a href="/friends/{{loggedInUser.username}}?loggedInUser={{loggedInUser.username}}">

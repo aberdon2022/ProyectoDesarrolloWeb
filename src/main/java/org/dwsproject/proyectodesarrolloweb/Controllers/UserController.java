@@ -99,8 +99,8 @@ public class UserController {
         }
     }
 
-    @GetMapping("/usersProfile/{username}")
 
+    @GetMapping("/usersProfile/{username}")
     public String showUserProfile(@PathVariable String username, Model model) {
         User user = userService.findUserByUsername(username);
         User loggedInUser = userSession.getUser();
@@ -110,17 +110,14 @@ public class UserController {
         } catch (UnauthorizedAccessException e) {
             throw new RuntimeException(e);
         }
-        boolean isOwner = false;
-        if(loggedInUser.getUsername().equals(username)) {
-            isOwner = true;
-        }
+        boolean isOwner = loggedInUser.getUsername().equals(username);
         if (user != null) {
             model.addAttribute("user", user);
             model.addAttribute("loggedInUser", loggedInUser);
             model.addAttribute("isOwner", isOwner);
             return "usersProfile";
         } else {
-            return "redirect:/error/405"; // Redirect if user not found
+            return "redirect:/error/404"; // Redirect if user not found
         }
     }
 
@@ -218,6 +215,7 @@ public class UserController {
         if (user != null) {
             model.addAttribute("user", user);
             model.addAttribute("loggedInUser", loggedInUser);
+            model.addAttribute("isAdmin", loggedInUser.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN")));
             return "profile";
         } else {
             return "redirect:/login"; 
