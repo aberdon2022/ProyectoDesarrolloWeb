@@ -12,13 +12,21 @@ body {
 }
 
 .message {
-    text-align: center;
-    padding: 1.5rem;
-    background-color: #678ACC;
-    color: white;
-    border-radius: 10px;
+    display: flex;  /* Habilitar flexbox */
+    justify-content: center;  /* Centrar horizontalmente */
+    color: red;
     font-family: 'Roboto', sans-serif;
-    margin: 0 30px 2rem 0;
+    animation: fadeOut 4s forwards;
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+        visibility: hidden;
+    }
 }
 
 h1 {
@@ -39,7 +47,7 @@ h1 {
     border-radius: 10px;
     padding: 20px;
     margin: 100px auto;
-    margin-top: 70px;
+    margin-top: 50px;
 }
 
 #RegisterForm label {

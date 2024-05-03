@@ -75,6 +75,5 @@ h1 {
     right: 87vh;
     bottom: 75vh;
     font-size: 15px;
-    transition: visibility 0.5s, opacity 0.5s linear;
     margin-right: 80px;
 }
