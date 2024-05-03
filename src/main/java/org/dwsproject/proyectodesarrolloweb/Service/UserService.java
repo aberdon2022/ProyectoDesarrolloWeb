@@ -176,6 +176,9 @@ public class UserService {
         userRepository.delete(user);
     }
     public boolean isAdmin(User user){
+        if(user==null){
+            return false;
+        }
         List<Role> roles = user.getRoles();
         for(Role r: roles){
             if(r.getName().equals("ADMIN")) {

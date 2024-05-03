@@ -104,8 +104,7 @@ public class WebSecurityConfig {
                 .csrf(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/", "/register", "/login", "/css/**", "/templates/**", "/images/**", "/error/**").permitAll()
-                        .requestMatchers("/profile/**").hasAuthority("USER")
-                        .requestMatchers("/profile/**").hasAuthority("ADMIN")
+                        .requestMatchers("/profile/**").hasAnyAuthority("ADMIN", "USER")
                         .requestMatchers("/admin/**").hasAuthority("ADMIN")
 
                         .anyRequest().authenticated()

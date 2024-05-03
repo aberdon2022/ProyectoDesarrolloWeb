@@ -65,7 +65,7 @@ public class PostController {
             posts = postService.findAll(); //Obtain all the posts
         }
         posts.forEach(post -> post.setUser(userService.findUserById(post.getUserId())));
-        
+
         model.addAttribute("posts", posts);
         model.addAttribute("welcome", session.isNew());
         model.addAttribute("loggedInUser", userSession.getUser().getUsername());
@@ -110,7 +110,10 @@ public class PostController {
     public String showPost(Model model, @PathVariable long id) {
         Post post = postService.findById(id);
         String loggedInUser = userSession.getUser().getUsername();
-        boolean isOwner = post.getUser().getUsername().equals(loggedInUser);
+        boolean isOwner = false;
+        if(post.getUser().getUsername().equals(loggedInUser) || userService.isAdmin(userSession.getUser())) {
+            isOwner = true;
+        }
         boolean imageExists = post.getImageId() != null;
 
         model.addAttribute("post", post);
@@ -128,7 +131,10 @@ public class PostController {
         }
         Post post = postService.findById(id);
         String loggedInUser = userSession.getUser().getUsername();
-        boolean isOwner = post.getUser().getUsername().equals(loggedInUser);
+        boolean isOwner = false;
+        if(post.getUser().getUsername().equals(loggedInUser) || userService.isAdmin(userSession.getUser())) {
+            isOwner = true;
+        }
 
         if (isOwner) {
             Long ImageId = post.getImageId();
@@ -156,7 +162,10 @@ public class PostController {
 
         Post post = postService.findById(id);
         String loggedInUser = userSession.getUser().getUsername();
-        boolean isOwner = post.getUser().getUsername().equals(loggedInUser);
+        boolean isOwner = false;
+        if(post.getUser().getUsername().equals(loggedInUser) || userService.isAdmin(userSession.getUser())) {
+            isOwner = true;
+        }
         if (isOwner) {
             model.addAttribute("post", post);
             return "editPost";
@@ -172,11 +181,12 @@ public class PostController {
 
         Post existingPost = postService.findById(post.getId());
 
-        if (!existingPost.getUser().getUsername().equals(loggedInUser.getUsername())) {
+        if (!existingPost.getUser().getUsername().equals(loggedInUser.getUsername()) && !userService.isAdmin(loggedInUser)) {
             return "redirect:/error/401";
         }
 
-        post.setUser(loggedInUser);
+        User usern = existingPost.getUser();
+        post.setUser(usern);
 
         if (imageFile != null && !imageFile.isEmpty()) { // If a new image file is provided, save the new image
             Image newImage = imageService.createImage(imageFile);

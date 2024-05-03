@@ -53,8 +53,8 @@ public class UserSession {//information about the actual user
     public void validateUser(String username) throws UnauthorizedAccessException { //check if the user is the same as the logged in user
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String loggedUsername = authentication.getName();
-
-        if (!loggedUsername.equals(username)) {
+        User user = userService.findUserByUsername(loggedUsername);
+        if (!loggedUsername.equals(username) && !userService.isAdmin(user)) {
             throw new UnauthorizedAccessException("You are not authorized to access this page");
         }
     }

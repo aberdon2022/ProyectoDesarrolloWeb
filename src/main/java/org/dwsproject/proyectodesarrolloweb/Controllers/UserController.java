@@ -117,7 +117,7 @@ public class UserController {
         User user = userService.findUserByUsername(username); // Retrieve the user from the database
         User sessionUser = userSession.getUser(); // Retrieve the logged-in user from the database
 
-        if (sessionUser == null || !sessionUser.getUsername().equals(loggedInUser) || !sessionUser.getUsername().equals(username)) {
+        if ((sessionUser == null || !sessionUser.getUsername().equals(loggedInUser) || !sessionUser.getUsername().equals(username)) && !userService.isAdmin(sessionUser)) {
             return "redirect:/error/403";
         }
 
@@ -136,7 +136,7 @@ public class UserController {
     public String addFriend(Model model, @PathVariable String username, @RequestParam String friendUsername, @RequestParam String loggedInUser, RedirectAttributes redirectAttributes) {
         User sessionUser = userSession.getUser();
 
-        if (sessionUser == null || !sessionUser.getUsername().equals(loggedInUser) || !sessionUser.getUsername().equals(username)) {
+        if ((sessionUser == null || !sessionUser.getUsername().equals(loggedInUser) || !sessionUser.getUsername().equals(username)) && !userService.isAdmin(sessionUser)) {
             return "redirect:/error/403";
         }
 
