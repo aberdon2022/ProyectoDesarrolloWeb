@@ -33,10 +33,6 @@ h1 {
     opacity: 0.6;
     margin-left: -15px;
 }
-h2{
-    color: #ddd;
-    font-family: 'Roboto', sans-serif;
-}
 
 .item {
     text-align: center; 
@@ -81,6 +77,24 @@ a.logout{
 a.logout:hover {
     background-color: #BD300D; 
 }
+
+a.usersProfile{
+    font-weight: bold;
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #1b67a9;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    float: left;
+    transition: background-color 0.3s; 
+}
+
+a.usersProfile:hover {
+    background-color: #1b67a9; 
+}
+
 a.friends {
     font-weight: bold;
     display: inline-block;
@@ -90,7 +104,9 @@ a.friends {
     text-decoration: none;
     border-bottom-left-radius: 5px;
     border-top-left-radius: 5px;
+    margin-top: 60px;
     margin-bottom: 15px;
+    margin-left: -90px;
     float: left;
 }
 .friendsImg img {
@@ -100,7 +116,8 @@ a.friends {
     height: auto;
     max-width: 100%;
     max-height: 100%;
-    margin-top: 0px;
+    margin-top: 60.279px;
+    margin-left: -20px;
     padding: 9px 5px;
     background-color: #4FCB7C;
     border-bottom-right-radius: 5px;
