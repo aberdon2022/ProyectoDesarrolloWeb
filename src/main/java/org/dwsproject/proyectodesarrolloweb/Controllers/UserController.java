@@ -291,7 +291,6 @@ public String editProfile(Model model, @RequestParam String bio, @RequestParam("
         return "redirect:/friends/" + username; // Redirect to the user's friend list
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/admin/{username}/users")
     public String listAllUsers(Model model, @PathVariable String username) {
 
@@ -312,7 +311,6 @@ public String editProfile(Model model, @RequestParam String bio, @RequestParam("
         }
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/admin/delete/{username}")
     public String deleteUser(Model model, @PathVariable String username, RedirectAttributes redirectAttributes) {
 
