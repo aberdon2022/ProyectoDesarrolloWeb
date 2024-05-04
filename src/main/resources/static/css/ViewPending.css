@@ -16,8 +16,8 @@ body::before {
     height: 100%;
     background: url('../images/series-netflix.webp') center/cover;
     filter: blur(5px);
-    opacity: 0.4; 
-    z-index: -1; 
+    opacity: 0.4;
+    z-index: -1;
 }
 h1 {
     text-align: center;
@@ -44,7 +44,7 @@ p{
 a.button {
     display: inline-block;
     color: #fff;
-    background-color: #26689e;
+    background-color: red;
     padding: 10px 20px;
     text-decoration: none;
     border-radius: 5px;
@@ -53,7 +53,7 @@ a.button {
 }
 
 a.button:hover {
-    background-color: #2E4F9B;
+    background-color: darkred;
 }
 a.add {
     display: inline-block;
@@ -67,7 +67,7 @@ a.add {
 }
 
 a.add:hover {
-    background-color: #2E4F9B;
+    background-color: darkblue;
 }
 #film-list div div img{
     position: relative;
@@ -83,7 +83,7 @@ a.add:hover {
     padding-left: 0px;
     padding-top: 2px;
     box-shadow:0 0;
-    transition: background-color 0.3s; 
+    transition: background-color 0.3s;
     background-color: #F34F1B;
 }
 
@@ -99,7 +99,13 @@ a.add:hover {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
-    margin: 20px 2rem 2rem;
+    clear: both;
+    margin: 20px 2rem 2rem 10px;
+}
+.clearfix::after {
+    content: "";
+    display: table;
+    clear: both;
 }
 
 #film-list .film-item {
@@ -155,8 +161,9 @@ a.add:hover {
 }
 
 form {
-    float: right;
+    float: left;
     color: #fff;
+    margin-left: 10px;
 }
 
 form input[type=submit] {
@@ -208,8 +215,8 @@ form label{
 }
 #searchForm{
     float: right;
-    margin-top: -10px;
-  }
+    margin-top: -25px;
+}
 #searchForm input {
     display: inline-flex;
     background-color: #ddd;
@@ -217,14 +224,14 @@ form label{
     color: #000E54;
     padding: 3px;
     border-radius: 2px;
-  }
-  
+}
+
 #searchForm input:focus{
     outline: none;
-  }
+}
 #searchForm input:active{
     outline: none;
-  }
+}
 #searchForm button{
     background-color: #7C7C7C;
     color: #fff;
@@ -234,10 +241,10 @@ form label{
     border-radius: 2px;
     transition: background-color 0.2s;
     font-size: 15px;
-  }
+}
 #searchForm button:hover {
     background-color: #5D5D5D;
-  }
+}
 .notFound {
     display: inline-block;
     float: right;
@@ -248,11 +255,15 @@ form label{
 }
 
 @keyframes fadeOut {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-    visibility: hidden;
-  }
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+p.noFilms{
+    float: left;
 }

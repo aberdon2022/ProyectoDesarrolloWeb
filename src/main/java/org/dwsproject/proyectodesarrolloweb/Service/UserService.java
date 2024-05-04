@@ -56,6 +56,14 @@ public class UserService {
         user.setCompletedFilms(films);
     }
 
+    public User loginUSer(String username, String password){//Login user
+        User user= findUserByUsername(username);
+        if(user!=null && checkPassword(user,password)){
+            return user;
+        } else{
+            throw new RuntimeException("Wrong username or password");
+        }
+    }
     public User registerUser (String username, String password) {//Register a new user (
         User user = new User(username, password);
         if (userRepository.findByUsername(user.getUsername()) == null) {//Check if the user already exists

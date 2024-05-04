@@ -11,46 +11,49 @@
 </head>
 <body>
 <h1>Completed Films</h1>
-
-<a href="/profile/{{user.username}}" class="button">Return to Profile</a>
-<form action="/completed" method="post">
-    <input type="hidden" name="username" value="{{user.username}}">
-    <label for="minYear">Minimum Year:</label>
-    <input type="number" id="minYear" name="minYear" min="1900">
-    <label for="maxYear">Maximum Year:</label>
-    <input type="number" id="maxYear" name="maxYear" min="1900">
-    <label for="minRating">Minimum Rating:</label>
-    <input type="number" id="minRating" name="minRating" min="0" max="5">
-    <label for="maxRating">Maximum Rating:</label>
-    <input type="number" id="maxRating" name="maxRating" min="0" max="5">
-    <label for="sort">Sort by:</label>
-    <select id="sort" name="sort">
-        <option value="title">Title</option>
-        <option value="year">Year</option>
-        <option value="rating">Rating</option>
-    </select>
-    <label for="order">Order:</label>
-    <select id="order" name="order">
-        <option value="asc">Ascending</option>
-        <option value="desc">Descending</option>
-    </select>
-    <label for="applySort" class="custom-checkbox">
-        <input type="checkbox" id="applySort" name="applySort" style="opacity: 0; position: absolute; width: 0;">
-        <span class="checkbox-indicator"></span> Apply Sort
-    </label>
-    <input type="submit" value="Filter">
-    <input type="hidden" name="_csrf" value="{{_csrf.token}}">
-</form>
-<br>
-<form id="searchForm" action="/completed" method="post">
-    <input type="hidden" name="username" value="{{user.username}}">
-    <input type="text" id="title" name="title">
-    <input type="hidden" name="_csrf" value="{{_csrf.token}}">
-    <button type="submit">Search</button>
-</form>
-{{#filmNotFound}}
-    <p class="notFound">Film not found</p>
-{{/filmNotFound}}
+<div class="clearfix">
+    <form action="/completed" method="post">
+        <input type="hidden" name="username" value="{{user.username}}">
+        <label for="minYear">Minimum Year:</label>
+        <input type="number" id="minYear" name="minYear" min="1900">
+        <label for="maxYear">Maximum Year:</label>
+        <input type="number" id="maxYear" name="maxYear" min="1900">
+        <label for="minRating">Minimum Rating:</label>
+        <input type="number" id="minRating" name="minRating" min="0" max="5">
+        <label for="maxRating">Maximum Rating:</label>
+        <input type="number" id="maxRating" name="maxRating" min="0" max="5">
+        <br>
+        <br>
+        <label for="sort">Sort by:</label>
+        <select id="sort" name="sort">
+            <option value="title">Title</option>
+            <option value="year">Year</option>
+            <option value="rating">Rating</option>
+        </select>
+        <label for="order">Order:</label>
+        <select id="order" name="order">
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+        </select>
+        <label for="applySort" class="custom-checkbox">
+            <input type="checkbox" id="applySort" name="applySort" style="opacity: 0; position: absolute; width: 0;">
+            <span class="checkbox-indicator"></span> Apply Sort
+        </label>
+        <input type="submit" value="Filter">
+        <input type="hidden" name="_csrf" value="{{_csrf.token}}">
+    </form>
+    <form id="searchForm" action="/completed" method="post">
+        <input type="hidden" name="username" value="{{user.username}}">
+        <input type="text" id="title" name="title">
+        <input type="hidden" name="_csrf" value="{{_csrf.token}}">
+        <button type="submit">Search</button>
+    </form>
+    <div>
+        {{#filmNotFound}}
+            <p class="notFound">Film not found</p>
+        {{/filmNotFound}}
+    </div>
+</div>
 <br>
 <div id="film-list">
     {{#completed}}
@@ -76,9 +79,11 @@
         </div>
     {{/completed}}
     {{^completed}}
-        <p>No completed films yet.</p>
+        <p class="noFilms">No completed films yet.</p>
     {{/completed}}
 </div>
 <a href="/completed/add?username={{user.username}}" class="add">Add Film</a>
+<br>
+<a href="/profile/{{user.username}}" class="button">Return to Profile</a>
 </body>
 </html>

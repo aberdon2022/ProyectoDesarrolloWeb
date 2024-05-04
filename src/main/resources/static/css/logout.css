@@ -67,3 +67,16 @@ p{
     float: left;
     transition: background-color 0.3s;
 }
+.logout{
+    font-weight: bold;
+    font-family: 'Roboto', sans-serif;
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #BD300D;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    float: left;
+    transition: background-color 0.3s;
+}

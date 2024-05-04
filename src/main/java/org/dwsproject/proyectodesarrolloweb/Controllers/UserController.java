@@ -64,15 +64,15 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(Model model, @RequestParam String username, @RequestParam String password, HttpServletResponse response) {
-        User user = userService.findUserByUsername(username); //Obtain the user
-
-        if (user != null && userService.checkPassword(user,password)) { //If the user exists and the password is correct
+    public String login(Model model, @RequestParam String username, @RequestParam String password, HttpServletResponse response, RedirectAttributes redirectAttributes) {
+        try {
+            User user = userService.loginUSer(username, password); //Obtain the user
             model.addAttribute("user", user);
             userSession.setUser(user);
             return "redirect:/profile/" + username;
-        } else {
-            return "redirect:/login?error=true";//If the user does not exist or the password is incorrect return to the login page with an error message
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("message", e.getMessage());
+            return "redirect:/login";
         }
     }
 

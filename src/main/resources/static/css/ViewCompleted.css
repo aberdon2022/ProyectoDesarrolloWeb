@@ -16,8 +16,8 @@ body::before {
   height: 100%;
   background: url('../images/series-netflix.webp') center/cover;
   filter: blur(5px);
-  opacity: 0.4; 
-  z-index: -1; 
+  opacity: 0.4;
+  z-index: -1;
 }
 h1 {
   text-align: center;
@@ -40,19 +40,19 @@ h2{
 p{
   color: #ddd;
 }
-  
+
 a.button {
-    display: inline-block;
-    color: #fff;
-    background-color: #26689e;
-    padding: 10px 20px;
-    text-decoration: none;
-    margin: 0 0 2rem 0;
-    border-radius: 5px;
-    transition: background-color 0.1s ease;
+  display: inline-block;
+  color: #fff;
+  background-color: red;
+  padding: 10px 20px;
+  text-decoration: none;
+  margin: 0 0 2rem 0;
+  border-radius: 5px;
+  transition: background-color 0.1s ease;
 }
 a.button:hover {
-  background-color: #2E4F9B;
+  background-color: darkred;
 }
 a.add {
   display: inline-block;
@@ -65,7 +65,7 @@ a.add {
   transition: background-color 0.1s ease;
 }
 a.add:hover {
-  background-color: #2E4F9B;
+  background-color: darkblue;
 }
 
 
@@ -83,7 +83,7 @@ a.add:hover {
   padding-left: 0px;
   padding-top: 2px;
   box-shadow:0 0;
-  transition: background-color 0.3s; 
+  transition: background-color 0.3s;
   background-color: #F34F1B;
 }
 #film-list div div img:hover {
@@ -101,71 +101,77 @@ a.add:hover {
   margin-right: 10px;
 }
 
-  #film-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    margin: 20px 2rem 2rem;
-  }
+#film-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  clear: both;
+  margin: 20px 2rem 2rem 10px;
+}
+.clearfix::after {
+  content: "";
+  display: table;
+  clear: both;
+}
 
-  #film-list .film-item {
-    background-color: #333;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 1rem;
-    text-align: center;
-    width: calc(33.333% - 2rem);
-    border-radius: 4px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    margin: 0px 1rem 1rem;
-  }
-  
-  #film-list div img {
-    width: 200px;
-    height: 300px;
-    border-radius: 15px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    max-width: 100%;
-    max-height: 100%
+#film-list .film-item {
+  background-color: #333;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  text-align: center;
+  width: calc(33.333% - 2rem);
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  margin: 0px 1rem 1rem;
+}
 
-  }
+#film-list div img {
+  width: 200px;
+  height: 300px;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  max-width: 100%;
+  max-height: 100%
 
-  #film-list .film-item h2 {
-    font-size: 1.2rem;
-    display: inline-block;
-    margin: -10px 0 0.5rem;
-  }
+}
 
-  #film-list .film-item p {
-    text-align: center;
-    margin: 0;
-    font-size: 1rem;
-    color: #bbb;
+#film-list .film-item h2 {
+  font-size: 1.2rem;
+  display: inline-block;
+  margin: -10px 0 0.5rem;
+}
+
+#film-list .film-item p {
+  text-align: center;
+  margin: 0;
+  font-size: 1rem;
+  color: #bbb;
+}
+
+@media (max-width: 768px) {
+  #film-list div {
+    width: calc(50% - 2rem);
   }
-  
-  @media (max-width: 768px) {
-    #film-list div {
-        width: calc(50% - 2rem);
-    }
+}
+
+@media (max-width: 200px) {
+  #film-list div {
+    width: 100%;
   }
-  
-  @media (max-width: 200px) {
-    #film-list div {
-        width: 100%;
-    }
-  }
+}
 
 form {
-  float: right;
+  float: left;
   color: #fff;
+  margin-left: 10px;
 }
 
 form input[type=submit] {
-  margin-right: 100px;
   background-color: #7C7C7C;
   color: #fff;
   border: none;
@@ -218,9 +224,6 @@ form label{
   position: relative;
   padding-right: 30px;
   line-height: 25px;
-  margin-top: 0px;
-  margin-right: 0px; /* Aumenta el margen derecho */
-  margin-bottom: 10px; 
 }
 
 .custom-checkbox input[type="checkbox"] {
@@ -245,9 +248,7 @@ form label{
 }
 
 #searchForm{
-  margin-right: 1190px;
   float: right;
-  margin-top: -10px;
 }
 #searchForm input {
   display: inline-flex;
@@ -279,7 +280,7 @@ form label{
 }
 .notFound {
   display: inline-block;
-  float: right;
+  float: none;
   color: #ddd;
   animation: fadeOut 4s forwards;
   margin-top: -7px;
@@ -294,4 +295,8 @@ form label{
     opacity: 0;
     visibility: hidden;
   }
+}
+
+p.noFilms{
+  float: left;
 }

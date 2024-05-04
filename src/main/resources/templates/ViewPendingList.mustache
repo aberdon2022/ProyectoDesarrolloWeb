@@ -9,34 +9,35 @@
 </head>
 <body>
 <h1>Pending Films</h1>
-<a href="/profile/{{user.username}}" class="button">Return to Profile</a>
-<form action="/pending" method="post">
-    <input type="hidden" name="username" value="{{user.username}}">
-    <label for="sort">Sort by:</label>
-    <select id="sort" name="sort">
-        <option value="title">Title</option>
-        <option value="year">Year</option>
-    </select>
-    <label for="order">Order:</label>
-    <select id="order" name="order">
-        <option value="asc">Ascending</option>
-        <option value="desc">Descending</option>
-    </select>
-    <input type="submit" value="Filter">
-    <input type="hidden" name="_csrf" value="{{_csrf.token}}">
-</form>
+<div class="clearfix">
+    <form action="/pending" method="post">
+        <input type="hidden" name="username" value="{{user.username}}">
+        <label for="sort">Sort by:</label>
+        <select id="sort" name="sort">
+            <option value="title">Title</option>
+            <option value="year">Year</option>
+        </select>
+        <label for="order">Order:</label>
+        <select id="order" name="order">
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+        </select>
+        <input type="submit" value="Filter">
+        <input type="hidden" name="_csrf" value="{{_csrf.token}}">
+    </form>
 
-<br>
-<form id="searchForm" action="/pending" method="post">
-    <input type="hidden" name="username" value="{{user.username}}">
-    <input type="text" id="title" name="title">
-    <button type="submit">Search</button>
-    <input type="hidden" name="_csrf" value="{{_csrf.token}}">
-</form>
-{{#filmNotFound}}
-    <p class="notFound">Film not found</p>
-{{/filmNotFound}}
-<br>
+    <br>
+    <form id="searchForm" action="/pending" method="post">
+        <input type="hidden" name="username" value="{{user.username}}">
+        <input type="text" id="title" name="title">
+        <button type="submit">Search</button>
+        <input type="hidden" name="_csrf" value="{{_csrf.token}}">
+    </form>
+    {{#filmNotFound}}
+        <p class="notFound">Film not found</p>
+    {{/filmNotFound}}
+    <br>
+</div>
 <div id="film-list">
     {{#pending}}
         <div>
@@ -52,9 +53,11 @@
         </div>
     {{/pending}}
     {{^pending}}
-        <p>No pending films yet.</p>
+        <p class="noFilms">No pending films yet.</p>
     {{/pending}}
 </div>
 </body>
 <a href="/pending/add?username={{user.username}}" class="add">Add Film</a>
+<br>
+<a href="/profile/{{user.username}}" class="button">Return to Profile</a>
 </html>
