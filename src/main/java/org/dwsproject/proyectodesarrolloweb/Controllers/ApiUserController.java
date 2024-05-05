@@ -87,7 +87,7 @@ public class ApiUserController {
     }
 
     @PostMapping("/editProfile/{username}")
-    public ResponseEntity<User> editProfile(@RequestParam String bio, @RequestParam("profilePicture") MultipartFile profilePicture, @PathVariable String username) throws UnauthorizedAccessException, IOException {
+    public ResponseEntity<User> editProfile(@RequestParam String bio, @RequestParam("profilePicture") MultipartFile profilePicture, @RequestParam String newUsername, @PathVariable String username) throws UnauthorizedAccessException, IOException {
         User authenticatedUser = userSession.getUser();
         if (authenticatedUser == null || !authenticatedUser.getUsername().equals(username)) {
             throw new UnauthorizedAccessException("Access denied");
@@ -100,6 +100,9 @@ public class ApiUserController {
                 Image image = imageService.createImage(profilePicture);
                 image = imageService.saveImage(image);
                 user.setProfilePicture(image.getId());
+            }
+            if (!newUsername.isEmpty()) {
+                user.setUsername(newUsername);
             }
             userService.saveUser(user,true);
             return new ResponseEntity<>(user, HttpStatus.OK);
