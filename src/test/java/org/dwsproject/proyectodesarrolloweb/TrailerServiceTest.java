@@ -8,7 +8,7 @@ public class TrailerServiceTest {
 
     @Test
     public void testSanitizeFileName() {
-        TrailerService trailerService = new TrailerService(null);
+        TrailerService trailerService = new TrailerService(null, null);
         String originalFileName = "CashBa00--ckTrailer.mp4";
         String sanitizedFileName = trailerService.sanitizeFileName(originalFileName);
         System.out.println(sanitizedFileName);

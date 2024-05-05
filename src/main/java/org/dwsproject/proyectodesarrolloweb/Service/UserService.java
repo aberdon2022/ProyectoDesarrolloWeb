@@ -74,29 +74,35 @@ public class UserService {
                 roleRepository.save(role);
             }
             user.getRoles().add(role);
-            saveUser(user);//Save the user
+            saveUser(user, false);//Save the user
             return user;
         } else {
             throw new RuntimeException("User already exists");
         }
     }
 
-    public void saveUser(User user) {
-        // Encuentra el usuario existente en la base de datos.
-        User existingUser = userRepository.findByUsername(user.getUsername());
+    public void saveUser(User user, boolean isUpdatingProfile) {
+        // Encuentra el usuario existente en la base de datos por ID.
+        User existingUser = userRepository.findById(user.getId()).orElse(null);
     
         if (existingUser != null) {
-            // Si la contraseña proporcionada es diferente a la existente, no la cambies.
-            if (!passwordEncoder.matches(user.getPassword(), existingUser.getPassword())) {
-                user.setPassword(existingUser.getPassword());
+            // Si se está actualizando el perfil, actualiza solo el nombre de usuario.
+            if (isUpdatingProfile) {
+                // Asegúrate de que el nuevo nombre de usuario no esté vacío y sea diferente al actual.
+                if (user.getUsername() != null && !user.getUsername().isEmpty() && !user.getUsername().equals(existingUser.getUsername())) {
+                    existingUser.setUsername(user.getUsername());
+                }
+            } else {
+                // Si no se está actualizando el perfil (es decir, se está registrando), codifica la contraseña.
+                existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
             }
+            // Guarda el usuario con la información actualizada.
+            userRepository.save(existingUser);
         } else {
-            // Si es un nuevo usuario, codifica la contraseña.
+            // Si es un nuevo usuario, guarda el usuario con la contraseña ya codificada.
             user.setPassword(passwordEncoder.encode(user.getPassword()));
+            userRepository.save(user);
         }
-    
-        // Guarda el usuario en la base de datos.
-        userRepository.save(user);
     }
 
     public List<User> getFriends (User user) {

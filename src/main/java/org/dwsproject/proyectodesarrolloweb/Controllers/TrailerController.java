@@ -7,6 +7,7 @@ import org.dwsproject.proyectodesarrolloweb.Exceptions.TrailerUploadException;
 import org.dwsproject.proyectodesarrolloweb.Exceptions.UnauthorizedAccessException;
 import org.dwsproject.proyectodesarrolloweb.Service.TrailerService;
 import org.dwsproject.proyectodesarrolloweb.Service.UserSession;
+import org.dwsproject.proyectodesarrolloweb.Service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,11 +26,13 @@ public class TrailerController {
 
     private final TrailerService trailerService;
     private final UserSession userSession;
+    private final UserService userService;
 
 
-    public TrailerController(TrailerService trailerService, UserSession userSession) {
+    public TrailerController(TrailerService trailerService, UserSession userSession, UserService userService) {
         this.trailerService = trailerService;
         this.userSession = userSession;
+        this.userService = userService;
     }
 
     @PostMapping("/upload")
@@ -70,7 +73,7 @@ public class TrailerController {
             throw new RuntimeException(e);
         }
 
-        if (!user.getUsername().equals("admin")) {
+        if (!userService.isAdmin(user)) {
             return "redirect:/login";
         }
 
@@ -95,7 +98,7 @@ public class TrailerController {
        }
 
         List<Trailer> trailers = trailerService.getAllTrailers();
-        if (userSession.getUser() != null && user.getUsername().equals("admin")) {
+        if (userSession.getUser() != null && userService.isAdmin(user)) {
             model.addAttribute("isAdmin", true);
         }
         model.addAttribute("user", user);

@@ -101,7 +101,7 @@ public class ApiUserController {
                 image = imageService.saveImage(image);
                 user.setProfilePicture(image.getId());
             }
-            userService.saveUser(user);
+            userService.saveUser(user,true);
             return new ResponseEntity<>(user, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

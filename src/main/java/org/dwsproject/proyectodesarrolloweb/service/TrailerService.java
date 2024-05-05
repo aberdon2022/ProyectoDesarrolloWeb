@@ -12,6 +12,7 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.dwsproject.proyectodesarrolloweb.Service.UserService;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -31,9 +32,11 @@ public class TrailerService {
 
     private static final Path FILES_FOLDER = Paths.get(System.getProperty("user.dir"), "src/main/resources/static/uploads"); // Create a folder to store the trailers
     private final TrailerRepository trailerRepository;
+    private final UserService userService;
 
-    public TrailerService(TrailerRepository trailerRepository) {
+    public TrailerService(TrailerRepository trailerRepository, UserService userService) {
         this.trailerRepository = trailerRepository;
+        this.userService = userService;
     }
 
     public String sanitizeFileName(String originalFileName) {
@@ -57,7 +60,7 @@ public class TrailerService {
 
     public boolean uploadTrailer(MultipartFile file, String title, String description, User user) throws IOException, TrailerUploadException, NoSuchAlgorithmException {
 
-        if (user == null || !user.getUsername().equals("admin")) {
+        if (user == null || !userService.isAdmin(user)) {
             throw new TrailerUploadException("User Unauthorized. Please login as admin.");
         }
 
@@ -153,7 +156,7 @@ public class TrailerService {
 
     public void deleteTrailer(String folder, User user, Long trailerId) throws IOException, TrailerNotFoundException {
     // Check if user is admin
-    if (user == null || !user.getUsername().equals("admin")) {
+    if (user == null || !userService.isAdmin(user)) {
         throw new TrailerDeletionException("User Unauthorized. Please login as admin.");
     }
 

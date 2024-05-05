@@ -13,6 +13,9 @@ import org.dwsproject.proyectodesarrolloweb.Service.UserService;
 import org.dwsproject.proyectodesarrolloweb.Service.ImageService;
 import org.dwsproject.proyectodesarrolloweb.Service.UserSession;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.csrf.CsrfToken;
@@ -142,38 +145,61 @@ public class UserController {
     }
 
     @PostMapping("/editProfile/{username}")
-    public String editProfile(Model model, @RequestParam String bio, @RequestParam("profilePicture") MultipartFile profilePicture, @PathVariable String username, RedirectAttributes redirectAttributes, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        try {
-            User user = userService.findUserByUsername(username);
-            if(user != null) {
-                user.setBio(bio);
+public String editProfile(Model model, @RequestParam String bio, @RequestParam("profilePicture") MultipartFile profilePicture, @RequestParam(required = false) String newUsername, @PathVariable String username, RedirectAttributes redirectAttributes, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    try {
+        User user = userService.findUserByUsername(username);
+        if(user != null) {
+            user.setBio(bio);
 
-                // Manejo de la foto de perfil
-                if (!profilePicture.isEmpty()) {
-                    Image image = imageService.createImage(profilePicture);
-                    image = imageService.saveImage(image);
-                    user.setProfilePicture(image.getId());
-                }
-
-                userService.saveUser(user);
-
-                model.addAttribute("user", user);
-                userSession.setUser(user);
-
-                CsrfToken csrfToken = (CsrfToken) request.getAttribute("_csrf");
-                redirectAttributes.addFlashAttribute("_csrf", csrfToken);
-
-                return "redirect:/usersProfile/" + username;
-
-            } else {
-                redirectAttributes.addFlashAttribute("message", "Usuario no encontrado");
-                return "redirect:/editProfile/" + username;
+            // Manejo de la foto de perfil
+            if (!profilePicture.isEmpty()) {
+                Image image = imageService.createImage(profilePicture);
+                image = imageService.saveImage(image);
+                user.setProfilePicture(image.getId());
             }
-        } catch (RuntimeException e) {
-            redirectAttributes.addFlashAttribute("message", e.getMessage());
+
+            // Actualiza el nombre de usuario si se ha proporcionado uno nuevo
+            if (newUsername != null && !newUsername.isEmpty() && !newUsername.equals(user.getUsername())) {
+                // Comprueba si el nuevo nombre de usuario ya existe
+                if (userService.findUserByUsername(newUsername) == null) {
+                    user.setUsername(newUsername);
+
+                    // Actualiza el objeto Authentication con el nuevo nombre de usuario
+                    Authentication newAuth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(newAuth);
+
+                    // Invalida la sesión actual y crea una nueva
+                    request.getSession().invalidate();
+                    request.getSession(true); // Crea una nueva sesión
+
+                } else {
+                    redirectAttributes.addFlashAttribute("message", "El nuevo nombre de usuario ya está en uso.");
+                    return "redirect:/editProfile/" + username;
+                }
+            }
+
+            userService.saveUser(user, true);
+
+            // Actualiza la sesión del usuario
+            userSession.setUser(user);
+
+            // Agrega el CSRF token a los atributos de redirección
+            CsrfToken csrfToken = (CsrfToken) request.getAttribute("_csrf");
+            redirectAttributes.addFlashAttribute("_csrf", csrfToken);
+
+            // Redirige al perfil del usuario con el nuevo nombre de usuario
+            return "redirect:/usersProfile/" + newUsername;
+
+        } else {
+            redirectAttributes.addFlashAttribute("message", "Usuario no encontrado");
             return "redirect:/editProfile/" + username;
         }
+    } catch (RuntimeException e) {
+        redirectAttributes.addFlashAttribute("message", e.getMessage());
+        return "redirect:/editProfile/" + username;
     }
+}
+
 
     @PostMapping("/editProfile/{username}/delete")
     public String deleteUserAccount(Model model, @PathVariable String username, RedirectAttributes redirectAttributes,  HttpServletRequest request, HttpServletResponse response) {
