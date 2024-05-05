@@ -112,3 +112,17 @@ a.logout:hover {
     background-color: #ac1906;
 }
 
+a.button {
+    display: inline-block;
+    color: #fff;
+    background-color: red;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin: 50px 0 20px;
+    transition: background-color 0.1s;
+}
+
+a.button:hover {
+    background-color: darkred;
+}

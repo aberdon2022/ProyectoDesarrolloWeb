@@ -36,62 +36,74 @@ body::before {
 }
 
 #editForm {
-    width: 400px;
-    margin: 50px auto;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
     background-color: rgba(255, 255, 255, 0.7);
     border-radius: 10px;
-    padding: 30px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-}
-
-.form-group {
-    margin-bottom: -1.5rem;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    width: 100%;
+    padding: 20px;
+    margin: 100px auto;
+    margin-top: 50px;
+    float: none;
 }
 
 #editForm label {
-    margin-right: 1rem;
+    margin-bottom: 0px;
     font-weight: bold;
-    color: #040404;
-    white-space: nowrap;
+    color: #3B558A;
 }
 
-#editForm input[type="password"],
+#editForm input[type="text"],
 #editForm input[type="file"],
 #editForm textarea {
-    width: 60%;
-    flex-grow: 1;
     margin-bottom: 1rem;
+    padding: 0.5rem;
+    background-color: #95B4EF;
+    color: #11234C;
+    border: none;
+    font-family: 'Roboto', sans-serif;
+    margin-top: 10px;
 }
 
 #editForm textarea {
-    padding: 1rem;
-    background-color: #edf0f7cc;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: #95B4EF;
     color: #11234C;
     border: none;
+    resize: none;
     font-family: 'Roboto', sans-serif;
 }
 
 #editForm input[type="submit"] {
-    width: auto;
-    padding: 15px 30px;
-    font-family: 'Roboto', sans-serif;
-    padding: 15px 30px;
+    padding: 1rem;
     background-color: #26689e;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 25px;
-    margin-top: 20px;
-    transition: background-color 0.3s;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+    font-family: 'Roboto', sans-serif;
 }
 
 #editForm input[type="submit"]:hover {
     background-color: #3B558A;
 }
 
+a.cancel {
+    display: inline-block;
+    padding: 1rem;
+    background-color: #ED361D;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 10px;
+    margin-top: 10px;
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+    font-size: 12px;
+    transition: background-color 0.1s ease;
+}
+a.cancel:hover {
+    background-color: #B42901;
+}

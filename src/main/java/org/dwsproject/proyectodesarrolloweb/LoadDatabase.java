@@ -83,7 +83,6 @@ public class LoadDatabase implements CommandLineRunner {
                         return post;
                     });
         }
-
     }
 }
 
