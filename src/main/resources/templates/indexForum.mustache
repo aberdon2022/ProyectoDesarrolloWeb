@@ -18,10 +18,10 @@
     <p>No posts yet.</p>
 {{/posts}}
 </div>
-<form action="/forum" method="get">
+<form action="/forum" method="post">
     <input type="text" name="username" placeholder="Search by username...">
-    <button type="submit">Search</button>
     <input type="hidden" name="_csrf" value="{{_csrf.token}}">
+    <button type="submit">Search</button>
 </form>
 <br>
 {{#userNotFound}}
