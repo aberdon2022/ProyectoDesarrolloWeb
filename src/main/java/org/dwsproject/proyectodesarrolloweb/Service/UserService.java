@@ -32,16 +32,18 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     private final PostRepository postRepository;
+    private final ImageService imageService;
 
     public UserService(UserRepository userRepository, FilmRepository filmRepository, FriendshipRepository friendshipRepository, UserSession userSession, PasswordEncoder passwordEncoder,
                        RoleRepository roleRepository,
-                       PostRepository postRepository, UserDetailsServiceImpl userDetailsService) {
+                       PostRepository postRepository, UserDetailsServiceImpl userDetailsService, ImageService imageService) {
         this.userRepository = userRepository;
         this.filmRepository = filmRepository;
         this.friendshipRepository = friendshipRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
         this.postRepository = postRepository;
+        this.imageService = imageService;
     }
 
    
@@ -103,6 +105,34 @@ public class UserService {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             userRepository.save(user);
         }
+    }
+
+    public User updateUser(String username, String newUsername, String bio, MultipartFile profilePicture) throws IOException{
+        User user = findUserByUsername(username);
+            if(user != null) {
+                user.setBio(bio);
+
+                // Manejo de la foto de perfil
+                if (!profilePicture.isEmpty()) {
+                    Image image = imageService.createImage(profilePicture);
+                    image = imageService.saveImage(image);
+                    user.setProfilePicture(image.getId());
+                }
+
+                if (newUsername != null && !newUsername.isEmpty() && !newUsername.equals(user.getUsername())) {
+                    // Comprueba si el nuevo nombre de usuario ya existe
+                    if (findUserByUsername(newUsername) == null) {
+                        user.setUsername(newUsername);
+                    }
+                    else {
+                        throw new RuntimeException("User already exists");
+                    }
+                }
+                saveUser(user, true);
+                return user;
+            } else {
+                throw new RuntimeException("Usuario not found");
+            }
     }
 
     public List<User> getFriends (User user) {

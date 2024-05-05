@@ -145,60 +145,33 @@ public class UserController {
     }
 
     @PostMapping("/editProfile/{username}")
-public String editProfile(Model model, @RequestParam String bio, @RequestParam("profilePicture") MultipartFile profilePicture, @RequestParam(required = false) String newUsername, @PathVariable String username, RedirectAttributes redirectAttributes, HttpServletRequest request, HttpServletResponse response) throws IOException {
-    try {
-        User user = userService.findUserByUsername(username);
-        if(user != null) {
-            user.setBio(bio);
+    public String editProfile(Model model, @RequestParam String bio, @RequestParam("profilePicture") MultipartFile profilePicture, @RequestParam(required = false) String newUsername, @PathVariable String username, RedirectAttributes redirectAttributes, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            User user = userService.updateUser(username, newUsername, bio, profilePicture);
 
-            // Manejo de la foto de perfil
-            if (!profilePicture.isEmpty()) {
-                Image image = imageService.createImage(profilePicture);
-                image = imageService.saveImage(image);
-                user.setProfilePicture(image.getId());
-            }
+                // Actualiza el objeto Authentication con el nuevo nombre de usuario
+                 Authentication newAuth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(newAuth);
 
-            // Actualiza el nombre de usuario si se ha proporcionado uno nuevo
-            if (newUsername != null && !newUsername.isEmpty() && !newUsername.equals(user.getUsername())) {
-                // Comprueba si el nuevo nombre de usuario ya existe
-                if (userService.findUserByUsername(newUsername) == null) {
-                    user.setUsername(newUsername);
+                // Invalida la sesión actual y crea una nueva
+                request.getSession().invalidate();
+                request.getSession(true); // Crea una nueva sesión
 
-                    // Actualiza el objeto Authentication con el nuevo nombre de usuario
-                    Authentication newAuth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-                    SecurityContextHolder.getContext().setAuthentication(newAuth);
+                // Actualiza la sesión del usuario
+                userSession.setUser(user);
 
-                    // Invalida la sesión actual y crea una nueva
-                    request.getSession().invalidate();
-                    request.getSession(true); // Crea una nueva sesión
+                // Agrega el CSRF token a los atributos de redirección
+                CsrfToken csrfToken = (CsrfToken) request.getAttribute("_csrf");
+                redirectAttributes.addFlashAttribute("_csrf", csrfToken);
 
-                } else {
-                    redirectAttributes.addFlashAttribute("message", "El nuevo nombre de usuario ya está en uso.");
-                    return "redirect:/editProfile/" + username;
-                }
-            }
+                // Redirige al perfil del usuario con el nuevo nombre de usuario
+                return "redirect:/usersProfile/" + newUsername;
 
-            userService.saveUser(user, true);
-
-            // Actualiza la sesión del usuario
-            userSession.setUser(user);
-
-            // Agrega el CSRF token a los atributos de redirección
-            CsrfToken csrfToken = (CsrfToken) request.getAttribute("_csrf");
-            redirectAttributes.addFlashAttribute("_csrf", csrfToken);
-
-            // Redirige al perfil del usuario con el nuevo nombre de usuario
-            return "redirect:/usersProfile/" + newUsername;
-
-        } else {
-            redirectAttributes.addFlashAttribute("message", "Usuario no encontrado");
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("message", e.getMessage());
             return "redirect:/editProfile/" + username;
         }
-    } catch (RuntimeException e) {
-        redirectAttributes.addFlashAttribute("message", e.getMessage());
-        return "redirect:/editProfile/" + username;
     }
-}
 
 
     @PostMapping("/editProfile/{username}/delete")
