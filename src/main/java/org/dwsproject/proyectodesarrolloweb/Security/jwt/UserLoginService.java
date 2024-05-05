@@ -1,7 +1,11 @@
 package org.dwsproject.proyectodesarrolloweb.Security.jwt;
 
+import org.dwsproject.proyectodesarrolloweb.Exceptions.UserAlreadyExistsException;
+import org.dwsproject.proyectodesarrolloweb.Repositories.UserRepository;
+import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -9,12 +13,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+
 
 @Service
 public class UserLoginService {
@@ -30,6 +37,12 @@ public class UserLoginService {
 
 	@Autowired
 	private JwtCookieManager cookieUtil;
+
+	@Autowired
+	private UserRepository userRepository;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	public ResponseEntity<AuthResponse> login(LoginRequest loginRequest, String encryptedAccessToken, String 
 			encryptedRefreshToken) {
@@ -147,4 +160,28 @@ public class UserLoginService {
 		httpHeaders.add(HttpHeaders.SET_COOKIE,
 				cookieUtil.createRefreshTokenCookie(token.getTokenValue(), token.getDuration()).toString());
 	}
+
+	public ResponseEntity<?> registerUser(RegisterRequest registerRequest) {
+		try {
+			if (userRepository.findByUsername(registerRequest.getUsername()) != null) {
+				throw new UserAlreadyExistsException("Username already exists");
+			}
+
+			String encryptedPassword = passwordEncoder.encode(registerRequest.getPassword());
+
+			User newUser = new User(registerRequest.getUsername(), encryptedPassword);
+
+			userRepository.save(newUser);
+
+			return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
+
+		}catch (DataIntegrityViolationException e) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body("Duplicate entry");
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred during registration");
+		} catch (UserAlreadyExistsException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
+

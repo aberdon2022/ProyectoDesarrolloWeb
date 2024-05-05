@@ -70,6 +70,7 @@ public class WebSecurityConfig {
         http
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/**").hasAuthority("USER")
                         .requestMatchers(HttpMethod.POST, "/api/**").hasAuthority("USER")
                         .requestMatchers(HttpMethod.PUT, "/api/**").hasAuthority("USER")

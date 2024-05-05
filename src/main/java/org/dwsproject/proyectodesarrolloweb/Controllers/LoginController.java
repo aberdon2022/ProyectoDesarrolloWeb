@@ -1,6 +1,9 @@
 package org.dwsproject.proyectodesarrolloweb.Controllers;
 
+import org.dwsproject.proyectodesarrolloweb.Exceptions.UserAlreadyExistsException;
+import org.dwsproject.proyectodesarrolloweb.Security.jwt.RegisterRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,5 +43,9 @@ public class LoginController {
 	public ResponseEntity<AuthResponse> logOut(HttpServletRequest request, HttpServletResponse response) {
 
 		return ResponseEntity.ok(new AuthResponse(Status.SUCCESS, userService.logout(request, response)));
+	}
+	@PostMapping("/register")
+	public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
+		return userService.registerUser(registerRequest);
 	}
 }
