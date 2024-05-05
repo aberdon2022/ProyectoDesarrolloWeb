@@ -1,6 +1,8 @@
 package org.dwsproject.proyectodesarrolloweb.Security.jwt;
 
+import org.dwsproject.proyectodesarrolloweb.Classes.Role;
 import org.dwsproject.proyectodesarrolloweb.Exceptions.UserAlreadyExistsException;
+import org.dwsproject.proyectodesarrolloweb.Repositories.RoleRepository;
 import org.dwsproject.proyectodesarrolloweb.Repositories.UserRepository;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,9 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+
+import java.util.Collection;
+import java.util.Collections;
 
 
 @Service
@@ -43,6 +48,9 @@ public class UserLoginService {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+
+	@Autowired
+	private RoleRepository roleRepository;
 
 	public ResponseEntity<AuthResponse> login(LoginRequest loginRequest, String encryptedAccessToken, String 
 			encryptedRefreshToken) {
@@ -170,6 +178,17 @@ public class UserLoginService {
 			String encryptedPassword = passwordEncoder.encode(registerRequest.getPassword());
 
 			User newUser = new User(registerRequest.getUsername(), encryptedPassword);
+
+			//Assigning the role of the user
+
+			Role userRole = roleRepository.findByName("USER");
+			if (userRole == null) {
+				throw new RuntimeException("User Role not found.");
+			}
+
+			// Set the "USER" role to the new user
+			newUser.setRoles(Collections.singletonList(userRole));
+
 
 			userRepository.save(newUser);
 
