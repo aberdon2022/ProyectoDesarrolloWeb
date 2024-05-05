@@ -69,7 +69,7 @@ public class UserController {
     @PostMapping("/login")
     public String login(Model model, @RequestParam String username, @RequestParam String password, HttpServletResponse response, RedirectAttributes redirectAttributes) {
         try {
-            User user = userService.loginUSer(username, password); //Obtain the user
+            User user = userService.loginUSer(username, password); //login user
             model.addAttribute("user", user);
             userSession.setUser(user);
             return "redirect:/profile/" + username;

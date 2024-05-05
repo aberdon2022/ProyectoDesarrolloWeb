@@ -280,10 +280,9 @@ form label{
 }
 .notFound {
   display: inline-block;
-  float: none;
+  float: right;
   color: #ddd;
   animation: fadeOut 4s forwards;
-  margin-top: -7px;
   margin-right: 15px;
 }
 

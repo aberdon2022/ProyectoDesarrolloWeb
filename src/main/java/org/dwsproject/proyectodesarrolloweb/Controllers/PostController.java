@@ -2,6 +2,7 @@ package org.dwsproject.proyectodesarrolloweb.Controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.dwsproject.proyectodesarrolloweb.Classes.Film;
 import org.dwsproject.proyectodesarrolloweb.Classes.Image;
 import org.dwsproject.proyectodesarrolloweb.Classes.Post;
 import org.dwsproject.proyectodesarrolloweb.Classes.User;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.List;
 
 @Controller
@@ -48,10 +50,23 @@ public class PostController {
         if (csrfToken != null) {
             model.addAttribute("_csrf", csrfToken);
         }
+        List<Post> posts;
+
+        posts = postService.findAll(); //Obtain all the posts
+
+        posts.forEach(post -> post.setUser(userService.findUserById(post.getUserId())));
+
+        model.addAttribute("posts", posts);
+        model.addAttribute("welcome", session.isNew());
+        model.addAttribute("loggedInUser", userSession.getUser().getUsername());
+        return "indexForum";
+    }
+    @PostMapping("/forum")
+    public String handlePost(Model model, @RequestParam String username, @RequestParam (required = false) String title) {
+        User user = userService.findUserByUsername(username);
 
         List<Post> posts;
         if (username != null && !username.isEmpty()) {
-            User user = userService.findUserByUsername(username);
             if (user == null) {
                 posts = postService.findAll();
                 model.addAttribute("posts", posts);
@@ -60,16 +75,15 @@ public class PostController {
                 return "indexForum";
             }
             posts = postService.findAllByUserId(username);
-
         } else {
             posts = postService.findAll(); //Obtain all the posts
         }
         posts.forEach(post -> post.setUser(userService.findUserById(post.getUserId())));
 
         model.addAttribute("posts", posts);
-        model.addAttribute("welcome", session.isNew());
         model.addAttribute("loggedInUser", userSession.getUser().getUsername());
         return "indexForum";
+
     }
 
     @GetMapping("/forum/new")//Show the form to add a new post
