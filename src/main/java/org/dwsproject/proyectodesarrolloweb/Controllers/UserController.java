@@ -46,8 +46,11 @@ public class UserController {
         this.imageService = imageService;
     }
 
-    @GetMapping("/login")  
-    public String login() {
+    @GetMapping("/login")
+    public String login(Model model, HttpServletRequest request) {
+        if (request.getParameter("error") != null) {
+            model.addAttribute("message", "Invalid username or password.");
+        }
         return "login";
     }
 
