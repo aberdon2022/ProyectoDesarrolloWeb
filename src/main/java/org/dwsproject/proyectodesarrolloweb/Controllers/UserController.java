@@ -46,8 +46,11 @@ public class UserController {
         this.imageService = imageService;
     }
 
-    @GetMapping("/login")  
-    public String login() {
+    @GetMapping("/login")
+    public String login(Model model, HttpServletRequest request) {
+        if (request.getParameter("error") != null) {
+            model.addAttribute("message", "Invalid username or password.");
+        }
         return "login";
     }
 
@@ -264,7 +267,6 @@ public class UserController {
         return "redirect:/friends/" + username; // Redirect to the user's friend list
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/admin/{username}/users")
     public String listAllUsers(Model model, @PathVariable String username) {
 
@@ -285,7 +287,6 @@ public class UserController {
         }
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/admin/delete/{username}")
     public String deleteUser(Model model, @PathVariable String username, RedirectAttributes redirectAttributes) {
 
