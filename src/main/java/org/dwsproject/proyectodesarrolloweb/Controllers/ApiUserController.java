@@ -194,4 +194,15 @@ public class ApiUserController {
         }
     }
 
+    @GetMapping("/admin/allUsers")
+    public ResponseEntity<Iterable<User>> allUsers() {
+        User loggedInUser = userSession.getUser();
+
+        if (loggedInUser == null || !loggedInUser.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
+        return new ResponseEntity<>(userRepository.findAll(), HttpStatus.OK);
+    }
+
 }
