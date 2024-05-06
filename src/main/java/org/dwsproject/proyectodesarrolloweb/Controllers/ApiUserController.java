@@ -15,6 +15,7 @@ import org.dwsproject.proyectodesarrolloweb.Service.ImageService;
 import org.dwsproject.proyectodesarrolloweb.Service.UserSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -174,4 +175,23 @@ public class ApiUserController {
 
         userService.deleteFriend(username, friendUsername);
     }
+
+    @DeleteMapping("/admin/delete/{username}")
+    public ResponseEntity<Void> deleteUser(@PathVariable String username) throws UnauthorizedAccessException {
+        User loggedInUser = userSession.getUser();
+
+        if (loggedInUser == null || !loggedInUser.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+
+        User user = userService.findUserByUsername(username);
+
+        if (user != null) {
+            userService.deleteUser(user.getUsername());
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 }

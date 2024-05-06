@@ -6,6 +6,7 @@ import org.dwsproject.proyectodesarrolloweb.Exceptions.UnauthorizedAccessExcepti
 import org.dwsproject.proyectodesarrolloweb.Exceptions.UserAlreadyExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -47,5 +48,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(FriendException.class) // This method will handle friend not found exceptions
     public ResponseEntity<String> handleFriendNotFoundException(FriendException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND); // Return a ResponseEntity with the exception message for the API
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Void> handleAccessDeniedException(AccessDeniedException ex) {
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 }
