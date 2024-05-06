@@ -51,11 +51,11 @@ public class LoadDatabase implements CommandLineRunner {
         //Initial Data
 
         User[] users = new User[]{
-                new User("user1", passwordEncoder.encode("1")),
-                new User("user2", passwordEncoder.encode("2")),
-                new User("user3", passwordEncoder.encode("3")),
-                new User("user4", passwordEncoder.encode("4")),
-                new User("admin", passwordEncoder.encode("admin"))
+                new User("user1", passwordEncoder.encode("ProyectoDwsUser$1")),
+                new User("user2", passwordEncoder.encode("ProyectoDwsUser$2")),
+                new User("user3", passwordEncoder.encode("ProyectoDwsUser$3")),
+                new User("user4", passwordEncoder.encode("ProyectoDwsUser$4")),
+                new User("admin", passwordEncoder.encode("ProyectoDwsUser$Admin"))
         };
 
         Role userRole = roleRepository.findByName("USER");
