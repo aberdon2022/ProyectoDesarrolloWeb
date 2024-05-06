@@ -7,7 +7,9 @@ import org.dwsproject.proyectodesarrolloweb.Classes.Post;
 import org.dwsproject.proyectodesarrolloweb.Repositories.PostRepository;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class PostService {
@@ -35,13 +37,7 @@ public class PostService {
     public void sanitizeAndSavePost(Post post) {
         String sanitizedText = Jsoup.clean(post.getText(), Safelist.basic()); // Sanitize the text with Jsoup
         post.setText(sanitizedText);
-
-        List<Post> existingPosts = postRepository.findByTitleAndText(post.getTitle(), post.getText());
-        if (existingPosts.isEmpty()) { // if the post does not exist in the database already, save it
-            postRepository.save(post);
-        } else {
-            throw new RuntimeException("Post with this title and text already exists");
-        }
+        postRepository.save(post);
     }
 
     public List<Post> findByTitleAndText(String title, String text) {
