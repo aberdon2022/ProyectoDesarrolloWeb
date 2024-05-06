@@ -51,13 +51,13 @@ public class ApiPostController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         //get username from token
-        String usernameFromToken =userLoginService.getUserName() ;
+        String usernameFromToken = userLoginService.getUserName() ;
         //if username is null response with unauthorized
         if(usernameFromToken == null){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         // verify if username from token is the request username
-        if (!username.equals(usernameFromToken)) {
+        if (!username.equals(usernameFromToken) && !userService.isAdmin(userSession.getUser())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
 

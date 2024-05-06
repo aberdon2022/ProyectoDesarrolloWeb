@@ -68,7 +68,7 @@ public class ApiUserController {
     public ResponseEntity<User> profile(@PathVariable String username) throws UserNotFoundException, UnauthorizedAccessException {
         User user = userService.findUserByUsername(username);
         if (user == null) {
-            throw new UserNotFoundException("User not found");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         //get username from token
         String usernameFromToken =userLoginService.getUserName() ;

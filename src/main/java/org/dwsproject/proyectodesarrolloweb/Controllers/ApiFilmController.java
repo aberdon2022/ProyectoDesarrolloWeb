@@ -5,6 +5,7 @@ import org.dwsproject.proyectodesarrolloweb.Classes.Film;
 import org.dwsproject.proyectodesarrolloweb.Security.jwt.UserLoginService;
 import org.dwsproject.proyectodesarrolloweb.Service.FilmService;
 import org.dwsproject.proyectodesarrolloweb.Service.UserService;
+import org.dwsproject.proyectodesarrolloweb.Service.UserSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,11 +23,14 @@ public class ApiFilmController {
 
     private final UserLoginService userLoginService;
 
+    private final UserSession userSession;
 
-    public ApiFilmController(FilmService filmService, UserService userService, UserLoginService userLoginService) {
+
+    public ApiFilmController(FilmService filmService, UserService userService, UserLoginService userLoginService, UserSession userSession) {
         this.filmService = filmService;
         this.userService = userService;
         this.userLoginService = userLoginService;
+        this.userSession = userSession;
     }
 
     @GetMapping("/films")
@@ -38,7 +42,7 @@ public class ApiFilmController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         // verify if username from token is the request username
-        if (!username.equals(usernameFromToken)) {
+        if (!username.equals(usernameFromToken) && !userService.isAdmin(userSession.getUser())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
 
@@ -55,7 +59,7 @@ public class ApiFilmController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         // verify if username from token is the request username
-        if (!username.equals(usernameFromToken)) {
+        if (!username.equals(usernameFromToken) && !userService.isAdmin(userSession.getUser())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
         return filmService.getPendingFilms(username);
@@ -70,7 +74,7 @@ public class ApiFilmController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         // verify if username from token is the request username
-        if (!username.equals(usernameFromToken)) {
+        if (!username.equals(usernameFromToken) && !userService.isAdmin(userSession.getUser())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
         return filmService.getCompletedFilms(username);
@@ -85,7 +89,7 @@ public class ApiFilmController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         // verify if username from token is the request username
-        if (!username.equals(usernameFromToken)) {
+        if (!username.equals(usernameFromToken) && !userService.isAdmin(userSession.getUser())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
         try {
@@ -105,7 +109,7 @@ public class ApiFilmController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         // verify if username from token is the request username
-        if (!username.equals(usernameFromToken)) {
+        if (!username.equals(usernameFromToken) && !userService.isAdmin(userSession.getUser())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
         try {
@@ -125,7 +129,7 @@ public class ApiFilmController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         // verify if username from token is the request username
-        if (!username.equals(usernameFromToken)) {
+        if (!username.equals(usernameFromToken) && !userService.isAdmin(userSession.getUser())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
         boolean deleted = filmService.deleteFilm(userService.findUserByUsername(username), filmId, "completed");
@@ -139,13 +143,13 @@ public class ApiFilmController {
     @DeleteMapping("/films/pending")
     public ResponseEntity<Void> deleteFilmP (@RequestParam long filmId, @RequestParam String username) {
         //get username from token
-        String usernameFromToken =userLoginService.getUserName() ;
+        String usernameFromToken = userLoginService.getUserName() ;
         //if username is null response with unauthorized
         if(usernameFromToken == null){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         // verify if username from token is the request username
-        if (!username.equals(usernameFromToken)) {
+        if (!username.equals(usernameFromToken) && !userService.isAdmin(userSession.getUser())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
         boolean deleted = filmService.deleteFilm(userService.findUserByUsername(username), filmId, "pending");
