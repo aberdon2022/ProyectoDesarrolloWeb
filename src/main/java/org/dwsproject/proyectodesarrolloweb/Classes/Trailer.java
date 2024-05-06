@@ -1,5 +1,6 @@
 package org.dwsproject.proyectodesarrolloweb.Classes;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -17,6 +18,7 @@ public class Trailer {
     }
 
     @Column(name = "hash")
+    @JsonIgnore
     private String hash;
 
     @Column(name = "file_path")
