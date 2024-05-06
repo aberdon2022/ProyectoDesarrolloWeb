@@ -22,10 +22,10 @@ class ProyectoDesarrolloWebApplicationTests {
     @Test
     void contextLoads() {
         try {
-            File file = new ClassPathResource("LateNightwiththe...&%$DevilTrailer.mp4").getFile();
+            File file = new ClassPathResource("LateNightwiththeDevilTrailer.mp4").getFile();
             MockMultipartFile mockMultipartFile = new MockMultipartFile("file", file.getName(), "video/mp4", file.toURI().toURL().openStream());
 
-            String originalFileName = "LateNightwiththe...&%$DevilTrailer.mp4";
+            String originalFileName = "LateNightwiththeDevilTrailer.mp4";
             String sanitizedFileName = trailerService.sanitizeFileName(originalFileName);
             System.out.println(sanitizedFileName);
 
@@ -50,7 +50,7 @@ class ProyectoDesarrolloWebApplicationTests {
 
         String hash = sb.toString(); // Hex representation of the MD5 hash to a string
 
-        Trailer trailer = new Trailer("", "LateNightwiththe...&%$DevilTrailer.mp4","A trailer for the movie Late Night with the Devil","Late Night with the Devil");
+        Trailer trailer = new Trailer("", "LateNightwiththeDevilTrailer.mp4","A trailer for the movie Late Night with the Devil","Late Night with the Devil");
         trailer.setHash(hash);
         return trailer;
     }

@@ -54,7 +54,7 @@ public class TrailerController {
             } else {
                 throw new RuntimeException("Unknown error occurred whilst storing file " + file.getOriginalFilename());
             }
-        } catch (TrailerUploadException e) {
+        } catch (TrailerUploadException | IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("message", e.getMessage());
         } catch (IOException e) {
             throw new RuntimeException("Could not store file " + file.getOriginalFilename(), e);
